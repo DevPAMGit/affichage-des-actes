@@ -1,6 +1,5 @@
 package org.cd59.affichagedesactes.modeles.sources;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
@@ -98,7 +97,7 @@ public class AlfrescoModeleHelper extends AlfrescoHelper {
 	 * @param type Le type du nœud rechercher.
 	 * @param nom Le nom du nœud à rechercher.
 	 * @return NodeRef Le nœud avec le nom indiqué en paramètre ou null. */
-	protected NodeRef searchNoeudDossierParNom(QName type, String nom) {
+	public NodeRef searchNoeudDossierParNom(QName type, String nom) {
 		return this.serviceNoeud.getChildByName(this.noeud, type, nom);
 	}
 

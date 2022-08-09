@@ -3,7 +3,6 @@ package org.cd59.affichagedesactes.modeles.sources;
 import java.util.ArrayList;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -121,7 +120,7 @@ public class AlfrescoHelper {
 	 * @param type Le type du nœud rechercher.
 	 * @param nom Le nom du nœud à rechercher.
 	 * @return NodeRef Le nœud avec le nom indiqué en paramètre ou null. */
-	protected NodeRef searchNoeudDossierParNom(NodeRef noeud, QName type, String nom) {
+	public NodeRef searchNoeudDossierParNom(NodeRef noeud, QName type, String nom) {
 		return this.serviceNoeud.getChildByName(noeud, type, nom);
 	}
 

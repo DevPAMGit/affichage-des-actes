@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="erreur59:erreur">
+    <description>Modèles d'erreurs pour l'affichage des actes du CD59</description>
+    <author>ANDRIANAIVO Michel</author>
+    <imports>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://cd59.fr/model/erreur59/1.0." prefix="erreur59"/>
+    </namespaces>
+
+    <aspects>
+
+        <!-- Définifion de l'aspect d'erreur de base. -->
+        <aspect name="erreur59:erreurBase">
+            <title>Erreur</title>
+            <description>Affichage des erreurs</description>
+            <properties>
+                
+                <!-- Le message d'erreur -->
+                <property name="erreur59:messageErreur">
+                    <title>Message</title>
+                    <description>Le message d'erreur.</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <!-- FIN - Le message d'erreur -->
+                
+                <!-- La date à laquelle l'erreur à eu lieu. -->
+                <property name="erreur59:dateErreur">
+                    <title>Date</title>
+                    <description>Date à laquelle l'erreur à eu lieu</description>
+                    <type>d:datetime</type>
+                    <mandatory>true</mandatory>                    
+                </property>
+                <!-- FIN - La date à laquelle l'erreur à eu lieu. -->
+                
+            </properties>
+        </aspect>
+        <!-- Définifion de l'aspect d'erreur de base. -->
+
+        <!-- Définition de l'aspect d'erreur sur un dossier. -->
+        <aspect name="erreur59:erreurDossier">
+            <title>Erreur</title>
+            <description>Les erreurs du dossier</description>
+            <parent>erreur59:erreurBase</parent>
+            <properties>
+                <!-- Le nombre fichiers en erreurs dans le dossier. -->
+                <property name="erreur59:nbFichierEnErreur">
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                    <default>0</default>
+                </property>
+                <!-- FIN - Le nombre fichiers en erreurs dans le dossier. -->
+            </properties>
+        </aspect>
+        <!-- FIN - Définition de l'aspect d'erreur sur un dossier. -->
+
+    </aspects>
+</model>

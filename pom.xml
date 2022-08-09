@@ -8,7 +8,7 @@
   <description>All-In-One (AIO) project for SDK 4.4</description>
   <packaging>pom</packaging>
   <prerequisites>
-    <maven>3.3.0</maven>
+    <maven>3.8.6</maven>
   </prerequisites>
   <properties>
     <!-- Alfresco Maven Plugin version to use -->
@@ -128,7 +128,7 @@
                     the layout of your AMP. The end result is that Maven will produce both a JAR file and an AMP with your
                     module.
                 -->
-        <!--
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
@@ -154,7 +154,7 @@
                         </dependency>
                     </dependencies>
                 </plugin>
-                -->
+
         <!-- Filter resources in any subproject with this config -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -204,7 +204,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
-          <version>3.0.0-M1</version>
+          <version>3.0.0-M7</version>
           <executions>
             <execution>
               <id>integration-test</id>
@@ -222,11 +222,15 @@
             </execution>
           </executions>
           <dependencies>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.surefire/surefire-junit47 -->
             <dependency>
               <groupId>org.apache.maven.surefire</groupId>
-              <artifactId>surefire-junit47</artifactId>
-              <version>3.0.0-M1</version>
+              <artifactId>surefire-junit4</artifactId>
+              <version>2.12.4</version>
             </dependency>
+
+
           </dependencies>
         </plugin>
         <plugin>

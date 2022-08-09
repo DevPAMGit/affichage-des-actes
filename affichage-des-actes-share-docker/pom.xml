@@ -29,6 +29,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <!--version>3.1.1</version-->
                 <executions>
                     <!-- Collect extensions (JARs or AMPs) declared in this module do be deployed to docker -->
                     <execution>
@@ -49,6 +50,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>copy-and-filter-docker-resources</id>

@@ -14,6 +14,8 @@ import org.alfresco.service.namespace.QName;
 import org.cd59.affichagedesactes.modeles.sources.AlfrescoModeleHelper;
 import org.cd59.affichagedesactes.modeles.typescontenus.actes59.aspects.docinfos.DocinfosAspectHelperModele;
 import org.cd59.affichagedesactes.modeles.typescontenus.actes59.aspects.dossierinfos.DossierinfosAspectHelperModele;
+import org.cd59.affichagedesactes.modeles.typescontenus.erreur59.aspects.erreurbase.ErreurbaseAspectHelperModele;
+import org.cd59.affichagedesactes.modeles.typescontenus.erreur59.aspects.erreurbase.ErreurbaseAspectModele;
 
 import java.io.Serializable;
 import java.util.*;
@@ -37,20 +39,40 @@ public class RangerActeAction extends ActionExecuterAbstractBase {
                 new DossierinfosAspectHelperModele(this.serviceRegistry.getNodeService(), nodeRef);
 
         // Vérification que le nœud possède l'aspect adéquat.
-        if(!dossier.hasAspect()) return;
+        if(!dossier.hasAspect()) {
+            this.setError(nodeRef, "Le dossier n'a pas l'aspect requis.");
+            return;
+        }
+
         // Vérification que la métadonées
         else if(!dossier.getDossiercomplet()) return;
 
-        if(!dossier.estAspectValide()) return;
+        if(!dossier.estAspectValide()) {
+            this.setError(nodeRef, "Le dossier n'a pas rempli tout les aspects requis.");
+            return;
+        }
 
         List<NodeRef> noeuds = dossier.getContenu();
-        if(noeuds.size() < 2) return;
+        if(noeuds.size() < 2) {
+            this.setError(nodeRef, "Le dossier n'a pas le nombre de fichiers minimum requis.");
+            return;
+        }
 
         for(NodeRef noeud : noeuds)
             if(!this.verifierFichier(noeud))
                 return;
 
         NodeRef destination = this.getNoeudDestination(dossier.getAncetre(2), dossier);
+    }
+
+    private void setError(NodeRef nodeRef, String message) {
+        ErreurbaseAspectHelperModele node = new ErreurbaseAspectHelperModele(this.serviceRegistry.getNodeService(), nodeRef);
+
+        HashMap<QName, Serializable> parameters = new HashMap<>();
+        parameters.put(ErreurbaseAspectModele.DATEERREUR, new Date());
+        parameters.put(ErreurbaseAspectModele.MESSAGEERREUR, message);
+
+        node.addAspect(parameters);
     }
 
     /** Permet de récupérer le nœud de destination de l'acte.
