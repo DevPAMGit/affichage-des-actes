@@ -12,10 +12,10 @@ import org.alfresco.service.cmr.repository.NodeService;
 
 import org.alfresco.service.namespace.QName;
 import org.cd59.affichagedesactes.modeles.sources.AlfrescoModeleHelper;
-import org.cd59.affichagedesactes.modeles.typescontenus.actes59.aspects.docinfos.DocinfosAspectHelperModele;
-import org.cd59.affichagedesactes.modeles.typescontenus.actes59.aspects.dossierinfos.DossierinfosAspectHelperModele;
-import org.cd59.affichagedesactes.modeles.typescontenus.erreur59.aspects.erreurbase.ErreurbaseAspectHelperModele;
-import org.cd59.affichagedesactes.modeles.typescontenus.erreur59.aspects.erreurbase.ErreurbaseAspectModele;
+import org.cd59.affichagedesactes.modeles.typescontenus.actes59.aspect.docinfos.DocinfosAspectHelperModele;
+import org.cd59.affichagedesactes.modeles.typescontenus.actes59.aspect.dossierinfos.DossierinfosAspectHelperModele;
+import org.cd59.affichagedesactes.modeles.typescontenus.erreur59.aspect.erreurbase.ErreurBaseAspectHelperModele;
+import org.cd59.affichagedesactes.modeles.typescontenus.erreur59.aspect.erreurbase.ErreurBaseAspectModele;
 
 import java.io.Serializable;
 import java.util.*;
@@ -66,11 +66,11 @@ public class RangerActeAction extends ActionExecuterAbstractBase {
     }
 
     private void setError(NodeRef nodeRef, String message) {
-        ErreurbaseAspectHelperModele node = new ErreurbaseAspectHelperModele(this.serviceRegistry.getNodeService(), nodeRef);
+        ErreurBaseAspectHelperModele node = new ErreurBaseAspectHelperModele(this.serviceRegistry.getNodeService(), nodeRef);
 
         HashMap<QName, Serializable> parameters = new HashMap<>();
-        parameters.put(ErreurbaseAspectModele.DATEERREUR, new Date());
-        parameters.put(ErreurbaseAspectModele.MESSAGEERREUR, message);
+        parameters.put(ErreurBaseAspectModele.DATE_ERREUR, new Date());
+        parameters.put(ErreurBaseAspectModele.MESSAGE_ERREUR, message);
 
         node.addAspect(parameters);
     }

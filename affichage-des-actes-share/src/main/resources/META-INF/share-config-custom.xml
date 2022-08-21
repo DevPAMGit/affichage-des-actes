@@ -41,7 +41,6 @@
 			<form>
 				<field-visibility>
 					<show id="acme:documentId"/>
-					<show id="acme:securityClassification"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
@@ -157,7 +156,6 @@
 			<form>
 				<field-visibility>
 					<show id="acme:documentId"/>
-					<show id="acme:securityClassification"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>

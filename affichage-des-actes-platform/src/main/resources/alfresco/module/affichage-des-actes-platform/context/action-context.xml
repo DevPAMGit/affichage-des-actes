@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<beans>
+	<bean id="Ranger-Acte-Action" class="org.cd59.affichagedesactes.actions.RangerActeAction" parent="action-executer">
+		<property name="serviceRegistry;">
+			<property bean="ServiceRegistry"/>
+		</property>
+	</bean>
+</beans>
