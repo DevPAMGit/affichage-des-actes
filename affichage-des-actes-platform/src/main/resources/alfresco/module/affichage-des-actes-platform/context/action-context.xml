@@ -1,8 +1,9 @@
-<?xml version="1.0" ?>
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN/EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 <beans>
 	<bean id="Ranger-Acte-Action" class="org.cd59.affichagedesactes.actions.RangerActeAction" parent="action-executer">
-		<property name="serviceRegistry;">
-			<property bean="ServiceRegistry"/>
+		<property name="serviceRegistry">
+			<ref bean="ServiceRegistry"/>
 		</property>
 	</bean>
 </beans>

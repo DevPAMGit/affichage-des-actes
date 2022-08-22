@@ -77,12 +77,7 @@ public class ErreurBaseAspectHelperModele extends AlfrescoModeleHelper {
 	public boolean estAspectValide() { 
 		return ( this.hasAspect()
 		&& this.estMessageErreurValide()
-		);
-	}
-
-
-		&& this.estDateErreurValide()
-		);
+		&& this.estDateErreurValide());
 	}
 
 }

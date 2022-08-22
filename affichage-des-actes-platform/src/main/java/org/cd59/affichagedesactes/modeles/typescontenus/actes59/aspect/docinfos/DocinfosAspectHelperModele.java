@@ -71,8 +71,7 @@ public class DocinfosAspectHelperModele extends AlfrescoModeleHelper {
 	 * @return <c>true</c> si le type de contenu à toutes ces propriétés valides sinon <c>false</c>. */ 
 	public boolean estAspectValide() { 
 		return ( this.hasAspect()
-		&& this.estTypedocumentValide()
-		);
+		&& this.estTypedocumentValide());
 	}
 
 }

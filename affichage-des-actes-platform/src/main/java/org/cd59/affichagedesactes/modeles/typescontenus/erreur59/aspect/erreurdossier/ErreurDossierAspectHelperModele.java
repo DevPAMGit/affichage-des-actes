@@ -95,17 +95,8 @@ public class ErreurDossierAspectHelperModele extends AlfrescoModeleHelper {
 	public boolean estAspectValide() { 
 		return ( this.hasAspect()
 		&& this.estNbFichierEnErreurValide()
-		);
-	}
-
-
 		&& this.estMessageErreurValide()
-		);
-	}
-
-
-		&& this.estDateErreurValide()
-		);
+		&& this.estDateErreurValide());
 	}
 
 }

@@ -287,47 +287,14 @@ public class DossierinfosAspectHelperModele extends AlfrescoModeleHelper {
 	public boolean estAspectValide() { 
 		return ( this.hasAspect()
 		&& this.estSignataireValide()
-		);
-	}
-
-
 		&& this.estSourceValide()
-		);
-	}
-
-
 		&& this.estAnneeValide()
-		);
-	}
-
-
 		&& this.estObjetValide()
-		);
-	}
-
-
 		&& this.estOrgasigleValide()
-		);
-	}
-
-
 		&& this.estNumeroacteValide()
-		);
-	}
-
-
 		&& this.estTypedossierValide()
-		);
-	}
-
-
 		&& this.estIddossierValide()
-		);
-	}
-
-
-		&& this.estDatedossierValide()
-		);
+		&& this.estDatedossierValide());
 	}
 
 }

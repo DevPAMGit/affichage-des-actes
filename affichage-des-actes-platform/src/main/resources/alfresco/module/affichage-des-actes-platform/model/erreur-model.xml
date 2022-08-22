@@ -20,7 +20,7 @@
                 
                 <!-- Le message d'erreur -->
                 <property name="erreur59:messageErreur">
-                    <title>Message</title>
+                    <title>Message de l'erreur</title>
                     <description>Le message d'erreur.</description>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
@@ -29,8 +29,8 @@
                 
                 <!-- La date à laquelle l'erreur à eu lieu. -->
                 <property name="erreur59:dateErreur">
-                    <title>Date</title>
-                    <description>Date à laquelle l'erreur à eu lieu</description>
+                    <title>Date de l'erreur</title>
+                    <description>Date à laquelle l'erreur a eu lieu</description>
                     <type>d:datetime</type>
                     <mandatory>true</mandatory>                    
                 </property>
@@ -48,6 +48,7 @@
             <properties>
                 <!-- Le nombre fichiers en erreurs dans le dossier. -->
                 <property name="erreur59:nbFichierEnErreur">
+                    <title>Nombre de contenus en erreurs</title>
                     <type>d:int</type>
                     <mandatory>true</mandatory>
                     <default>0</default>
