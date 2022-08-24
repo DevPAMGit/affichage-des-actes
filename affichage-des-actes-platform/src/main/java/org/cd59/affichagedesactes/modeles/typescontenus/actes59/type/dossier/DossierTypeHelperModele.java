@@ -37,4 +37,19 @@ public class DossierTypeHelperModele extends AlfrescoModeleHelper {
 		this.addAspect(this.noeud, DossierTypeModele.NOM, valeurs);
 	}
 
+	/**
+	* Vérifie si le nœud du modèle est du type en en paramètre.* 
+	@return <c>true</c> si le nœud est du type en paramètre sinon <c>false</c>.
+	*/
+	public boolean hasType() {
+		return this.hasType(DossierTypeModele.NOM);
+	}
+
+	/**
+	* Ajoute le type au nœud.
+	*/
+	public void addType(){
+		this.addType(DossierTypeModele.NOM);
+	}
+
 }

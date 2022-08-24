@@ -116,23 +116,27 @@ public class AlfrescoHelper {
 		return noeuds;
 	}
 
-	/** Permet de rechercher un nœud par son nom dans un autre nœud fournit en paramètre.
+	/**
+	 * Permet de rechercher un nœud par son nom dans un autre nœud fournit en paramètre.
 	 * @param noeud Le nœud dans lequel on recherchera l'enfant.
 	 * @param type Le type du nœud rechercher.
 	 * @param nom Le nom du nœud à rechercher.
-	 * @return NodeRef Le nœud avec le nom indiqué en paramètre ou null. */
+	 * @return NodeRef Le nœud avec le nom indiqué en paramètre ou null.
+	 * */
 	public NodeRef searchNoeudDossierParNom(NodeRef noeud, QName type, String nom) {
 		return this.serviceNoeud.getChildByName(noeud, type, nom);
 	}
 
-	/** Permet de créer un dossier dans un nœud mis en paramètres s'il n'existe pas.
+	/**
+	 * Permet de créer un dossier dans un nœud mis en paramètres s'il n'existe pas.
 	 * @param noeud Le nœud dans lequel on va créer le dossier.
 	 * @param nom Le nom du dossier.
-	 * @return NodeRef Le nouveau nœud créer. */
+	 * @return NodeRef Le nouveau nœud créer.
+	 * */
 	protected NodeRef creerDossier(NodeRef noeud, String nom) {
 		NodeRef resultat = this.searchNoeudDossierParNom(noeud, ContentModel.TYPE_FOLDER, nom);
 		if( resultat == null )
-			resultat = this.serviceNoeud.createNode(noeud, ContentModel.ASSOC_CHILDREN, QName.createQName(nom),
+			resultat = this.serviceNoeud.createNode(noeud, ContentModel.ASSOC_CONTAINS, QName.createQName(nom),
 					ContentModel.TYPE_FOLDER).getChildRef();
 		return resultat;
 	}

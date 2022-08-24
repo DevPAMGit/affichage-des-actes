@@ -37,6 +37,21 @@ public class ErreurBaseAspectHelperModele extends AlfrescoModeleHelper {
 		this.addAspect(this.noeud, ErreurBaseAspectModele.NOM, valeurs);
 	}
 
+	/**
+	* Vérifie si le nœud du modèle est du type en en paramètre.* 
+	@return <c>true</c> si le nœud est du type en paramètre sinon <c>false</c>.
+	*/
+	public boolean hasType() {
+		return this.hasType(ErreurBaseAspectModele.NOM);
+	}
+
+	/**
+	* Ajoute le type au nœud.
+	*/
+	public void addType(){
+		this.addType(ErreurBaseAspectModele.NOM);
+	}
+
 	/** Méthode permettant de récupérer la valeur de la propriété 'erreur59:messageErreur'. 
 	 * @return String La valeur de la propriété 'erreur59:messageErreur'. */
 	public String getMessageErreur() { 

@@ -1,4 +1,4 @@
-package org.cd59.affichagedesactes.modeles.factory;
+package org.cd59.affichagedesactes.logique.factory;
 
 import org.alfresco.service.namespace.QName;
 import org.cd59.affichagedesactes.modeles.typescontenus.erreur59.aspect.erreurbase.ErreurBaseAspectModele;
@@ -18,7 +18,7 @@ public class ErreurFactory {
      * @param message Le message d'erreur.
      * @return La liste des paramètres pour l'aspect d'erreur.
      */
-    public static HashMap<QName, Serializable> getParametresAspectErreur(String message) {
+    public static HashMap<QName, Serializable> obtenirParametreAspectErreurBase(String message) {
         HashMap<QName, Serializable> parametres = new HashMap<>();
 
         parametres.put(ErreurBaseAspectModele.DATE_ERREUR, new Date());
@@ -29,20 +29,26 @@ public class ErreurFactory {
 
     /**
      * Méthode permettant de récupérer les paramètres nécessaires pour l'aspect d'erreurs de dossier.
-     * @param nbErreurs Le nombre d'erreurs actuellement dans le dossier.
+     * @param nbContenuEnErreur Le nombre d'erreurs actuellement dans le dossier.
      * @return La liste des paramètres pour l'aspect de d'erreur de dossier.
      */
-    public static Map<QName, Serializable> getParametresAspectDossierErreur(int nbErreurs) {
+    public static Map<QName, Serializable> getParametresAspectDossierErreur(int nbContenuEnErreur) {
         HashMap<QName, Serializable> parametres = new HashMap<>();
 
-        String pluriel = nbErreurs > 1 ? "s" : "";
-
-        parametres.put(ErreurDossierAspectModele.NB_FICHIER_EN_ERREUR, nbErreurs);
+        parametres.put(ErreurDossierAspectModele.NB_FICHIER_EN_ERREUR, nbContenuEnErreur);
         parametres.put(ErreurDossierAspectModele.DATE_ERREUR, new Date());
-        parametres.put(ErreurBaseAspectModele.MESSAGE_ERREUR, String.format(
-                "Le dossier contient %s élément%s en erreur%s.", nbErreurs, pluriel, pluriel)
-        );
+        parametres.put(ErreurBaseAspectModele.MESSAGE_ERREUR, obtenirDossierErreurMessage(nbContenuEnErreur));
 
         return parametres;
+    }
+
+    /**
+     * Méthode permettant de récupérer le message d'erreur pour un aspect d'erreur de dossier.
+     * @param nbContenuEnErreur Le nombre d'erreurs actuellement dans le dossier.
+     * @return Le message d'erreur pour l'aspect d'erreur de dossier.
+     */
+    public static String obtenirDossierErreurMessage(int nbContenuEnErreur) {
+        String pluriel = nbContenuEnErreur > 1 ? "s" : "";
+        return String.format("Le dossier contient %s élément%s en erreur%s.", nbContenuEnErreur, pluriel, pluriel);
     }
 }

@@ -12,7 +12,7 @@
 
     <aspects>
 
-        <!-- Définifion de l'aspect d'erreur de base. -->
+        <!-- Définition de l'aspect d'erreur de base. -->
         <aspect name="erreur59:erreurBase">
             <title>Erreur</title>
             <description>Affichage des erreurs</description>
@@ -27,18 +27,18 @@
                 </property>
                 <!-- FIN - Le message d'erreur -->
                 
-                <!-- La date à laquelle l'erreur à eu lieu. -->
+                <!-- La date à laquelle l'erreur a eu lieu. -->
                 <property name="erreur59:dateErreur">
                     <title>Date de l'erreur</title>
                     <description>Date à laquelle l'erreur a eu lieu</description>
                     <type>d:datetime</type>
                     <mandatory>true</mandatory>                    
                 </property>
-                <!-- FIN - La date à laquelle l'erreur à eu lieu. -->
+                <!-- FIN - La date à laquelle l'erreur a eu lieu. -->
                 
             </properties>
         </aspect>
-        <!-- Définifion de l'aspect d'erreur de base. -->
+        <!-- Définition de l'aspect d'erreur de base. -->
 
         <!-- Définition de l'aspect d'erreur sur un dossier. -->
         <aspect name="erreur59:erreurDossier">

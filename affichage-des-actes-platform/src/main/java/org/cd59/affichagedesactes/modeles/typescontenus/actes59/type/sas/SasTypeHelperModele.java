@@ -37,4 +37,19 @@ public class SasTypeHelperModele extends AlfrescoModeleHelper {
 		this.addAspect(this.noeud, SasTypeModele.NOM, valeurs);
 	}
 
+	/**
+	* Vérifie si le nœud du modèle est du type en en paramètre.* 
+	@return <c>true</c> si le nœud est du type en paramètre sinon <c>false</c>.
+	*/
+	public boolean hasType() {
+		return this.hasType(SasTypeModele.NOM);
+	}
+
+	/**
+	* Ajoute le type au nœud.
+	*/
+	public void addType(){
+		this.addType(SasTypeModele.NOM);
+	}
+
 }

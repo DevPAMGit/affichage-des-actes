@@ -6,6 +6,7 @@
 				<aspect name="acme:securityClassified"/>
 				<aspect name="actes59:docinfos"/>
 				<aspect name="actes59:dossierinfos"/>
+				<aspect name="stockageactes59:dossierInfo"/>
 				<aspect name="erreur59:erreurBase"/>
 				<aspect name="erreur59:erreurDossier"/>
 			</visible>
@@ -22,6 +23,8 @@
 			<type name="cm:folder">
 				<subtype name="actes59:sas"/>
 				<subtype name="actes59:dossier"/>
+				<subtype name="stockageactes59:actesConteneur"/>
+				<subtype name="stockageactes59:conteneurActeAnnee"/>
 			</type>
 		</types>
 	</config>
@@ -105,6 +108,23 @@
 					<show id="actes59:iddossier"/>
 					<show id="actes59:dateaffichageinternet"/>
 					<show id="actes59:datedossier"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="stockageactes59:dossierInfo">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="stockageactes59:nbDossiersPresents"/>
+					<show id="stockageactes59:nbDossiersEnErreur"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
@@ -201,6 +221,37 @@
 		<forms>
 			<form>
 				<field-visibility>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="stockageactes59:actesConteneur">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="stockageactes59:conteneurActeAnnee">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="stockageactes59:dateAnnee"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>

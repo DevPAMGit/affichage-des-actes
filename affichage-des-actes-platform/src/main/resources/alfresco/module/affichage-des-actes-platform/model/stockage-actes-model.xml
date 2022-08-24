@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="stockageactes59:stockageacte">
+    <description>Modèles pour l'affichage des actes du CD59 </description>
+    <author>ANDRIANAIVO MICHEL</author>
+    <imports>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://cd59.fr/model/stockageacte/1.0." prefix="stockageactes59"/>
+    </namespaces>
+
+    <types>
+
+        <type name="stockageactes59:actesConteneur">
+            <title>Dossier de tous les actes</title>
+            <description>Dossiers de stockage des actes du département du Nord.</description>
+            <parent>cm:folder</parent>
+            <mandatory-aspects>
+                <aspect>stockageactes59:dossierInfo</aspect>
+            </mandatory-aspects>
+        </type>
+
+        <type name="stockageactes59:conteneurActeAnnee">
+            <title>Dossier de tous les actes pour une année</title>
+            <description>Dossier de stockage pour les actes du département du Nord pour une année.</description>
+            <parent>cm:folder</parent>
+            <properties>
+                <property name="stockageactes59:dateAnnee">
+                    <title>L'année des actes contenus</title>
+                    <description>L'année des actes contenus</description>
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+            <mandatory-aspects>
+                <aspect>stockageactes59:dossierInfo</aspect>
+            </mandatory-aspects>
+        </type>
+        
+        <type name=""></type>
+
+    </types>
+
+    <aspects>
+        <aspect name="stockageactes59:dossierInfo">
+            <properties>
+
+                <property name="stockageactes59:nbDossiersPresents">
+                    <title>Le nombre de dossiers d'actes disponibles</title>
+                    <description>Le nombre de dossiers d'actes disponibles</description>
+                    <type>d:int</type>
+                    <default>0</default>
+                </property>
+
+                <property name="stockageactes59:nbDossiersEnErreur">
+                    <title>Le nombre de dossiers d'actes en erreurs</title>
+                    <description>Le nombre de dossiers d'actes en erreurs</description>
+                    <type>d:int</type>
+                    <default>0</default>
+                </property>
+
+            </properties>
+        </aspect>
+
+    </aspects>
+
+    
+</model>

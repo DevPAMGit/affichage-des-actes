@@ -37,6 +37,21 @@ public class SecurityClassifiedAspectHelperModele extends AlfrescoModeleHelper {
 		this.addAspect(this.noeud, SecurityClassifiedAspectModele.NOM, valeurs);
 	}
 
+	/**
+	* Vérifie si le nœud du modèle est du type en en paramètre.* 
+	@return <c>true</c> si le nœud est du type en paramètre sinon <c>false</c>.
+	*/
+	public boolean hasType() {
+		return this.hasType(SecurityClassifiedAspectModele.NOM);
+	}
+
+	/**
+	* Ajoute le type au nœud.
+	*/
+	public void addType(){
+		this.addType(SecurityClassifiedAspectModele.NOM);
+	}
+
 	/** Méthode permettant de récupérer la valeur de la propriété 'acme:securityClassification'. 
 	 * @return String La valeur de la propriété 'acme:securityClassification'. */
 	public String getSecurityClassification() { 
