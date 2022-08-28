@@ -16,9 +16,8 @@
             <title>Dossier de tous les actes</title>
             <description>Dossiers de stockage des actes du département du Nord.</description>
             <parent>cm:folder</parent>
-            <mandatory-aspects>
-                <aspect>stockageactes59:dossierInfo</aspect>
-            </mandatory-aspects>
+            <properties />
+            <associations />
         </type>
 
         <type name="stockageactes59:conteneurActeAnnee">
@@ -33,37 +32,143 @@
                     <mandatory>true</mandatory>
                 </property>
             </properties>
-            <mandatory-aspects>
-                <aspect>stockageactes59:dossierInfo</aspect>
-            </mandatory-aspects>
         </type>
-        
-        <type name=""></type>
 
-    </types>
-
-    <aspects>
-        <aspect name="stockageactes59:dossierInfo">
+        <type name="stockageactes59:conteneurActeMois">
+            <title>Dossier de tous les actes pour un mois dans année</title>
+            <description>Dossier de stockage pour les actes du département du Nord pour un mois dans une année</description>
+            <parent>stockageactes59:conteneurActeAnnee</parent>
             <properties>
 
-                <property name="stockageactes59:nbDossiersPresents">
-                    <title>Le nombre de dossiers d'actes disponibles</title>
-                    <description>Le nombre de dossiers d'actes disponibles</description>
+                <property name="stockageactes59:dateMois">
+                    <title>Le mois des actes contenus</title>
+                    <description>Le mois des actes</description>
                     <type>d:int</type>
-                    <default>0</default>
-                </property>
-
-                <property name="stockageactes59:nbDossiersEnErreur">
-                    <title>Le nombre de dossiers d'actes en erreurs</title>
-                    <description>Le nombre de dossiers d'actes en erreurs</description>
-                    <type>d:int</type>
-                    <default>0</default>
+                    <mandatory>true</mandatory>
                 </property>
 
             </properties>
-        </aspect>
+        </type>
 
-    </aspects>
+        <type name="stockageactes59:conteneurActeJour">
+            <title>Dossier de tous les actes pour un jour dans un mois de l'année</title>
+            <description>Dossier de stockage pour les actes du département du Nord pour un jour dans un mois de l'année</description>
+            <parent>stockageactes59:conteneurActeMois</parent>
+            <properties>
 
-    
+                <property name="stockageactes59:dateJour">
+                    <title>Le jour des actes contenus</title>
+                    <description>Le jour des actes contenus</description>
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+            </properties>
+        </type>
+
+        <type name="stockageactes59:conteneurType">
+            <title>Dossier pour tous les actes d'un type pour un jour dans un mois de l'année</title>
+            <description>Dossier de stockage pour les actes du département du Nord d'un type pour un jour dans un mois de l'année</description>
+            <parent>stockageactes59:conteneurActeJour</parent>
+            <properties>
+
+                <property name="stockageactes59:conteneurActeType">
+                    <title>Le type des actes contenus</title>
+                    <description>Le type des actes contenus</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+            </properties>
+        </type>
+
+        <type name="stockageactes59:conteneurActe">
+            <title>Dossier pour un acte</title>
+            <description>Dossier de stockage pour un acte</description>
+            <parent>stockageactes59:conteneurType</parent>
+            
+            <properties>
+                
+                <property name="stockageactes59:stockageIdentifiant">
+                    <title>L'identifiant du dossier</title>
+                    <description>L'identifiant du dossier</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <property name="stockageactes59:stockageDirectionSigle">
+                    <title>Sigle Organisation</title>
+                    <description>Sigle Organisation</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <property name="stockageactes59:stockageObjet">
+                    <title>Objet</title>
+                    <description>Objet</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <property name="stockageactes59:stockageDate">
+                    <title>Objet</title>
+                    <description>Objet</description>
+                    <type>d:date</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <property name="stockageactes59:stockageSignataire">
+                    <title>Signataire</title>
+                    <description>Signataire</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+            </properties>
+        </type>
+
+
+        <type name="stockageactes59:stockageFichier">
+            <title>Une fichier du dossier d'acte</title>
+            <description>Une fichier du dossier d'acte</description>
+            <parent>cm:content</parent>
+
+            <properties>
+
+                <property name="stockageactes59:typeFichier">
+                    <title>La typologie</title>
+                    <description>La typologie</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+                <property name="stockageactes59:empreinteFichier">
+                    <title>Empreinte</title>
+                    <description>Empreinte</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+            </properties>
+
+        </type>
+        
+        <type name="stockageactes59:stockageActeOriginal">
+            <title>L'acte original</title>
+            <description>L'acte original</description>
+            <parent>stockageactes59:stockageFichier</parent>
+            <properties />
+            <associations />
+        </type>
+
+        <type name="stockageactes59:stockageAnnexe">
+            <title>Annexe</title>
+            <description>Annexe</description>
+            <parent>stockageactes59:stockageFichier</parent>
+            <properties />
+            <associations />
+        </type>
+        
+    </types>
+
 </model>

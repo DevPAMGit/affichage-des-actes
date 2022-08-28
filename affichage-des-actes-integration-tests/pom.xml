@@ -47,7 +47,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Make sure we attach the tests, so we can include them when running -->
+            <!-- Make sure we attach the tests so we can include them when running -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -65,7 +65,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M7</version>
                 <configuration>
                     <systemPropertyVariables>
                         <acs.endpoint.path>${test.acs.endpoint.path}</acs.endpoint.path>

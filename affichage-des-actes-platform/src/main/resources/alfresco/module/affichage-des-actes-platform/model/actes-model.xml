@@ -127,7 +127,7 @@
                 <property name="actes59:source">
                     <title>Source</title>
                     <type>d:text</type>
-                    <mandatory>true</mandatory>
+                    <mandatory>false</mandatory>
                     <index enabled="true">
                         <tokenised>true</tokenised>
                         <facetable>false</facetable>
@@ -137,7 +137,7 @@
                     <title>Année</title>
                     <description>Année</description>
                     <type>d:text</type>
-                    <mandatory>true</mandatory>
+                    <mandatory>false</mandatory>
                     <index enabled="true">
                         <tokenised>true</tokenised>
                         <facetable>false</facetable>
@@ -195,7 +195,7 @@
                     <title>Numéro de l’acte</title>
                     <description>Numéro de l’acte</description>
                     <type>d:text</type>
-                    <mandatory>true</mandatory>
+                    <mandatory>false</mandatory>
                     <index enabled="true">
                         <tokenised>true</tokenised>
                         <facetable>false</facetable>
@@ -243,7 +243,7 @@
                     <title>Identifiant du dossier</title>
                     <description>Identifiant du dossier</description>
                     <type>d:text</type>
-                    <mandatory>true</mandatory>
+                    <mandatory>false</mandatory>
                     <index enabled="true">
                         <tokenised>true</tokenised>
                         <facetable>false</facetable>

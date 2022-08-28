@@ -25,13 +25,13 @@
     <docker.acs.image>alfresco/alfresco-content-repository-community</docker.acs.image>
     <docker.share.image>alfresco/alfresco-share</docker.share.image>
     <keystore.settings>-Dencryption.keystore.type=JCEKS
-            -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
-            -Dencryption.keyAlgorithm=AES
-            -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore
-            -Dmetadata-keystore.password=mp6yc0UD9e
-            -Dmetadata-keystore.aliases=metadata
-            -Dmetadata-keystore.metadata.password=oKIWzVdEdA
-            -Dmetadata-keystore.metadata.algorithm=AES</keystore.settings>
+      -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
+      -Dencryption.keyAlgorithm=AES
+      -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore
+      -Dmetadata-keystore.password=mp6yc0UD9e
+      -Dmetadata-keystore.aliases=metadata
+      -Dmetadata-keystore.metadata.password=oKIWzVdEdA
+      -Dmetadata-keystore.metadata.algorithm=AES</keystore.settings>
     <!-- JRebel Hot reloading of classpath stuff and web resource stuff -->
     <jrebel.version>1.1.8</jrebel.version>
     <!-- Environment configuration properties -->
@@ -128,31 +128,31 @@
                     the layout of your AMP. The end result is that Maven will produce both a JAR file and an AMP with your
                     module.
                 -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <version>2.6</version>
-                    <executions>
-                        <execution>
-                            <id>build-amp-file</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>single</goal>
-                            </goals>
-                            <configuration>
-                                <appendAssemblyId>false</appendAssemblyId>
-                                <descriptor>src/main/assembly/amp.xml</descriptor>
-                            </configuration>
-                        </execution>
-                    </executions>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.alfresco.maven.plugin</groupId>
-                            <artifactId>alfresco-maven-plugin</artifactId>
-                            <version>${alfresco.sdk.version}</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.6</version>
+          <executions>
+            <execution>
+              <id>build-amp-file</id>
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+              <configuration>
+                <appendAssemblyId>false</appendAssemblyId>
+                <descriptor>src/main/assembly/amp.xml</descriptor>
+              </configuration>
+            </execution>
+          </executions>
+          <dependencies>
+            <dependency>
+              <groupId>org.alfresco.maven.plugin</groupId>
+              <artifactId>alfresco-maven-plugin</artifactId>
+              <version>${alfresco.sdk.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
         <!-- Filter resources in any subproject with this config -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

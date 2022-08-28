@@ -21,9 +21,10 @@
                 <!-- Le message d'erreur -->
                 <property name="erreur59:messageErreur">
                     <title>Message de l'erreur</title>
-                    <description>Le message d'erreur.</description>
+                    <description>Le message d'erreur</description>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <default>Aucune erreur en cours</default>
                 </property>
                 <!-- FIN - Le message d'erreur -->
                 

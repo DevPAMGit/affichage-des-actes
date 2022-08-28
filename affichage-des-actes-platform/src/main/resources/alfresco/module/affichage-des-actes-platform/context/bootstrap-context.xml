@@ -11,11 +11,11 @@
     <bean id="affichage-des-actes-platform.dictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
         <property name="models">
             <list>
-                <value>alfresco/module/${project.artifactId}/model/content-model.xml</value>
                 <value>alfresco/module/${project.artifactId}/model/actes-model.xml</value>
-                <value>alfresco/module/${project.artifactId}/model/stockage-actes-model.xml</value>
                 <value>alfresco/module/${project.artifactId}/model/erreur-model.xml</value>
+                <value>alfresco/module/${project.artifactId}/model/content-model.xml</value>
                 <value>alfresco/module/${project.artifactId}/model/workflow-model.xml</value>
+                <value>alfresco/module/${project.artifactId}/model/stockage-actes-model.xml</value>
             </list>
         </property>
         <property name="labels">

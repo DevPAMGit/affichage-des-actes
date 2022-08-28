@@ -24,7 +24,7 @@
         <constraint name="acme:securityClassificationOptions" type="LIST">
             <parameter name="allowedValues">
                 <list>
-                    <value></value>
+                    <!-- <value></value> -->
                     <!-- Empty for default search-->
                     <value>Public</value>
                     <value>Client Confidential</value>
@@ -61,7 +61,7 @@
 
     <aspects>
         <!-- A document can have security classification applied and
-             faceted search is specifically enabled for best performance and we change
+             faceted search is specifically enabled for best performance, and we change
              default index config to not tokenize the value. -->
         <aspect name="acme:securityClassified">
             <title>ACME Security Classified</title>
