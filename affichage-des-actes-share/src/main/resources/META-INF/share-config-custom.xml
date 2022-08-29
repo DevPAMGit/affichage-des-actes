@@ -8,6 +8,7 @@
 				<aspect name="erreur59:erreurBase"/>
 				<aspect name="erreur59:erreurDossier"/>
 				<aspect name="acme:securityClassified"/>
+				<aspect name="stockageactes59:informationDossier"/>
 			</visible>
 			<addable> 
             </addable>
@@ -19,12 +20,15 @@
 				<subtype name="stockageactes59:stockageFichier"/>
 				<subtype name="actes59:doc"/>
 				<subtype name="acme:document"/>
+				<subtype name="stockageactes59:fichier"/>
 			</type>
 			<type name="cm:folder">
-				<subtype name="actes59:sas"/>
-				<subtype name="actes59:dossier"/>
 				<subtype name="stockageactes59:actesConteneur"/>
 				<subtype name="stockageactes59:conteneurActeAnnee"/>
+				<subtype name="actes59:sas"/>
+				<subtype name="actes59:dossier"/>
+				<subtype name="stockageactes59:dossierActes"/>
+				<subtype name="stockageactes59:dossierAnnee"/>
 			</type>
 			<type name="stockageactes59:conteneurActeAnnee">
 				<subtype name="stockageactes59:conteneurActeMois"/>
@@ -42,6 +46,22 @@
 				<subtype name="stockageactes59:stockageActeOriginal"/>
 				<subtype name="stockageactes59:stockageAnnexe"/>
 			</type>
+			<type name="stockageactes59:dossierAnnee">
+				<subtype name="stockageactes59:dossierMois"/>
+			</type>
+			<type name="stockageactes59:dossierMois">
+				<subtype name="stockageactes59:dossierJour"/>
+			</type>
+			<type name="stockageactes59:dossierJour">
+				<subtype name="stockageactes59:dossierTypologie"/>
+			</type>
+			<type name="stockageactes59:dossierTypologie">
+				<subtype name="stockageactes59:dossierActe"/>
+			</type>
+			<type name="stockageactes59:fichier">
+				<subtype name="stockageactes59:acteOriginal"/>
+				<subtype name="stockageactes59:annexe"/>
+			</type>
 		</types>
 	</config>
 	<config evaluator="string-compare" condition="AdvancedSearch" replace="true">
@@ -54,23 +74,6 @@
                 </form>
 			</forms>
 		</advanced-search>
-	</config>
-	<config evaluator="node-type" condition="acme:document">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="acme:documentId"/>
-					<show id="acme:securityClassification"/>
-					<show id="cm:name"/>
-					<show id="cm:title" force="true"/>
-					<show id="cm:description" force="true"/>
-					<show id="cm:created" force="true"/>
-					<show id="cm:modifier" force="true"/>
-					<show id="cm:modified" force="true"/>
-					<show id="cm:creator" for-mode="view"/>
-				</field-visibility>
-			</form>
-		</forms>
 	</config>
 	<config evaluator="node-type" condition="stockageactes59:stockageFichier">
 		<forms>
@@ -112,6 +115,132 @@
 				<field-visibility>
 					<show id="stockageactes59:typeFichier"/>
 					<show id="stockageactes59:empreinteFichier"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="stockageactes59:actesConteneur">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="stockageactes59:conteneurActeAnnee">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="stockageactes59:dateAnnee"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="stockageactes59:conteneurActeMois">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="stockageactes59:dateMois"/>
+					<show id="stockageactes59:dateAnnee"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="stockageactes59:conteneurActeJour">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="stockageactes59:dateJour"/>
+					<show id="stockageactes59:dateMois"/>
+					<show id="stockageactes59:dateAnnee"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="stockageactes59:conteneurType">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="stockageactes59:conteneurActeType"/>
+					<show id="stockageactes59:dateJour"/>
+					<show id="stockageactes59:dateMois"/>
+					<show id="stockageactes59:dateAnnee"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="stockageactes59:conteneurActe">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="stockageactes59:stockageIdentifiant"/>
+					<show id="stockageactes59:stockageDirectionSigle"/>
+					<show id="stockageactes59:stockageObjet"/>
+					<show id="stockageactes59:stockageDate"/>
+					<show id="stockageactes59:stockageSignataire"/>
+					<show id="stockageactes59:conteneurActeType"/>
+					<show id="stockageactes59:dateJour"/>
+					<show id="stockageactes59:dateMois"/>
+					<show id="stockageactes59:dateAnnee"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="acme:document">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="acme:documentId"/>
+					<show id="acme:securityClassification"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
@@ -222,10 +351,29 @@
 			</form>
 		</forms>
 	</config>
+	<config evaluator="aspect" condition="stockageactes59:informationDossier">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="stockageactes59:nbActes"/>
+					<show id="stockageactes59:nbActesEnErreurs"/>
+					<show id="stockageactes59:nbActesTraites"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 	<config evaluator="node-type" condition="actes59:sas">
 		<forms>
 			<form>
 				<field-visibility>
+					<show id="actes59:compteur"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
@@ -284,10 +432,13 @@
 			</form>
 		</forms>
 	</config>
-	<config evaluator="node-type" condition="stockageactes59:actesConteneur">
+	<config evaluator="node-type" condition="stockageactes59:dossierActes">
 		<forms>
 			<form>
 				<field-visibility>
+					<show id="stockageactes59:nbActes"/>
+					<show id="stockageactes59:nbActesEnErreurs"/>
+					<show id="stockageactes59:nbActesTraites"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
@@ -299,11 +450,11 @@
 			</form>
 		</forms>
 	</config>
-	<config evaluator="node-type" condition="stockageactes59:conteneurActeAnnee">
+	<config evaluator="node-type" condition="stockageactes59:dossierAnnee">
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="stockageactes59:dateAnnee"/>
+					<show id="stockageactes59:annee"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
@@ -315,12 +466,12 @@
 			</form>
 		</forms>
 	</config>
-	<config evaluator="node-type" condition="stockageactes59:conteneurActeMois">
+	<config evaluator="node-type" condition="stockageactes59:dossierMois">
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="stockageactes59:dateMois"/>
-					<show id="stockageactes59:dateAnnee"/>
+					<show id="stockageactes59:mois"/>
+					<show id="stockageactes59:annee"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
@@ -332,13 +483,13 @@
 			</form>
 		</forms>
 	</config>
-	<config evaluator="node-type" condition="stockageactes59:conteneurActeJour">
+	<config evaluator="node-type" condition="stockageactes59:dossierJour">
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="stockageactes59:dateJour"/>
-					<show id="stockageactes59:dateMois"/>
-					<show id="stockageactes59:dateAnnee"/>
+					<show id="stockageactes59:jour"/>
+					<show id="stockageactes59:mois"/>
+					<show id="stockageactes59:annee"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
@@ -350,14 +501,14 @@
 			</form>
 		</forms>
 	</config>
-	<config evaluator="node-type" condition="stockageactes59:conteneurType">
+	<config evaluator="node-type" condition="stockageactes59:dossierTypologie">
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="stockageactes59:conteneurActeType"/>
-					<show id="stockageactes59:dateJour"/>
-					<show id="stockageactes59:dateMois"/>
-					<show id="stockageactes59:dateAnnee"/>
+					<show id="stockageactes59:typologieDossier"/>
+					<show id="stockageactes59:jour"/>
+					<show id="stockageactes59:mois"/>
+					<show id="stockageactes59:annee"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
@@ -369,19 +520,70 @@
 			</form>
 		</forms>
 	</config>
-	<config evaluator="node-type" condition="stockageactes59:conteneurActe">
+	<config evaluator="node-type" condition="stockageactes59:dossierActe">
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="stockageactes59:stockageIdentifiant"/>
-					<show id="stockageactes59:stockageDirectionSigle"/>
-					<show id="stockageactes59:stockageObjet"/>
-					<show id="stockageactes59:stockageDate"/>
-					<show id="stockageactes59:stockageSignataire"/>
-					<show id="stockageactes59:conteneurActeType"/>
-					<show id="stockageactes59:dateJour"/>
-					<show id="stockageactes59:dateMois"/>
-					<show id="stockageactes59:dateAnnee"/>
+					<show id="stockageactes59:identifiant"/>
+					<show id="stockageactes59:sigleDirection"/>
+					<show id="stockageactes59:objet"/>
+					<show id="stockageactes59:date"/>
+					<show id="stockageactes59:signataire"/>
+					<show id="stockageactes59:typologieDossier"/>
+					<show id="stockageactes59:jour"/>
+					<show id="stockageactes59:mois"/>
+					<show id="stockageactes59:annee"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="stockageactes59:fichier">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="stockageactes59:typologieFichier"/>
+					<show id="stockageactes59:empreinte"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="stockageactes59:acteOriginal">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="stockageactes59:typologieFichier"/>
+					<show id="stockageactes59:empreinte"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="stockageactes59:annexe">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="stockageactes59:typologieFichier"/>
+					<show id="stockageactes59:empreinte"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>

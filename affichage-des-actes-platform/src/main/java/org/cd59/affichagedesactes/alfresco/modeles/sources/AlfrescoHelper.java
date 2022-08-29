@@ -4,6 +4,7 @@ package org.cd59.affichagedesactes.alfresco.modeles.sources;
 import java.util.ArrayList;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -16,13 +17,23 @@ import java.io.Serializable;
 /** Classe permettant de simplifier la gestion des nœuds Alfresco. */
 public class AlfrescoHelper {
 
-	/** Le service de gestion des nœuds d'Alfresco. */
+	/**
+	 * Le service de gestion des nœuds d'Alfresco.
+	 */
 	protected NodeService serviceNoeud;
 
-	/** Initialise une nouvelle instance de la classe {@link AlfrescoHelper}.
-	* @param serviceNoeud Le service de gestion des nœuds d'Alfresco. */
-	public AlfrescoHelper(NodeService serviceNoeud) {
-		this.serviceNoeud = serviceNoeud;
+	/**
+	 * Le registre de service Alfresco.
+	 */
+	protected ServiceRegistry registryService;
+
+	/**
+	 * Initialise une nouvelle instance de la classe {@link AlfrescoHelper}.
+	 * @param serviceRegistry Le registre de service Alfresco.
+	 */
+	public AlfrescoHelper(ServiceRegistry serviceRegistry) {
+		this.registryService = serviceRegistry;
+		this.serviceNoeud = this.registryService.getNodeService();
 	}
 
 	/** Permet de vérifier qu'un nœud possède l'aspect désigné en paramètre.
@@ -116,21 +127,34 @@ public class AlfrescoHelper {
 		return noeuds;
 	}
 
-	/** Permet de rechercher un nœud par son nom dans un autre nœud fournit en paramètre.
+	/**
+	 * Permet de rechercher un nœud par son nom dans un autre nœud fournit en paramètre.
 	 * @param noeud Le nœud dans lequel on recherchera l'enfant.
-	 * @param type Le type du nœud rechercher.
+	 // @param type Le type du nœud rechercher.
 	 * @param nom Le nom du nœud à rechercher.
-	 * @return NodeRef Le nœud avec le nom indiqué en paramètre ou null. */
-	public NodeRef searchNoeudDossierParNom(NodeRef noeud, QName type, String nom) {
-		return this.serviceNoeud.getChildByName(noeud, type, nom);
+	 * @return NodeRef Le nœud avec le nom indiqué en paramètre ou null.
+	 */
+	public NodeRef searchNoeudDossierParNom(NodeRef noeud, /*QName type,*/ String nom) {
+		// String query = this.serviceNoeud.getPath(noeud).toString() + "/" + nom;
+
+		// System.out.println("\n=================================================\n"+query + "\n=================================================\n");
+
+		// HashMap<String, Serializable> parametres = new HashMap<>();
+		//parametres.put("query", query);
+
+		//return this.nodeLocatorService.getNode("xpath",null, parametres);
+		return this.registryService.getFileFolderService().searchSimple(noeud, nom);
+		// return this.serviceNoeud.getChildByName(noeud, type, nom);
 	}
 
-	/** Permet de créer un dossier dans un nœud mis en paramètres s'il n'existe pas.
+	/**
+	 * Permet de créer un dossier dans un nœud mis en paramètres s'il n'existe pas.
 	 * @param noeud Le nœud dans lequel on va créer le dossier.
 	 * @param nom Le nom du dossier.
-	 * @return NodeRef Le nouveau nœud créer. */
+	 * @return NodeRef Le nouveau nœud créer.
+	 */
 	protected NodeRef creerDossier(NodeRef noeud, String nom) {
-		NodeRef resultat = this.searchNoeudDossierParNom(noeud, ContentModel.TYPE_FOLDER, nom);
+		NodeRef resultat = this.searchNoeudDossierParNom(noeud/*, ContentModel.TYPE_FOLDER*/, nom);
 		if( resultat == null )
 			resultat = this.serviceNoeud.createNode(noeud, ContentModel.ASSOC_CONTAINS, QName.createQName(nom),
 					ContentModel.TYPE_FOLDER).getChildRef();
@@ -143,7 +167,7 @@ public class AlfrescoHelper {
 	 * @param metadonnees Les métadonnées du nouveau nœud.
 	 * @return NodeRef Le nouveau nœud créer. */
 	protected NodeRef creerDossierAvecDonnees(NodeRef noeud, String nom, Map<QName, Serializable> metadonnees) {
-		NodeRef resultat = this.searchNoeudDossierParNom(noeud, ContentModel.TYPE_FOLDER, nom);
+		NodeRef resultat = this.searchNoeudDossierParNom(noeud/*, ContentModel.TYPE_FOLDER*/, nom);
 		if( resultat == null )
 			resultat = this.serviceNoeud.createNode(noeud, ContentModel.ASSOC_CONTAINS, QName.createQName(nom),
 					ContentModel.TYPE_FOLDER).getChildRef();

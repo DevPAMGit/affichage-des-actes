@@ -14,4 +14,7 @@ public class SasTypeModele {
 	/** Le nom du type de contenu. */
 	public final static QName NOM = QName.createQName( URI , "sas");
 
+	/** Modèle pour la propriété 'actes59:compteur'. */
+	public final static QName COMPTEUR = QName.createQName( URI , "compteur");
+
 }

@@ -2,7 +2,7 @@ package org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.type.s
 
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.QName;
+import org.alfresco.service.ServiceRegistry;import org.alfresco.service.namespace.QName;
 
 import org.cd59.affichagedesactes.alfresco.modeles.sources.AlfrescoModeleHelper;
 
@@ -14,10 +14,10 @@ import java.util.Map;
 public class SasTypeHelperModele extends AlfrescoModeleHelper {
 
 	/** Initialise une nouvelle instance de la classe {@link SasTypeHelperModele}. 
-	 * @param serviceNoeud Le service de gestion des nœuds d'Alfresco. 
+	 * @param serviceRegistry Le registre des services. 
 	 * @param noeud Le nœud de référence. */
-	public SasTypeHelperModele(NodeService serviceNoeud, NodeRef noeud){
-		super(serviceNoeud, noeud);
+	public SasTypeHelperModele(ServiceRegistry serviceRegistry, NodeRef noeud){
+		super(serviceRegistry, noeud);
 	}
 
 	/** Permet de vérifier que le nœud du modèle possède le type de contenu désigné en paramètre.
@@ -50,6 +50,18 @@ public class SasTypeHelperModele extends AlfrescoModeleHelper {
 	*/
 	public void addType(){
 		this.addType(SasTypeModele.NOM);
+	}
+
+	/** Méthode permettant de récupérer la valeur de la propriété 'actes59:compteur'. 
+	 * @return int La valeur de la propriété 'actes59:compteur'. */
+	public int getCompteur() { 
+		return (int) this.getPropriete(SasTypeModele.COMPTEUR);
+	}
+
+	/** Méthode permettant de récupérer la valeur de la propriété 'actes59:compteur'. 
+	 * @param valeur La nouvelle valeur de la propriété 'actes59:compteur'. */ 
+	public void setCompteur(int valeur) { 
+		this.majPropriete(SasTypeModele.COMPTEUR, valeur);
 	}
 
 }

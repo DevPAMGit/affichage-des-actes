@@ -1,3 +1,7 @@
+## Affichage des actes
+## Objectifs
+L'objectif de ce développement est de répondre à l'obligation qu'on les département concernant l'affichage des actes.
+
 # Alfresco AIO Project - SDK 4.4
 
 This is an All-In-One (AIO) project for Alfresco SDK 4.4.

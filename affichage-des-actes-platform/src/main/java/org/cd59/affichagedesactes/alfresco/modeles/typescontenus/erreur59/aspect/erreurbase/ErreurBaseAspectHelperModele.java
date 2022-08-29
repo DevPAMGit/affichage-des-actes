@@ -2,7 +2,7 @@ package org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspec
 
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.QName;
+import org.alfresco.service.ServiceRegistry;import org.alfresco.service.namespace.QName;
 
 import org.cd59.affichagedesactes.alfresco.modeles.sources.AlfrescoModeleHelper;
 
@@ -14,10 +14,10 @@ import java.util.Map;
 public class ErreurBaseAspectHelperModele extends AlfrescoModeleHelper {
 
 	/** Initialise une nouvelle instance de la classe {@link ErreurBaseAspectHelperModele}. 
-	 * @param serviceNoeud Le service de gestion des nœuds d'Alfresco. 
+	 * @param serviceRegistry Le registre des services. 
 	 * @param noeud Le nœud de référence. */
-	public ErreurBaseAspectHelperModele(NodeService serviceNoeud, NodeRef noeud){
-		super(serviceNoeud, noeud);
+	public ErreurBaseAspectHelperModele(ServiceRegistry serviceRegistry, NodeRef noeud){
+		super(serviceRegistry, noeud);
 	}
 
 	/** Permet de vérifier que le nœud du modèle possède le type de contenu désigné en paramètre.

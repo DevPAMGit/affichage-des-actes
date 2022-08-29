@@ -1,9 +1,12 @@
 package org.cd59.affichagedesactes.metiers.regle;
 
+import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspect.erreurbase.ErreurBaseAspectHelperModele;
+import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspect.erreurbase.ErreurBaseAspectModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspect.erreurdossier.ErreurDossierAspectHelperModele;
+import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspect.erreurdossier.ErreurDossierAspectModele;
 import org.cd59.affichagedesactes.metiers.factory.ErreurFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +17,9 @@ import org.slf4j.LoggerFactory;
 public class RegleMetierErreur {
 
     /**
-     * Le service de gestion des nœuds du projet.
+     * Le registre des services
      * */
-    private final NodeService nodeService;
+    private final ServiceRegistry serviceRegistry;
 
     /**
      * Le logger de la classe.
@@ -26,14 +29,14 @@ public class RegleMetierErreur {
     /**
      * La variable permettant la mutuelle exclusion sur le dossier de SAS.
      */
-    private static final Object SAS_MUTEX = new Object();
+    public static final Object SAS_MUTEX = new Object();
 
     /**
      * Initialise une nouvelle instance de la classe {@link RegleMetierErreur}.
-     * @param nodeService Le service de gestion des nœuds d'Alfresco.
+     * @param serviceRegistry Le registre des services.
      * */
-    public RegleMetierErreur(NodeService nodeService) {
-        this.nodeService = nodeService;
+    public RegleMetierErreur(ServiceRegistry serviceRegistry) {
+        this.serviceRegistry = serviceRegistry;
     }
 
     /**
@@ -60,8 +63,11 @@ public class RegleMetierErreur {
      * @param nodeRef Nœud référençant le fichier dans le dossier d'acte dans le SAS.
      */
     public void ajouterErreurDossierActeSAS(NodeRef nodeRef, String message) {
+        if(!this.serviceRegistry.getNodeService().hasAspect(nodeRef, ErreurBaseAspectModele.NOM)
+                && !this.serviceRegistry.getNodeService().hasAspect(nodeRef, ErreurDossierAspectModele.NOM))
+            this.ajouterErreurDossierSAS(this.obtenirNoeudParent(nodeRef));
+
         this.ajouterErreur(nodeRef, message);
-        this.ajouterErreurDossierSAS(this.obtenirNoeudParent(nodeRef));
     }
 
     /**
@@ -80,20 +86,21 @@ public class RegleMetierErreur {
      *                de dossier.
      */
     public void retirerErreurDossierActe(NodeRef nodeRef) {
-        ErreurBaseAspectHelperModele erreur1 = new ErreurBaseAspectHelperModele(this.nodeService, nodeRef);
-        ErreurDossierAspectHelperModele erreur2 = new ErreurDossierAspectHelperModele(this.nodeService, nodeRef);
+        ErreurBaseAspectHelperModele erreur1 = new ErreurBaseAspectHelperModele(this.serviceRegistry, nodeRef);
+        ErreurDossierAspectHelperModele erreur2 = new ErreurDossierAspectHelperModele(this.serviceRegistry, nodeRef);
 
         if(!erreur1.hasAspect() && !erreur2.hasAspect()) return;
 
         if(erreur1.hasAspect()) {
             this.retirerErreur(nodeRef);
             this.soustraireErreurDossierSAS(erreur1.getNoeudParent());
-            return;
         }
 
-        this.soustraireErreurDossier(nodeRef);
-        // Si l'aspect n'est plus présent : alors il faut soustraire une erreur du dossier SAS.
-        if(!erreur2.hasAspect()) this.soustraireErreurDossierSAS(erreur2.getNoeudParent());
+        if(erreur2.hasAspect()) {
+            this.soustraireErreurDossier(nodeRef);
+            // Si l'aspect n'est plus présent : alors il faut soustraire une erreur du dossier SAS.
+            if(!erreur2.hasAspect()) this.soustraireErreurDossierSAS(erreur2.getNoeudParent());
+        }
     }
 
     /**
@@ -124,7 +131,7 @@ public class RegleMetierErreur {
      * @param message Le message lié à l'erreur.
      * */
     private void ajouterErreur(NodeRef nodeRef, String message) {
-        ErreurBaseAspectHelperModele erreur = new ErreurBaseAspectHelperModele(nodeService, nodeRef);
+        ErreurBaseAspectHelperModele erreur = new ErreurBaseAspectHelperModele(this.serviceRegistry, nodeRef);
         logger.info(String.format("Ajout d'une erreur sur l'élément %s", erreur.obtenirNom()));
         if(!erreur.hasAspect()) erreur.addAspect(ErreurFactory.obtenirParametresErreur(message));
         else erreur.majProprietes(ErreurFactory.obtenirParametresErreur(message));
@@ -136,7 +143,7 @@ public class RegleMetierErreur {
      * @return <c>true</c> Si un aspect d'erreur a été supprimé ; sinon <c>false</c>.
      */
     private boolean retirerErreur(NodeRef nodeRef) {
-        ErreurBaseAspectHelperModele erreur = new ErreurBaseAspectHelperModele(nodeService, nodeRef);
+        ErreurBaseAspectHelperModele erreur = new ErreurBaseAspectHelperModele(this.serviceRegistry, nodeRef);
 
         logger.info(String.format("Retrait d'une erreur sur l'élément %s", erreur.obtenirNom()));
 
@@ -151,7 +158,7 @@ public class RegleMetierErreur {
      * @param nodeRef Le nœud sur lequel on doit ajouter l'erreur de dossier.
      */
     private void ajouterErreurDossier(NodeRef nodeRef) {
-        ErreurDossierAspectHelperModele erreur = new ErreurDossierAspectHelperModele(this.nodeService, nodeRef);
+        ErreurDossierAspectHelperModele erreur = new ErreurDossierAspectHelperModele(this.serviceRegistry, nodeRef);
         logger.info(String.format("Ajouter d'une erreur dossier sur le dossier %s", erreur.obtenirNom()));
         if(!erreur.hasAspect()) erreur.addAspect(ErreurFactory.obtenirParametresErreurDossier(1));
         else erreur.majProprietes(ErreurFactory.obtenirParametresErreurDossier(erreur.getNbFichierEnErreur() + 1 ));
@@ -162,7 +169,7 @@ public class RegleMetierErreur {
      * @param nodeRef Le nœud auquel on soustrait une erreur.
      */
     private void soustraireErreurDossier(NodeRef nodeRef) {
-        ErreurDossierAspectHelperModele erreur = new ErreurDossierAspectHelperModele(this.nodeService, nodeRef);
+        ErreurDossierAspectHelperModele erreur = new ErreurDossierAspectHelperModele(this.serviceRegistry, nodeRef);
         logger.info(String.format("Soustraction d'une erreur sur le dossier %s", erreur.obtenirNom()));
 
         // Vérification de l'existence de l'aspect sur le nœud.
@@ -193,6 +200,6 @@ public class RegleMetierErreur {
      * @return le nœud parent du nœud en référence.
      */
     private NodeRef obtenirNoeudParent(NodeRef nodeRef) {
-        return this.nodeService.getPrimaryParent(nodeRef).getParentRef();
+        return this.serviceRegistry.getNodeService().getPrimaryParent(nodeRef).getParentRef();
     }
 }

@@ -13,7 +13,14 @@
         <type name="actes59:sas">
             <title>SAS</title>
             <parent>cm:folder</parent>
-            <properties/>
+            <properties>
+                <property name="actes59:compteur">
+                    <title>Compteur</title>
+                    <description>Le compteur du SAS</description>
+                    <type>d:int</type>
+                    <default>1</default>
+                </property>
+            </properties>
             <associations/>
         </type>
         <type name="actes59:dossier">
