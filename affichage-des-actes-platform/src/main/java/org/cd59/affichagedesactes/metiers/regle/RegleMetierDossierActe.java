@@ -41,6 +41,9 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+/**
+ * Classe pour respecter les règle métier des actes.
+ */
 public class RegleMetierDossierActe {
 
     /**
@@ -131,7 +134,6 @@ public class RegleMetierDossierActe {
                 // Mise à jour des aspects dossier informations.
                 this.ajouterDossierActeArborescence(dossierTypologie.getNoeud());
 
-                System.out.println("=======================================\nREMOVE FOLDER \n========================================");
                 // Suppression du nœud acte dans le SAS.
                 this.serviceRegistry.getFileFolderService().delete(dossierActeSAS.getNoeud());
 
@@ -192,8 +194,6 @@ public class RegleMetierDossierActe {
         if(type.isMatch(DossierAnneeTypeModele.NOM) || type.isMatch(DossierMoisTypeModele.NOM) ||
                 type.isMatch(DossierJourTypeModele.NOM) || type.isMatch(DossierTypologieTypeModele.NOM)) {
 
-            System.out.println("=======================================\nINCREMENTATION DOSSIER " + ((String)this.serviceRegistry.getNodeService().getProperty(nodeRef, ContentModel.PROP_NAME)) + "\n========================================");
-
             // Récupération de nombre d'actes en cours.
             int nbActes = (int) this.serviceRegistry.getNodeService().getProperty(nodeRef, InformationDossierAspectModele.NB_ACTES);
             // Incrémentation de son nombre.
@@ -246,9 +246,16 @@ public class RegleMetierDossierActe {
         }
     }
 
+    /**
+     * Déplace les fichiers du SAS vers le dossier de destination.
+     * @param childNode Le nœud à déplacer.
+     * @param dossierActe Le dossier de destination.
+     * @throws FileNotFoundException Si le fichier a déplacé n'est pas trouvé.
+     * @throws NoSuchAlgorithmException ...
+     * @throws IOException S'il y a une exception Input output.
+     */
     private void deplacerFichierActeSAS(NodeRef childNode, DossierActeTypeHelperModele dossierActe)
             throws FileNotFoundException, NoSuchAlgorithmException, IOException {
-        System.out.println("=======================================\n DEPLACEMENT FICHIER\n========================================");
         FileInfo fileInfo = this.serviceRegistry.getFileFolderService().move(childNode, dossierActe.getNoeud(), this.genererNomFichier(dossierActe, childNode));
         this.majNoeudStocker(fileInfo.getNodeRef());
     }
@@ -264,7 +271,6 @@ public class RegleMetierDossierActe {
             DossierTypologieTypeHelperModele dossierTypologie, DossierinfosAspectHelperModele dossierActeSAS,
             String nomDossier) {
         // Création du dossier.
-        System.out.println("=======================================\nDOSSIER A CREER" + nomDossier + "\n========================================");
         DossierActeTypeHelperModele dossier = new DossierActeTypeHelperModele(
                 this.serviceRegistry, dossierTypologie.creerDossier(nomDossier)
         );
@@ -289,15 +295,14 @@ public class RegleMetierDossierActe {
         String type = this.formatTypeDossier(dossierActeSAS.getTypedossier());
 
         // Recherche du dossier jour dans le dossier du mois.
-        NodeRef noeudTypologie = dossierJour.searchNoeudDossierParNom(/*ContentModel.TYPE_FOLDER,*/ type);
+        NodeRef noeudTypologie = dossierJour.searchNoeudDossierParNom(type);
         if(noeudTypologie == null) {
-            System.out.println("=======================================\nDOSSIER TYPE A CREER " + type + "\n========================================");
             noeudTypologie = dossierJour.creerDossierAvecDonnees(
                     type, DossierFactory.obtenirParametresDossierType(
                             dossierJour.getJour(), dossierJour.getMois(), dossierJour.getAnnee(), type
                     )
             );
-        }else System.out.println("=======================================\nDOSSIER TYPE EXISTANT " + type + "\n========================================");
+        }
 
         // Ajout du type si le dossier vient d'être créé.
         DossierTypologieTypeHelperModele dossier = new DossierTypologieTypeHelperModele(this.serviceRegistry,
@@ -339,13 +344,12 @@ public class RegleMetierDossierActe {
         // Recherche du dossier jour dans le dossier du mois.
         NodeRef noeudJour = dossierMois.searchNoeudDossierParNom(/*ContentModel.TYPE_FOLDER,*/ jourChaine);
         if(noeudJour == null) {
-            System.out.println("=======================================\nDOSSIER JOUR A CREER " + jour + "\n========================================");
             noeudJour = dossierMois.creerDossierAvecDonnees(
                     jourChaine, DossierFactory.obtenirParametresDossierJour(
                             jour, dossierMois.getMois(), dossierMois.getAnnee()
                     )
             );
-        }else System.out.println("=======================================\nDOSSIER JOUR EXISTANT " + jour + "\n========================================");
+        }
 
         // Mise en place du type si le dossier vient d'être créé.
         DossierJourTypeHelperModele dossier = new DossierJourTypeHelperModele(this.serviceRegistry, noeudJour);
@@ -375,11 +379,10 @@ public class RegleMetierDossierActe {
         // Recherche du dossier mois dans le dossier de l'année.
         NodeRef noeudMois = dossierAnnee.searchNoeudDossierParNom(/*ContentModel.TYPE_FOLDER,*/ moisChaine);
         if(noeudMois == null) {
-            System.out.println("=======================================\nDOSSIER MOIS A CREER " + mois + "\n========================================");
             noeudMois = dossierAnnee.creerDossierAvecDonnees(
                     moisChaine, DossierFactory.obtenirParametresDossierMois(mois, dossierAnnee.getAnnee())
             );
-        }else System.out.println("=======================================\nDOSSIER MOIS EXISTANT " + mois + "\n========================================");
+        }
 
         // Mise en place du type si le dossier vient d'être créé.
         DossierMoisTypeHelperModele dossier = new DossierMoisTypeHelperModele(this.serviceRegistry, noeudMois);
@@ -407,13 +410,12 @@ public class RegleMetierDossierActe {
         String anneeChaine = Integer.toString(annee);
 
         // Recherche du dossier année dans le dossier des actes.
-        NodeRef noeudAnnee = dossierActes.searchNoeudDossierParNom(/*ContentModel.TYPE_FOLDER,*/ anneeChaine);
+        NodeRef noeudAnnee = dossierActes.searchNoeudDossierParNom(anneeChaine);
         if(noeudAnnee == null) {
-            System.out.println("=======================================\nDOSSIER ANNEE A CREER " + annee + "\n========================================");
             noeudAnnee = dossierActes.creerDossierAvecDonnees(
                     anneeChaine, DossierFactory.obtenirParametresDossierAnnees(annee)
             );
-        }else System.out.println("=======================================\nDOSSIER ANNEE EXISTANT " + annee + "\n========================================");
+        }
 
         // Mise en place du type si le dossier vient d'être créé.
         DossierAnneeTypeHelperModele dossier = new DossierAnneeTypeHelperModele(this.serviceRegistry, noeudAnnee);
@@ -430,25 +432,12 @@ public class RegleMetierDossierActe {
      */
     private DossierActesTypeHelperModele obtenirDossierActes(NodeRef nodeRef) {
         AlfrescoModeleHelper racine = new AlfrescoModeleHelper(this.serviceRegistry, nodeRef);
-        /* NodeRef noeudActes = racine.searchNoeudDossierParNom(ContentModel.TYPE_FOLDER, NOM_DOSSIER_ACTES);
-        if(noeudActes == null) {
-            System.out.println("=======================================\nDOSSIER A CREER " + NOM_DOSSIER_ACTES + "\n========================================");
-            noeudActes = racine.creerDossierAvecDonnees(
-                    NOM_DOSSIER_ACTES, DossierFactory.obtenirParametresDossierActes()
-            );
-        }else System.out.println("=======================================\nDOSSIER EXISTANT " + NOM_DOSSIER_ACTES + "\n========================================");
-
-
-
-        // Mise en place du type si le dossier vient d'être créé.
-        DossierActesTypeHelperModele dossierActes = new DossierActesTypeHelperModele(this.nodeService, noeudActes);*/
 
         DossierActesTypeHelperModele dossierActes = new DossierActesTypeHelperModele(this.serviceRegistry, racine.creerDossier(NOM_DOSSIER_ACTES));
         if(!dossierActes.hasType()) {
-            System.out.println("=======================================\nNOUVEAU DOSSIER " + NOM_DOSSIER_ACTES + "\n========================================");
             dossierActes.addType();
             dossierActes.majProprietes(DossierFactory.obtenirParametresDossierActes());
-        }else System.out.println("=======================================\nVIEUX DOSSIER " + NOM_DOSSIER_ACTES + "\n========================================");
+        }
 
         return dossierActes;
     }
@@ -467,14 +456,11 @@ public class RegleMetierDossierActe {
             synchronized (COMPTEUR_SAS_MUTEX) {
                 Serializable nActe = dossierSAS.getPropriete(SasTypeModele.COMPTEUR);
                 if(nActe == null) {
-                    System.out.println("=======================================\nCOMPTEUR SAS NULL \n========================================");
                     dossierSAS.setCompteur(1);
                     nActe = dossierSAS.getCompteur();
-                }else
-                    System.out.println("=======================================\nCOMPTEUR SAS NON NULL " + ((int)nActe)  + " \n========================================");
+                }
 
                 dossierSAS.setCompteur( ((int)nActe) +1 );
-                System.out.println("=======================================\nCOMPTEUR SAS VALEUR " + ((int)nActe) + " \n========================================");
                 numeroActe =  entierSurTroisChiffres( (int)nActe );
             }
 
@@ -498,8 +484,8 @@ public class RegleMetierDossierActe {
     /**
      * Met à jour le nœud stocké.
      * @param nodeRef Le nœud
-     * @throws NoSuchAlgorithmException
-     * @throws IOException
+     * @throws NoSuchAlgorithmException ...
+     * @throws IOException S'il y a une exception Input/Output
      */
     private void majNoeudStocker(NodeRef nodeRef) throws NoSuchAlgorithmException, IOException {
         // Suppression de l'aspect 'docinfo'.
