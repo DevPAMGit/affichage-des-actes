@@ -20,4 +20,7 @@ public class ErreurBaseAspectModele {
 	/** Modèle pour la propriété 'erreur59:dateErreur'. */
 	public final static QName DATE_ERREUR = QName.createQName( URI , "dateErreur");
 
+	/** Modèle pour la propriété 'erreur59:etat'. */
+	public final static QName ETAT = QName.createQName( URI , "etat");
+
 }

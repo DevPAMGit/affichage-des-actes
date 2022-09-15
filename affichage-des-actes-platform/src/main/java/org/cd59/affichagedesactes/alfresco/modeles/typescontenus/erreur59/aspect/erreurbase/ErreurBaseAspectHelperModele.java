@@ -87,12 +87,31 @@ public class ErreurBaseAspectHelperModele extends AlfrescoModeleHelper {
 	public boolean estDateErreurValide() { 
 		return (this.getDateErreur() != null);	}
 
+	/** Méthode permettant de récupérer la valeur de la propriété 'erreur59:etat'. 
+	 * @return String La valeur de la propriété 'erreur59:etat'. */
+	public String getEtat() { 
+		return (String) this.getPropriete(ErreurBaseAspectModele.ETAT);
+	}
+
+	/** Méthode permettant de récupérer la valeur de la propriété 'erreur59:etat'. 
+	 * @param valeur La nouvelle valeur de la propriété 'erreur59:etat'. */ 
+	public void setEtat(String valeur) { 
+		this.majPropriete(ErreurBaseAspectModele.ETAT, valeur);
+	}
+
+	/** Méthode permettant de vérifier si la valeur de la propriété 'erreur59:etat' est valide. 
+	 * @return <c>true</c> si la valeur est valide; sinon <c>false</c>'.  */
+	public boolean estEtatValide() { 
+		return ( this.getEtat() != null && !this.getEtat().isBlank());
+	}
+
 	/** Méthode permettant de vérifier la validité de le type de contenu 'erreur59:erreurBase'. 
 	 * @return <c>true</c> si le type de contenu à toutes ces propriétés valides sinon <c>false</c>. */ 
 	public boolean estAspectValide() { 
 		return ( this.hasAspect()
 		&& this.estMessageErreurValide()
-		&& this.estDateErreurValide());
+		&& this.estDateErreurValide()
+		&& this.estEtatValide());
 	}
 
 }

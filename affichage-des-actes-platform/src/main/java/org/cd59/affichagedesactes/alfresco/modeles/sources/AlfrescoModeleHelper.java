@@ -176,4 +176,23 @@ public class AlfrescoModeleHelper extends AlfrescoHelper {
 		return (String) super.getPropriete(this.noeud, ContentModel.PROP_TITLE);
 	}
 
+	/**
+	 * Recherche un dossier par son type.
+	 * @param type Le type du nœud recherché.
+	 * @return La liste des nœuds par le type.
+	 */
+	public List<NodeRef> rechercherParType(QName type) {
+		return super.rechercherParType(this.noeud, type);
+	}
+
+	/**
+	 * Rechercher un dossier par son nom et son type.
+	 * @param type Le type du nœud recherché.
+	 * @param nom le nom du nœud que l'on recherche.
+	 * @return La liste des nœuds.
+	 */
+	public List<NodeRef> rechercherParTypeEtNom(QName type, String nom) {
+		return this.rechercherParTypeEtNom(this.noeud, type, nom);
+	}
+
 }

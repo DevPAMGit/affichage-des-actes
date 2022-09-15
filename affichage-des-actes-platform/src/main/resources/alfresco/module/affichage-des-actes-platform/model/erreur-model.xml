@@ -36,6 +36,25 @@
                     <mandatory>true</mandatory>                    
                 </property>
                 <!-- FIN - La date à laquelle l'erreur a eu lieu. -->
+
+                <!-- L'état actuel du dossier. -->
+                <property name="erreur59:etat">
+                    <title>Etat</title>
+                    <description>Etat</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <constraints>
+                        <constraint name="erreur59:listeEtatSAS" type="LIST">
+                            <parameter name="allowedValues">
+                                <list>
+                                    <value>OK</value>
+                                    <value>ERREUR</value>
+                                </list>
+                            </parameter>
+                        </constraint>
+                    </constraints>
+                </property>
+                <!-- FIN -  -->
                 
             </properties>
         </aspect>
@@ -58,6 +77,107 @@
             </properties>
         </aspect>
         <!-- FIN - Définition de l'aspect d'erreur sur un dossier. -->
+
+        <!-- *************************** V2 ************************************ -->
+
+        <aspect name="erreur59:infosDossierSas">
+            <title>Informations sur le dossier SAS</title>
+            <description>Informations concernant le dossier du SAS</description>
+            <properties>
+
+                <!-- NOMBRE DE DOSSIERS EN ERREURS -->
+                <property name="erreur59:nbDossiersActesEnErreurs">
+                    <title>Nombre de dossiers d'actes en erreurs</title>
+                    <description>Nombre dossier d'actes en erreurs</description>
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                    <default>0</default>
+                </property>
+                <!-- FIN - NOMBRE DE DOSSIER EN ERREURS -->
+
+            </properties>
+            <mandatory-aspects>
+                <aspect>erreur59:infosBaseSAS</aspect>
+            </mandatory-aspects>
+        </aspect>
+
+        <aspect name="erreur59:infosDossierActeSas">
+            <title>Information sur le dossier d'acte.</title>
+            <description>Information sur le dossier d'acte.</description>
+            <properties>
+
+                <!-- LE NOMBRE DE FICHIERS EN ERREURS -->
+                <property name="erreur59:nbFichierEnErreurs">
+                    <title>Nombre de fichiers en erreurs</title>
+                    <description>Le nombre de fichiers en erreurs</description>
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                    <default>0</default>
+                </property>
+                <!-- FIN - LE NOMBRE DE FICHIERS EN ERREURS -->
+
+            </properties>
+            <mandatory-aspects>
+                <aspect>erreur59:infosBaseSAS</aspect>
+            </mandatory-aspects>
+        </aspect>
+        
+        <aspect name="erreur59:infosFichierActeSas">
+            <title>Informations sur le fichier d'acte</title>
+            <description>Informations sur le fichier d'acte</description>
+            <mandatory-aspects>
+                <aspect>erreur59:infosBaseSAS</aspect>
+            </mandatory-aspects>
+        </aspect>
+
+        <aspect name="erreur59:infosBaseSAS">
+            <title>Message d'information</title>
+            <description>Message d'information</description>
+            <properties>
+
+                <!-- DATE DE L'INFORMATION -->
+                <property name="erreur59:dateInfoSAS">
+                    <title>Nombre de dossiers d'actes présent</title>
+                    <description>Le nombre de dossiers d'actes présent</description>
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                    <default>0</default>
+                </property>
+                <!-- FIN - DATE DE L'INFORMATION -->
+
+                <!-- MESSAGE D'INFORMATION -->
+                <property name="erreur59:messageInfoSAS">
+                    <title>Message</title>
+                    <description>Message informatif sur l'élément</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <default>0</default>
+                </property>
+                <!-- FIN - MESSAGE D'INFORMATION -->
+
+                <!-- ETAT DE L'ELEMENT -->
+                <property name="erreur59:etatInfoSAS">
+                    <title>Etat</title>
+                    <description>Etat du dossier</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <default>EN ATTENTE</default>
+                    <constraints>
+                        <constraint name="erreur59:etatSASListe" type="LIST">
+                            <parameter name="allowedValues">
+                                <list>
+                                    <value>OK</value>
+                                    <value>ERREUR</value>
+                                    <value>EN ATTENTE</value>
+                                </list>
+                            </parameter>
+                        </constraint>
+                    </constraints>
+                </property>
+                <!-- FIN - ETAT DE L'ELEMENT -->
+
+            </properties>
+        </aspect>
 
     </aspects>
 </model>

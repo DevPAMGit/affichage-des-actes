@@ -10,6 +10,9 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.SearchService;
+
 import java.util.Map;
 import java.util.List;
 import java.io.Serializable;
@@ -175,6 +178,44 @@ public class AlfrescoHelper {
 		this.majProprietes(resultat, metadonnees);
 
 		return resultat;
+	}
+
+	/**
+	 * Recherche un dossier par son type.
+	 * @param nodeRef Le nœud dans lequel rechercher.
+	 * @param type Le type du nœud recherché.
+	 * @return La liste des nœuds par le type.
+	 */
+	protected List<NodeRef> rechercherParType(NodeRef nodeRef, QName type) {
+		// Récupération du service de recherche.
+		SearchService searchService = this.registryService.getSearchService();
+		// Lancement de la recherche.
+		ResultSet resultatRequete = searchService.query(nodeRef.getStoreRef(), SearchService.LANGUAGE_CMIS_STRICT,
+				String.format("select * from %s:%s", type.getPrefixString(), type.getLocalName()));
+		// Vérification que le résultat est initié.
+		if(resultatRequete == null || resultatRequete.length() == 0) return new ArrayList<>();
+		// Récupération des nœuds.
+		return resultatRequete.getNodeRefs();
+	}
+
+	/**
+	 * Rechercher un dossier par son nom et son type.
+	 * @param nodeRef Le node dans lequel on souhaite rechercher.
+	 * @param type Le type du nœud recherché.
+	 * @param nom le nom du nœud que l'on recherche.
+	 * @return La liste des nœuds
+	 */
+	protected List<NodeRef> rechercherParTypeEtNom(NodeRef nodeRef, QName type, String nom) {
+		// Récupération du service de recherche.
+		SearchService searchService = this.registryService.getSearchService();
+		// Lancement de la recherche.
+		ResultSet resultatRequete = searchService.query(nodeRef.getStoreRef(), SearchService.LANGUAGE_CMIS_STRICT,
+				String.format("select * from %s:%s where cmis:name = '%s'",
+						type.getPrefixString(), type.getLocalName(), nom));
+		// Vérification que le résultat est initié.
+		if(resultatRequete == null || resultatRequete.length() == 0) return new ArrayList<>();
+		// Récupération des nœuds.
+		return resultatRequete.getNodeRefs();
 	}
 
 }

@@ -5,7 +5,7 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.cd59.affichagedesactes.metiers.action.stockage.StockerActeSASActionMetier;
+import org.cd59.affichagedesactes.v2.action.StockerDossierActe;
 
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class StockerDossierActeSAS extends ActionExecuterAbstractBase {
 
     @Override
     protected void executeImpl(Action action, NodeRef nodeRef) {
-        new StockerActeSASActionMetier(this.serviceRegistry).executer(nodeRef);
+        new StockerDossierActe(this.serviceRegistry, nodeRef).executer();
     }
 
     @Override

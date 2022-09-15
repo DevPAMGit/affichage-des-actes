@@ -3,10 +3,17 @@
 	<config evaluator="string-compare" condition="DocumentLibrary">
 		<aspects>
 			<visible>
+				<aspect name="erreur59:infoDossierSas"/>
+				<aspect name="erreur59:infoFichierActeSas"/>
+				<aspect name="erreur59:informationSAS"/>
 				<aspect name="actes59:docinfos"/>
 				<aspect name="actes59:dossierinfos"/>
 				<aspect name="erreur59:erreurBase"/>
 				<aspect name="erreur59:erreurDossier"/>
+				<aspect name="erreur59:infosDossierSas"/>
+				<aspect name="erreur59:infosDossierActeSas"/>
+				<aspect name="erreur59:infosFichierActeSas"/>
+				<aspect name="erreur59:infosBaseSAS"/>
 				<aspect name="acme:securityClassified"/>
 				<aspect name="stockageactes59:informationDossier"/>
 			</visible>
@@ -235,6 +242,55 @@
 			</form>
 		</forms>
 	</config>
+	<config evaluator="aspect" condition="erreur59:infoDossierSas">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="erreur59:nbDossiersActesEnErreurs"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="erreur59:infoFichierActeSas">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="erreur59:informationSAS">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="erreur59:dateInfoSAS"/>
+					<show id="erreur59:messageInfoSAS"/>
+					<show id="erreur59:etatInfoSAS"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 	<config evaluator="node-type" condition="acme:document">
 		<forms>
 			<form>
@@ -306,6 +362,7 @@
 				<field-visibility>
 					<show id="erreur59:messageErreur"/>
 					<show id="erreur59:dateErreur"/>
+					<show id="erreur59:etat"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
@@ -324,6 +381,72 @@
 					<show id="erreur59:nbFichierEnErreur"/>
 					<show id="erreur59:messageErreur"/>
 					<show id="erreur59:dateErreur"/>
+					<show id="erreur59:etat"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="erreur59:infosDossierSas">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="erreur59:nbDossiersActesEnErreurs"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="erreur59:infosDossierActeSas">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="erreur59:nbFichierEnErreurs"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="erreur59:infosFichierActeSas">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="erreur59:infosBaseSAS">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="erreur59:dateInfoSAS"/>
+					<show id="erreur59:messageInfoSAS"/>
+					<show id="erreur59:etatInfoSAS"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
