@@ -1,4 +1,4 @@
-package org.cd59.affichagedesactes.v2.action.envoie;
+package org.cd59.affichagedesactes.v2.action;
 
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -28,12 +28,12 @@ import java.util.List;
 /**
  * Action métier permettant d'envoyer un dossier au site d'affichage des actes.
  */
-public class EnvoyerDossierActe extends ActionMetier {
+public class EnvoyerDossierActeAction extends ActionMetier {
 
     /**
      * Le logger de la classe.
      */
-    private final Logger LOGGER = LoggerFactory.getLogger(EnvoyerDossierActe.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(EnvoyerDossierActeAction.class);
 
     /**
      * L'hôte de destination des
@@ -63,7 +63,7 @@ public class EnvoyerDossierActe extends ActionMetier {
     /**
      * La liste de noeuds annexe.
      */
-    public List<NodeRef> annexes;
+    private List<NodeRef> annexes;
 
     /**
      * Gestionnaire de nœuds pour l'aspect 'affichage59:affichage'.
@@ -74,7 +74,7 @@ public class EnvoyerDossierActe extends ActionMetier {
      * Initialise une nouvelle instance de la classe {@link ActionMetier}.
      * @param serviceRegistry Le registre de service Alfresco.
      */
-    public EnvoyerDossierActe(ServiceRegistry serviceRegistry, NodeRef nodeRef) {
+    public EnvoyerDossierActeAction(ServiceRegistry serviceRegistry, NodeRef nodeRef) {
         super(serviceRegistry);
         this.dossierActe = nodeRef;
         this.applicationEnvoiSAS = new ApplicationEnvoiSAS(this);
