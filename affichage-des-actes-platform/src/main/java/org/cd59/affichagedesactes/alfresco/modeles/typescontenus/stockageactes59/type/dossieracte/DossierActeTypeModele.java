@@ -29,6 +29,9 @@ public class DossierActeTypeModele {
 	/** Modèle pour la propriété 'stockageactes59:signataire'. */
 	public final static QName SIGNATAIRE = QName.createQName( URI , "signataire");
 
+	/** Modèle pour la propriété 'stockageactes59:resume'. */
+	public final static QName RESUME = QName.createQName( URI , "resume");
+
 	/** Modèle pour la propriété 'stockageactes59:typologieDossier'. */
 	public final static QName TYPOLOGIE_DOSSIER = QName.createQName( URI , "typologieDossier");
 

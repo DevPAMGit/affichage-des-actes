@@ -15,13 +15,16 @@ import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.aspect.
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.aspect.dossierinfos.DossierinfosAspectModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.type.sas.SasTypeHelperModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.type.sas.SasTypeModele;
+import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.affichage59.aspect.affichage.AffichageAspectModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.acteoriginal.ActeOriginalTypeModele;
+import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.annexe.AnnexeTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.dossieracte.DossierActeTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.dossierannee.DossierAnneeTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.dossierjour.DossierJourTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.dossiermois.DossierMoisTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.dossiertypologie.DossierTypologieTypeModele;
 import org.cd59.affichagedesactes.v2.action.source.ActionMetier;
+import org.cd59.affichagedesactes.v2.application.ApplicationEnvoiSAS;
 import org.cd59.affichagedesactes.v2.application.ApplicationErreurSAS;
 import org.cd59.affichagedesactes.v2.application.ApplicationErreurStockage;
 
@@ -62,12 +65,18 @@ public class StockerDossierActe extends ActionMetier {
     private final ApplicationErreurStockage applicationErreurStockage;
 
     /**
+     * le gestionnaire de l'aspect 'affichage59:affichage'.
+     */
+    private final ApplicationEnvoiSAS applicationEnvoiSAS;
+
+    /**
      * Initialise une nouvelle instance de la classe {@link ActionMetier}.
      * @param serviceRegistry Le registre de service Alfresco.
      */
     public StockerDossierActe(ServiceRegistry serviceRegistry, NodeRef noeudDossierActe) {
         super(serviceRegistry);
         this.noeudDossierActe = noeudDossierActe;
+        this.applicationEnvoiSAS = new ApplicationEnvoiSAS(this);
         this.applicationErreurSAS = new ApplicationErreurSAS(this);
         this.applicationErreurStockage = new ApplicationErreurStockage(this);
     }
@@ -93,18 +102,15 @@ public class StockerDossierActe extends ActionMetier {
             );
 
             // Le dossier existe déjà.
-            /*if(resultatRecherche != null && resultatRecherche.length() > 0) {
-                System.out.println(nomDossierActeStockage + " EXISTE DEJA");
-                this.applicationErreurSAS.ajouterErreur(this.noeudDossierActe,
+            if(resultatRecherche != null && resultatRecherche.length() > 0) {
+                this.applicationErreurSAS.miseAJourInfoBaseSasDossierInfos(this.noeudDossierActe,
                         String.format("Il existe déjà un dossier nommé '%s' dans l'arborescence des actes.",
-                                nomDossierActeStockage)
+                                nomDossierActeStockage), true
                 );
-
             // Le dossier n'existe pas.
-            }else*/
-            if(resultatRecherche == null || resultatRecherche.length() == 0){
+            }else if(resultatRecherche == null || resultatRecherche.length() == 0){
                 // Retrait de l'erreur si elle existe.
-                // this.applicationErreurSAS.retirerErreurInfosDossierActeSas(this.noeudDossierActe);
+                this.applicationErreurSAS.miseAJourInfoBaseSasDossierInfos(this.noeudDossierActe);
                 NodeRef nodeRef = this.obtenirDossierActe(dossierActes, nomDossierActeStockage);
 
                 try{
@@ -127,8 +133,8 @@ public class StockerDossierActe extends ActionMetier {
                         }
 
                     this.registryService.getFileFolderService().delete(nodeRef);
-                    /*this.applicationErreurSAS.ajouterErreur(this.noeudDossierActe,
-                            "Une erreur est survenue lors du déplacement des fichiers.");*/
+                    this.applicationErreurSAS.miseAJourInfoBaseSasDossierInfos(this.noeudDossierActe,
+                            "Une erreur est survenue lors du déplacement des fichiers.", true);
 
                     this.taggerIncomplet();
                 }
@@ -145,9 +151,11 @@ public class StockerDossierActe extends ActionMetier {
                 String nom = String.format("%s_ACTE_ANNEXE_%s", identifiant, this.entierSurNChiffres(cpt, 2));
                 this.registryService.getFileFolderService().move(nodeRef, destination, nom);
                 // Modification des métadonnées.
-                nodeService.setType(nodeRef, ActeOriginalTypeModele.NOM);
+                nodeService.setType(nodeRef, AnnexeTypeModele.NOM);
                 nodeService.setProperty(nodeRef, ContentModel.PROP_TITLE, nom);
-                nodeService.setProperty(nodeRef, ActeOriginalTypeModele.EMPREINTE, this.obtenirEmpreinte(nodeRef));
+                nodeService.setProperty(nodeRef, AnnexeTypeModele.EMPREINTE, this.obtenirEmpreinte(nodeRef));
+
+                this.applicationEnvoiSAS.initierAspect(this.noeudActeOriginal);
 
                 nodeService.removeAspect(nodeRef, DossierinfosAspectModele.NOM);
 
@@ -164,6 +172,9 @@ public class StockerDossierActe extends ActionMetier {
         nodeService.setProperty(this.noeudActeOriginal, ContentModel.PROP_TITLE, String.format("%s_ACTE_ORIGINAL", identifiant));
         nodeService.setProperty(this.noeudActeOriginal, ActeOriginalTypeModele.EMPREINTE, this.obtenirEmpreinte(this.noeudActeOriginal));
 
+        this.applicationEnvoiSAS.initierAspect(this.noeudActeOriginal);
+
+        // Retrait de l'aspect de dépôt.
         nodeService.removeAspect(this.noeudActeOriginal, DossierinfosAspectModele.NOM);
     }
 
@@ -337,7 +348,6 @@ public class StockerDossierActe extends ActionMetier {
      */
     private String obtenirNomDossierActeStockage() {
         DossierinfosAspectHelperModele dossier = new DossierinfosAspectHelperModele(this.registryService, this.noeudDossierActe);
-        if(!this.verifierPreconditionDossier()) return null;
         String numeroActe = dossier.getNumeroacte();
         if(numeroActe == null || numeroActe.isEmpty()) numeroActe = this.genererNumeroActe(dossier.getNoeudParent());
         if(numeroActe == null) return null;
@@ -392,10 +402,15 @@ public class StockerDossierActe extends ActionMetier {
     private String genererNumeroActe(NodeRef nodeRef) {
         // Vérification que le dossier est bien un dossier SAS.
         SasTypeHelperModele dossierSAS = new SasTypeHelperModele(this.registryService, nodeRef);
+
         if(!dossierSAS.hasType()) {
-            this.applicationErreurSAS.ajouterErreur(this.noeudDossierActe, "Le dossier n'est pas situé dans un dossier SAS. Il est impossible de récupérer un numéro d'acte.");
+            this.applicationErreurSAS.miseAJourInfoBaseSasDossierInfos(
+                    this.noeudDossierActe,
+                    "Le dossier n'est pas situé dans un dossier SAS. Il est impossible de récupérer un numéro d'acte.",
+                    true
+            );
             return null;
-        }else this.applicationErreurSAS.retirerErreurInfosDossierActeSas(this.noeudDossierActe);
+        }else this.applicationErreurSAS.miseAJourInfoBaseSasDossierInfos(this.noeudDossierActe);
 
         String resultat;
         synchronized (MutexAction.MUTEX_COMPTEUR_SAS) {
@@ -451,7 +466,7 @@ public class StockerDossierActe extends ActionMetier {
                 SearchService.LANGUAGE_CMIS_STRICT, "select * from stockageactes59:dossierActes");
 
         NodeRef resultat;
-        // Il n'est pas trouvé : Création du dossier d'acte.
+        // Il n'est pas trouvé : Création du dossier d'actes.
         if(resultatRecherche == null || resultatRecherche.length() == 0) {
             resultat = nodeService.createNode(racine, ContentModel.ASSOC_CONTAINS, QName.createQName("Actes"), ContentModel.TYPE_FOLDER).getChildRef();
             nodeService.setProperties(resultat, this.applicationErreurStockage.initierDossierActes());
@@ -477,6 +492,8 @@ public class StockerDossierActe extends ActionMetier {
         if(!this.verifierPreconditionActeOriginal()) resultat = false;
         if(!this.verifierPreconditionFichierInutile()) resultat = false;
 
+        this.applicationErreurSAS.miseAJourInfoBaseSasDossierInfos(this.noeudDossierActe);
+
         return resultat;
     }
 
@@ -492,15 +509,20 @@ public class StockerDossierActe extends ActionMetier {
         for(NodeRef nodeRef : nodeRefs) {
             DocinfosAspectHelperModele document = new DocinfosAspectHelperModele(this.registryService, nodeRef);
 
-            if(!document.hasAspect())
-                this.applicationErreurSAS.ajouterErreur(this.noeudDossierActe,
-                        "Le dossier contient des fichiers qui ne sont pas typés.");
-            else if( document.getTypedocument() == null)
-                this.applicationErreurSAS.ajouterErreur(this.noeudDossierActe,
-                        "Le dossier ne contient des fichiers dont le type n'est pas renseigné.");
-            else if(!document.getTypedocument().equals("ACTE_ORIGINAL") && !document.getTypedocument().equals("ANNEXE"))
-                this.applicationErreurSAS.ajouterErreur(this.noeudDossierActe,
-                        "Le dossier ne contient des fichiers dont le type n'est pas valide.");
+            if(!document.hasAspect()) {
+                this.applicationErreurSAS.miseAJourInfoBaseSasDocInfosEnErreur(nodeRef,
+                        "Le fichier ne possède pas l'aspect attendu ('actes59:docinfos').");
+                resultat = false;
+            }else if( document.getTypedocument() == null) {
+                this.applicationErreurSAS.miseAJourInfoBaseSasDocInfosEnErreur(nodeRef,
+                        "Le fichier n'a pas de typologie (ACTE_ORIGINAL ou ANNEXE).");
+                resultat = false;
+            }else if(!document.getTypedocument().equals("ACTE_ORIGINAL") && !document.getTypedocument().equals("ANNEXE")) {
+                this.applicationErreurSAS.miseAJourInfoBaseSasDocInfosEnErreur(nodeRef,
+                        "Le fichier n'a pas de typologie valide (ACTE_ORIGINAL ou ANNEXE).");
+                resultat = false;
+            }
+
         }
 
         return resultat;
@@ -511,15 +533,16 @@ public class StockerDossierActe extends ActionMetier {
      * @return <c>true</c> si le fichier annexe est valide.
      */
     private boolean verifierPreconditionActeAnnexe() {
+        // Recherche des fichier typés annexe.
         ResultSet resultatRecherche = this.registryService.getSearchService()
                 .query(this.noeudDossierActe.getStoreRef(), SearchService.LANGUAGE_CMIS_STRICT,
                         "select * from actes59:docinfos where actes59:typedocument = 'ANNEXE'");
-        if(resultatRecherche != null && resultatRecherche.length() > 0)
-            this.annexes = resultatRecherche.getNodeRefs();
-        else
-            this.annexes = new ArrayList<>();
 
+        // Initialisation de la propriété de la classe.
+        if(resultatRecherche != null && resultatRecherche.length() > 0) this.annexes = resultatRecherche.getNodeRefs();
+        else this.annexes = new ArrayList<>();
 
+        // Toujours vrai.
         return true;
     }
 
@@ -529,6 +552,8 @@ public class StockerDossierActe extends ActionMetier {
      */
     private boolean verifierPreconditionActeOriginal() {
         List<NodeRef> nodeRefs = null;
+
+        // Recherche de tous les nœuds qui typés 'ACTE_ORIGINAL'.
         ResultSet resultatRecherche = this.registryService.getSearchService()
                 .query(this.noeudDossierActe.getStoreRef(), SearchService.LANGUAGE_CMIS_STRICT,
                         "select * from actes59:docinfos where actes59:typedocument = 'ACTE_ORIGINAL'");
@@ -536,21 +561,23 @@ public class StockerDossierActe extends ActionMetier {
 
         boolean resultat = true;
 
-        if(nodeRefs == null || nodeRefs.size() == 0) {
-            this.applicationErreurSAS.ajouterErreur(
-                    this.noeudDossierActe, "Le dossier ne contient pas le fichier d'acte original."
-            );
-            resultat = false;
-        }else if(nodeRefs.size() > 1) {
+        // Il n'y a pas de fichier typé 'ACTE_ORIGINAL' : erreur.
+        if(nodeRefs == null || nodeRefs.size() == 0) resultat = false;
+        // Il y a plus d'un typé en 'ACTE_ORIGINAL' : erreur.
+        else if(nodeRefs.size() > 1) {
+
             for (NodeRef nodeRef : nodeRefs)
-                this.applicationErreurSAS.ajouterErreur(
-                        nodeRef, "Il ne doit y avoir qu'un seul fichier d'acte original."
-                );
+                this.applicationErreurSAS.miseAJourInfoBaseSasDossierInfos(nodeRef,
+                        "Il ne peut y avoir qu'un seul fichier d'acte original.", true);
+
             resultat = false;
-        }else {
-            this.noeudActeOriginal = nodeRefs.get(0);
-            this.applicationErreurSAS.retirerErreur(nodeRefs.get(0));
         }
+        // Tout est Ok.
+        else {
+            this.noeudActeOriginal = nodeRefs.get(0);
+            this.applicationErreurSAS.miseAJourInfoBaseSasDocInfosEnSucces(this.noeudActeOriginal);
+        }
+
         return resultat;
     }
 
@@ -562,17 +589,17 @@ public class StockerDossierActe extends ActionMetier {
         DossierinfosAspectHelperModele dossier = new DossierinfosAspectHelperModele(
                 this.registryService, this.noeudDossierActe
         );
+        // Vérification si l'aspect est présent et s'ils sont valides.
         if(!dossier.hasAspect() && !dossier.estAspectValide()) {
-            this.applicationErreurSAS.ajouterErreur(
-                    this.noeudDossierActe,
-                    this.obtenirMessageErreurDossierActe(
-                            new DossierinfosAspectHelperModele(this.registryService, this.noeudDossierActe)
-                    )
+            this.applicationErreurSAS.miseAJourInfoBaseSasDossierInfos(
+                    this.noeudDossierActe,this.obtenirMessageErreurDossierActe(), true
             );
+            // Remettre la propriété du dossier à incomplet.
             this.taggerIncomplet();
             return false;
+        }else
             // Retrait de l'erreur s'il y avait.
-        }else this.applicationErreurSAS.retirerErreurInfosDossierActeSas(this.noeudDossierActe);
+            this.applicationErreurSAS.miseAJourInfoBaseSasDossierInfos(this.noeudDossierActe);
 
         // Le dossier n'est à traiter que s'il est complet.
         return dossier.getDossiercomplet();
@@ -590,10 +617,11 @@ public class StockerDossierActe extends ActionMetier {
 
     /**
      * Méthode permettant d'obtenir le message d'erreur pour un dossier d'acte.
-     * @param dossier Le dossier pour lequel on souhaite récupérer le message d'erreur.
      * @return Le message d'erreur pour un dossier d'acte.
      */
-    private String obtenirMessageErreurDossierActe(DossierinfosAspectHelperModele dossier) {
+    private String obtenirMessageErreurDossierActe() {
+        DossierinfosAspectHelperModele dossier = new DossierinfosAspectHelperModele(this.registryService, this.noeudDossierActe);
+
         if(!dossier.hasAspect()) return "Le document n'a pas l'aspect (actes59:dossier) requis pour être traité.";
 
         StringBuilder message = new StringBuilder();

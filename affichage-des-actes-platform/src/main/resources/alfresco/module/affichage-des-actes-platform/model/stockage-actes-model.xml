@@ -18,9 +18,11 @@
             <parent>cm:folder</parent>
             <properties />
             <associations />
+            <!--
             <mandatory-aspects>
                 <aspect>stockageactes59:informationDossier</aspect>
             </mandatory-aspects>
+            -->
         </type>
 
         <type name="stockageactes59:dossierAnnee">
@@ -127,6 +129,13 @@
                     <mandatory>true</mandatory>
                 </property>
 
+                <property name="stockageactes59:resume">
+                    <title>Résumé</title>
+                    <description>Résumé de l'acte</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
             </properties>
 
         </type>
@@ -174,7 +183,7 @@
         </type>
         
     </types>
-    
+
     <aspects>
         <aspect name="stockageactes59:informationDossier">
             <title>Informations dossier</title>

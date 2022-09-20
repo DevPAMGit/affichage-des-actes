@@ -1,23 +1,24 @@
 package org.cd59.affichagedesactes.v2.application;
 
-import org.alfresco.service.namespace.QName;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.aspect.docinfos.DocinfosAspectHelperModele;
-import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspect.infosdossieractesas.InfosDossierActeSasAspectHelperModele;
-import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspect.infosfichieractesas.InfosFichierActeSasAspectHelperModele;
-import org.cd59.affichagedesactes.v2.action.MutexAction;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.QName;
+
+import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.aspect.docinfos.DocinfosAspectModele;
+import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.aspect.dossierinfos.DossierinfosAspectModele;
+import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspect.dossieracteinfo.DossierActeInfoAspectModele;
+import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspect.fichieracteinfo.FichierActeInfoAspectModele;
 import org.cd59.affichagedesactes.v2.action.source.ActionMetier;
 import org.cd59.affichagedesactes.v2.application.source.ApplicationSource;
-import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.type.sas.SasTypeHelperModele;
-import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspect.infosbasesas.InfosBaseSASAspectModele;
-import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.aspect.dossierinfos.DossierinfosAspectHelperModele;
-import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspect.infosdossiersas.InfosDossierSasAspectModele;
-import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspect.infosdossieractesas.InfosDossierActeSasAspectModele;
-import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspect.infosdossiersas.InfosDossierSasAspectHelperModele;
+import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.erreur59.aspect.infosbasesas.InfosBaseSasAspectModele;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Classe permettant la gestion des aspects d'erreurs dans le dossier SAS.
@@ -33,340 +34,129 @@ public class ApplicationErreurSAS extends ApplicationSource {
     }
 
     /**
-     * Ajoute un aspect d'erreur à un nœud.
-     * @param nodeRef Le nœud auquel on souhaite ajouter une erreur.
-     * @param message Le message à lier à l'erreur.
+     * Permet d'initialiser/ou mettre à jour les propriétés d'un nœud qui possède l'aspect 'actes59:dossierinfos' avec
+     * l'aspect 'erreur59:etatInfoSas' avec pour valeur propriété 'erreur59:etatInfoSas' à 'ERREUR'.
+     * @param nodeRef Le nœud dont on souhaite modifier les propriétés d'aspects.
+     * @param message La valeur du de la propriété 'messageInfoSas:message' de l'aspect 'messageInfoSas:infosBaseSas'.
+     * @param enErreur Indique si l'information est en erreur.
      */
-    public void ajouterErreur(NodeRef nodeRef, String message) {
-        if(nodeRef == null || this.estPasBienType(nodeRef)) return;
-
-        if(this.aSasType(nodeRef)) this.incrementerErreurInfosDossierSas(nodeRef);
-        else if(this.aDossierAspect(nodeRef)) this.incrementerErreurInfosDossierActeSas(nodeRef, message);
-        else if(this.aDocumentInfosAspect(nodeRef)) this.incrementerErreurInfosFichierActeSas(nodeRef, message);
+    public void miseAJourInfoBaseSasDossierInfos(NodeRef nodeRef, String message, boolean enErreur) {
+        // Vérification des préconditions.
+        if(nodeRef == null || !this.aAspectDossierInfos(nodeRef)) return;
+        // Ajout de l'aspect en erreur.
+        this.ajouterInfoBaseSas(nodeRef, message, enErreur);
     }
 
     /**
-     * Ajoute un aspect d'erreur à un nœud.
-     * @param nodeRef Le nœud auquel on souhaite ajouter une erreur.
+     * Permet d'initialiser/ou mettre à jour les propriétés d'un nœud qui possède l'aspect 'actes59:dossierinfos' avec
+     * l'aspect 'erreur59:etatInfoSas' avec pour valeur propriété 'erreur59:etatInfoSas' à 'ERREUR'.
+     * @param nodeRef Le nœud dont on souhaite modifier les propriétés d'aspects.
      */
-    public void ajouterErreur(NodeRef nodeRef) {
-        if(nodeRef == null || this.estPasBienType(nodeRef)) return;
-
-        if(this.aSasType(nodeRef)) this.incrementerErreurInfosDossierSas(nodeRef);
-        else if(this.aDossierAspect(nodeRef)) this.incrementerErreurInfosDossierActeSas(nodeRef);
-        else if(this.aDocumentInfosAspect(nodeRef)) this.incrementerErreurInfosFichierActeSas(nodeRef, null);
-    }
-
-    /**
-     * Ajoute l'aspect 'erreur59 : infosDossierSas' à un nœud.
-     * @param nodeRef Le nœud de référence vers le dossier.
-     */
-    private void incrementerErreurInfosDossierSas(NodeRef nodeRef) {
-        if(nodeRef == null) return;
-
-        synchronized (MutexAction.MUTEX_INFO_SAS) {
-            InfosDossierSasAspectHelperModele dossierSas = new InfosDossierSasAspectHelperModele(this.action.registryService, nodeRef);
-            if(!dossierSas.hasAspect())
-                dossierSas.addAspect(obtenirParametreInfoDossierSas(1));
-            else
-                dossierSas.majProprietes(
-                        obtenirParametreInfoDossierSas(dossierSas.getNbDossiersActesEnErreurs() + 1)
+    public void miseAJourInfoBaseSasDossierInfos(NodeRef nodeRef) {
+        // Vérification des préconditions.
+        if(nodeRef == null || !this.aAspectDossierInfos(nodeRef)) return;
+        // Ajout de l'aspect en erreur.
+        // Récupération du nombre de fichiers en erreur.
+        List<NodeRef> nodeRefList;
+        ResultSet nodeRefResult = this.action.registryService.getSearchService()
+                .query(nodeRef.getStoreRef(), SearchService.LANGUAGE_CMIS_STRICT,
+                        "select * from erreur59:fichierActeInfo where erreur59:etatSasListe = 'ERREUR'"
                 );
-        }
+        if(nodeRefResult == null || nodeRefResult.length() == 0) nodeRefList = new ArrayList<>();
+        else nodeRefList = nodeRefResult.getNodeRefs();
+
+        String pluriel = nodeRefList.size() > 1 ? "s" : "";
+
+        this.ajouterInfoBaseSas(nodeRef,
+                String.format("Il y a %d fichier%s en erreur%s.", nodeRefList.size(), pluriel), (nodeRefList.size() > 0)
+        );
     }
 
     /**
-     * Ajoute l'aspect 'erreur59:infosDossierActeSas' à un nœud.
-     * @param nodeRef Le nœud de référence vers le dossier.
+     * Permet d'initialiser/ou mettre à jour les propriétés d'un nœud qui possède l'aspect 'actes59:dossierinfos' avec
+     * l'aspect 'erreur59:etatInfoSas' avec pour valeur propriété 'erreur59:etatInfoSas' à 'ERREUR'.
+     * @param nodeRef Le nœud dont on souhaite modifier les propriétés d'aspects.
      */
-    private void incrementerErreurInfosDossierActeSas(NodeRef nodeRef) {
+    public void miseAJourInfoBaseSasDocInfosEnErreur(NodeRef nodeRef, String message) {
         if(nodeRef == null) return;
+        this.ajouterInfoBaseSas(nodeRef, message, true);
+    }
 
-        InfosDossierActeSasAspectHelperModele dossierActe = new InfosDossierActeSasAspectHelperModele(this.action.registryService, nodeRef);
-        if(!dossierActe.hasAspect()) {
-            dossierActe.addAspect(obtenirParametreInfosDossierActeSas(1));
-            this.ajouterErreur(dossierActe.getNoeudParent());
-        }else {
-            dossierActe.majProprietes(obtenirParametreInfosDossierActeSas(
-                    dossierActe.getNbFichierEnErreurs() + 1)
+    /**
+     * Permet d'initialiser/ou mettre à jour les propriétés d'un nœud qui possède l'aspect 'actes59:dossierinfos' avec
+     * l'aspect 'erreur59:etatInfoSas' avec pour valeur propriété 'erreur59:etatInfoSas' à 'ERREUR'.
+     * @param nodeRef Le nœud dont on souhaite modifier les propriétés d'aspects.
+     */
+    public void miseAJourInfoBaseSasDocInfosEnSucces(NodeRef nodeRef) {
+        if(nodeRef == null) return;
+        this.ajouterInfoBaseSas(nodeRef, "Le fichier est prêt à être stocker", false);
+    }
+
+    /**
+     * Méthode permettant d'initialiser les propriétés pour l'aspect 'erreur59:etatInfoSas' avec pour valeur pour la
+     * propriété 'erreur59:etatInfoSas' à 'ERREUR'.
+     * @param nodeRef Le nœud dont on souhaite modifier les propriétés d'aspects.
+     * @param enErreur Indique si l'information est en erreur.
+     * @param message La valeur du de la propriété 'messageInfoSas:message' de l'aspect 'messageInfoSas:infosBaseSas'
+     */
+    public void ajouterInfoBaseSas(NodeRef nodeRef, String message, boolean enErreur) {
+        // Vérification des préconditions.
+        if(nodeRef == null) return;
+        // Ajout de l'aspect et initialisation des propriétés.
+        if(this.aAspectEtatInfoSas(nodeRef))
+            this.action.registryService.getNodeService().addAspect(nodeRef, InfosBaseSasAspectModele.NOM,
+                    this.obtenirParametreInfoBaseSas(message, enErreur));
+        // Mise à jour des propriétés
+        else
+            this.action.registryService.getNodeService().setProperties(
+                    nodeRef, obtenirParametreInfoBaseSas(message, enErreur)
             );
-        }
     }
 
     /**
-     * Ajoute l'aspect 'erreur59:infosDossierActeSas' à un nœud.
-     * @param nodeRef Le nœud de référence vers le dossier.
-     * @param message Le message lié à l'erreur.
+     * Méthode permettant d'initialiser les propriétés pour l'aspect 'erreur59:etatInfoSas'.
+     * @param message La valeur de la propriété 'erreur59:messageInfoSas'.
+     * @param enErreur Indique si l'information est en erreur.
+     * @return Un {@link HashMap} permettant d'initier les paramètres de l'aspect 'erreur59:etatInfoSas'.
      */
-    private void incrementerErreurInfosDossierActeSas(NodeRef nodeRef, String message) {
-        if(nodeRef == null) return;
-
-        InfosDossierActeSasAspectHelperModele dossierActe = new InfosDossierActeSasAspectHelperModele(this.action.registryService, nodeRef);
-        if(!dossierActe.hasAspect()) {
-            dossierActe.addAspect(obtenirParametreInfosDossierActeSas(message, 0));
-            this.ajouterErreur(dossierActe.getNoeudParent());
-        }else {
-            String etatAvant = (String) dossierActe.getPropriete(InfosBaseSASAspectModele.ETAT_INFO_SA_S);
-            dossierActe.majProprietes(obtenirParametreInfosDossierActeSas(message, dossierActe.getNbFichierEnErreurs()));
-            String etatApres = (String) dossierActe.getPropriete(InfosBaseSASAspectModele.ETAT_INFO_SA_S);
-            if(!etatAvant.equals(etatApres)) this.ajouterErreur(dossierActe.getNoeudParent());
-        }
-    }
-
-    /**
-     * Ajoute l'aspect 'erreur59:infosDossierActeSas' à un nœud.
-     * @param message message d'erreur du nœud.
-     * @param nodeRef Le nœud de référence vers le dossier.
-     */
-    private void incrementerErreurInfosFichierActeSas(NodeRef nodeRef, String message) {
-        if(nodeRef == null) return;
-
-        InfosFichierActeSasAspectHelperModele fichierActe = new InfosFichierActeSasAspectHelperModele(this.action.registryService, nodeRef);
-        fichierActe.majProprietes( obtenirParametreInfosFichierActeSas(message, true) );
-        if(!fichierActe.hasAspect()) this.ajouterErreur(fichierActe.getNoeudParent());
-    }
-
-    /**
-     * Vérifie que le dossier est bien typé pour recevoir l'aspect.
-     * @param nodeRef Le nœud à tester.
-     * @return <c>true</c> si le dossier est bien typé. Sinon <c>false</c>.
-     */
-    private boolean estPasBienType(NodeRef nodeRef) {
-        return this.aDossierAspect(nodeRef) || this.aDocumentInfosAspect(nodeRef) ||
-                this.aSasType(nodeRef);
-    }
-
-    /**
-     * Méthode permettant de vérifier si le nœud possède l'aspect 'actes59 : sas'.
-     * @param nodeRef Le nœud que l'on souhaite vérifier.
-     * @return <c>true</c> si le nœud à l'aspect sinon faux.
-     */
-    private boolean aSasType(NodeRef nodeRef) {
-        SasTypeHelperModele document = new SasTypeHelperModele(this.action.registryService, nodeRef);
-        return document.hasType();
-    }
-
-    /**
-     * Méthode permettant de vérifier si le nœud possède l'aspect 'actes59 : dossier'.
-     * @param nodeRef Le nœud que l'on souhaite vérifier.
-     * @return <c>true</c> si le nœud à l'aspect sinon faux.
-     */
-    private boolean aDossierAspect(NodeRef nodeRef) {
-        DossierinfosAspectHelperModele document = new DossierinfosAspectHelperModele(this.action.registryService,
-                nodeRef);
-        return document.hasAspect();
-    }
-
-    /**
-     * Méthode permettant de vérifier si le nœud possède l'aspect 'actes59 : docinfos'.
-     * @param nodeRef Le nœud a vérifié.
-     * @return <c>true</c> si le nœud possède l'aspect. Sinon <c>false</c>.
-     */
-    private boolean aDocumentInfosAspect(NodeRef nodeRef) {
-        DocinfosAspectHelperModele dossier = new DocinfosAspectHelperModele(this.action.registryService, nodeRef);
-        return dossier.hasAspect();
-    }
-
-    /**
-     * Récupère le paramètre d'un aspect 'erreur59:infosBaseSAS'.
-     * @param message La valeur du message de l'aspect.
-     * @param etat La valeur de l'état de l'aspect.
-     * @return Une table contenant les propriétés d'un aspect 'erreur59:infosBaseSAS'.
-     */
-    private static HashMap<QName, Serializable> obtenirParametreInfoBaseSas(String message, String etat) {
+    private HashMap<QName, Serializable> obtenirParametreInfoBaseSas(String message, boolean enErreur) {
         HashMap<QName, Serializable> resultat = new HashMap<>();
-        resultat.put(InfosBaseSASAspectModele.DATE_INFO_SA_S, new Date());
-        resultat.put(InfosBaseSASAspectModele.MESSAGE_INFO_SA_S, message);
-        resultat.put(InfosBaseSASAspectModele.ETAT_INFO_SA_S, etat);
+        resultat.put(InfosBaseSasAspectModele.DATE_INFO_SAS, new Date());
+        resultat.put(InfosBaseSasAspectModele.MESSAGE_INFO_SAS, message);
+        resultat.put(InfosBaseSasAspectModele.ETAT_INFO_SAS, enErreur ? "ERREUR" : "OK");
         return resultat;
     }
 
     /**
-     * Récupère le paramètre d'un aspect 'erreur59 : infosDossierSas'.
-     * @param dossierEnErreurs Le nombre de dossiers en erreurs.
-     * @return Une table contenant les propriétés d'un aspect 'erreur59 : infosDossierSas'.
+     * Vérification de l'existence de l'aspect 'erreur59:etatInfoSas'.
+     * @param nodeRef Le nœud sur lequel on souhaite vérifier l'état.
+     * @return <c>true</c> si l'aspect existe. <c>false</c> sinon.
      */
-    private static HashMap<QName, Serializable> obtenirParametreInfoDossierSas(int dossierEnErreurs) {
-        String pluriel = dossierEnErreurs > 1 ? "s" : "";
-        int nbDossiers = dossierEnErreurs + 1;
-        String message, etat;
-
-        if(dossierEnErreurs == 0) {
-            message = "Il n'y a a aucun dossier d'acte en erreur.";
-            etat = "OK";
-        } else {
-            message = String.format("Il y a %d dossier%s d'acte%s en erreur%s.",
-                    dossierEnErreurs, pluriel, pluriel, pluriel);
-            etat = "ERREUR";
-        }
-
-        HashMap<QName, Serializable> resultat = obtenirParametreInfoBaseSas(message, etat);
-        resultat.put(InfosDossierSasAspectModele.NB_DOSSIERS_ACTES_EN_ERREURS, nbDossiers);
-
-        return resultat;
+    private boolean aAspectEtatInfoSas(NodeRef nodeRef) {
+        return this.action.registryService.getNodeService().hasAspect(nodeRef, InfosBaseSasAspectModele.NOM);
     }
 
     /**
-     * Récupère le paramètre d'un aspect 'erreur59:infosDossierActeSas'.
-     * @return Une table contenant les propriétés d'un aspect 'erreur59:infosDossierActeSas'.
+     * Vérifie que le noeud a l'aspect 'actes59:dossierinfos'.
+     * @param nodeRef Le nœud sur lequel on souhaite vérifier l'état.
+     * @return <c>true</c> si l'aspect existe; <c>false</c> sinon.
      */
-    private static HashMap<QName, Serializable> obtenirParametreInfosDossierActeSas(int fichierEnErreurs) {
-        String pluriel = fichierEnErreurs > 1 ? "s" : "";
-        int nbFichiers = fichierEnErreurs + 1;
-        String message, etat;
-
-        if(nbFichiers == 0) {
-            message = "Il n'y a a aucun fichiers d'acte en erreur.";
-            etat = "OK";
-        } else {
-            message = String.format("Il y a %d fichier%s d'acte en erreur%s.", nbFichiers, pluriel, pluriel);
-            etat = "ERREUR";
-        }
-
-        HashMap<QName, Serializable> resultat = obtenirParametreInfoBaseSas(message, etat);
-        resultat.put(InfosDossierActeSasAspectModele.NB_FICHIER_EN_ERREURS, nbFichiers);
-
-        return resultat;
+    private boolean aAspectDossierInfos(NodeRef nodeRef) {
+        // Vérification des préconditions.
+        if( nodeRef == null) return false;
+        // Vérification que l'aspect est présent.
+        return this.action.registryService.getNodeService().hasAspect(nodeRef, DossierinfosAspectModele.NOM);
     }
 
     /**
-     * Récupère le paramètre d'un aspect 'erreur59:infosDossierActeSas'.
-     * @param message Le message de l'erreur dossier acte.
-     * @param fichierEnErreurs Le nombre de fichiers en erreurs.
-     * @return Une table contenant les propriétés d'un aspect 'erreur59:infosDossierActeSas'.
+     * Récupère l'aspect d'information adéquate pour un nœud.
+     * @param nodeRef Le nœud dont on souhaite récupérer ... adéquate.
+     * @return L'aspect adéquat à l'aspect du nœud.
      */
-    private static HashMap<QName, Serializable> obtenirParametreInfosDossierActeSas(
-            String message, int fichierEnErreurs
-    ) {
-        String pluriel = fichierEnErreurs > 1 ? "s" : "";
-        int nbFichiers = fichierEnErreurs + 1;
-        String etat;
-
-        if(nbFichiers == 0) etat = "OK";
-         else etat = "ERREUR";
-
-        HashMap<QName, Serializable> resultat = obtenirParametreInfoBaseSas(message, etat);
-        resultat.put(InfosDossierActeSasAspectModele.NB_FICHIER_EN_ERREURS, nbFichiers);
-
-        return resultat;
-    }
-
-    /**
-     * Récupère le paramètre d'un aspect 'erreur59:infosDossierActeSas'.
-     * @return Une table contenant les propriétés d'un aspect 'erreur59:infosDossierActeSas'.
-     */
-    private static HashMap<QName, Serializable> obtenirParametreInfosFichierActeSas(String message, boolean enErreur) {
-        String etat;
-
-        if(!enErreur) etat = "OK";
-        else etat = "ERREUR";
-
-        return obtenirParametreInfoBaseSas(message, etat);
-    }
-
-    /**
-     * Retire une erreur d'un nœud du projet.
-     * @param nodeRef Le nœud dont on souhaite retirer l'erreur.
-     */
-    public void retirerErreur(NodeRef nodeRef) {
-        if(nodeRef == null || this.estPasBienType(nodeRef)) return;
-
-        if(this.aSasType(nodeRef)) this.decrementerErreurInfosDossierSas(nodeRef);
-        else if(this.aDossierAspect(nodeRef)) this.decrementerErreurInfosDossierActeSas(nodeRef);
-        else if(this.aDocumentInfosAspect(nodeRef)) this.decrementerErreurInfosFichierActeSas(nodeRef);
-    }
-
-    /**
-     * Retire l'erreur d'un nœud de type fichier.
-     * @param nodeRef Le nœud dont on souhaite retirer l'erreur.
-     */
-    private void decrementerErreurInfosFichierActeSas(NodeRef nodeRef) {
-        if(nodeRef == null) return;
-
-        InfosFichierActeSasAspectHelperModele fichierActe = new InfosFichierActeSasAspectHelperModele(this.action.registryService, nodeRef);
-
-        if(!fichierActe.hasAspect()) {
-            fichierActe.majProprietes(obtenirParametreInfosFichierActeSas("Le fichier est prêt à partir en stockage.", false));
-            return;
-        }
-
-        String etat = (String) this.action.registryService.getNodeService().getProperty(nodeRef, InfosBaseSASAspectModele.ETAT_INFO_SA_S);
-        fichierActe.majProprietes(obtenirParametreInfosFichierActeSas("Le fichier est prêt à partir en stockage.", false));
-        String nouvelEtat = (String) this.action.registryService.getNodeService().getProperty(nodeRef, InfosBaseSASAspectModele.ETAT_INFO_SA_S);
-
-        if(!nouvelEtat.equals(etat)) this.retirerErreur(fichierActe.getNoeudParent());
-    }
-
-    /**
-     * Décrémente l'erreur le nœud typé 'sas'.
-     * @param nodeRef Le nœud typé 'sas'.
-     */
-    private void decrementerErreurInfosDossierSas(NodeRef nodeRef) {
-        if(nodeRef == null) return;
-
-        synchronized (MutexAction.MUTEX_INFO_SAS) {
-            InfosDossierSasAspectHelperModele dossierSas = new InfosDossierSasAspectHelperModele(this.action.registryService, nodeRef);
-            if(!dossierSas.hasAspect())
-                dossierSas.addAspect(obtenirParametreInfoDossierSas(0));
-            else {
-                int nbDossierActesEnErreur = dossierSas.getNbDossiersActesEnErreurs();
-                if(nbDossierActesEnErreur > 0)
-                    dossierSas.majProprietes(
-                            obtenirParametreInfoDossierSas(nbDossierActesEnErreur-1)
-                    );
-            }
-        }
-    }
-
-    /**
-     * Retire l'aspect 'erreur59:infosDossierActeSas' à un nœud.
-     * @param nodeRef Le nœud de référence vers le dossier.
-     */
-    private void decrementerErreurInfosDossierActeSas(NodeRef nodeRef) {
-        if(nodeRef == null) return;
-
-        InfosDossierActeSasAspectHelperModele dossierActe = new InfosDossierActeSasAspectHelperModele(
-                this.action.registryService, nodeRef
-        );
-        int nbFichiersEnErreurs;
-        if(!dossierActe.hasAspect()) {
-            dossierActe.addAspect(obtenirParametreInfosDossierActeSas(0));
-            // this.retirerErreur(dossierActe.getNoeudParent());
-        } else {
-            nbFichiersEnErreurs = dossierActe.getNbFichierEnErreurs();
-            int nbFichiersEnErreursApres = nbFichiersEnErreurs;
-
-            if(nbFichiersEnErreursApres > 0) nbFichiersEnErreursApres -= 1;
-            String etatAvant = (String) dossierActe.getPropriete(InfosBaseSASAspectModele.ETAT_INFO_SA_S);
-
-            dossierActe.majProprietes(obtenirParametreInfosDossierActeSas(nbFichiersEnErreursApres));
-            String etatApres = (String) dossierActe.getPropriete(InfosBaseSASAspectModele.ETAT_INFO_SA_S);
-
-            if(!etatAvant.equals(etatApres)) this.retirerErreur(dossierActe.getNoeudParent());
-        }
-
-    }
-
-    /**
-     * Retire l'aspect 'erreur59:infosDossierActeSas' à un nœud.
-     * @param nodeRef Le nœud de référence vers le dossier.
-     */
-    public void retirerErreurInfosDossierActeSas(NodeRef nodeRef) {
-        if(nodeRef == null) return;
-
-        InfosDossierActeSasAspectHelperModele dossierActe = new InfosDossierActeSasAspectHelperModele(
-                this.action.registryService, nodeRef
-        );
-        int nbFichiersEnErreurs;
-        if(!dossierActe.hasAspect()) {
-            dossierActe.addAspect(obtenirParametreInfosDossierActeSas(0));
-            // this.retirerErreur(dossierActe.getNoeudParent());
-        } else {
-            String etatAvant = (String) dossierActe.getPropriete(InfosBaseSASAspectModele.ETAT_INFO_SA_S);
-            dossierActe.majProprietes(obtenirParametreInfosDossierActeSas(dossierActe.getNbFichierEnErreurs()));
-            String etatApres = (String) dossierActe.getPropriete(InfosBaseSASAspectModele.ETAT_INFO_SA_S);
-            if(!etatAvant.equals(etatApres)) this.retirerErreur(dossierActe.getNoeudParent());
-        }
-
+    private QName obtenirAspectInfoValide(NodeRef nodeRef) {
+        NodeService nodeService = this.action.registryService.getNodeService();
+        if(nodeService.hasAspect(nodeRef, DossierinfosAspectModele.NOM)) return DossierActeInfoAspectModele.NOM;
+        if(nodeService.hasAspect(nodeRef, DocinfosAspectModele.NOM)) return FichierActeInfoAspectModele.NOM;
+        return null;
     }
 }

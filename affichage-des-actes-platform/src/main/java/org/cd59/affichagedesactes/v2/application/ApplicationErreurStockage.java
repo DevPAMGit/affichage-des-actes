@@ -127,6 +127,7 @@ public class ApplicationErreurStockage extends ApplicationSource {
 
         resultat.put(DossierActeTypeModele.IDENTIFIANT, identifiant);
         resultat.put(DossierActeTypeModele.OBJET, dossier.getObjet());
+        resultat.put(DossierActeTypeModele.RESUME, dossier.getResume());
         resultat.put(DossierActeTypeModele.DATE, dossier.getDatedossier());
         resultat.put(DossierActeTypeModele.SIGNATAIRE, dossier.getSignataire());
         resultat.put(DossierActeTypeModele.SIGLE_DIRECTION, dossier.getOrgasigle());

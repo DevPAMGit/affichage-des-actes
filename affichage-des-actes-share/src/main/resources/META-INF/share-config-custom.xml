@@ -6,15 +6,19 @@
 				<aspect name="erreur59:infoDossierSas"/>
 				<aspect name="erreur59:infoFichierActeSas"/>
 				<aspect name="erreur59:informationSAS"/>
-				<aspect name="actes59:docinfos"/>
-				<aspect name="actes59:dossierinfos"/>
 				<aspect name="erreur59:erreurBase"/>
 				<aspect name="erreur59:erreurDossier"/>
 				<aspect name="erreur59:infosDossierSas"/>
 				<aspect name="erreur59:infosDossierActeSas"/>
 				<aspect name="erreur59:infosFichierActeSas"/>
 				<aspect name="erreur59:infosBaseSAS"/>
+				<aspect name="actes59:docinfos"/>
+				<aspect name="actes59:dossierinfos"/>
+				<aspect name="erreur59:dossierActeInfo"/>
+				<aspect name="erreur59:fichierActeInfo"/>
+				<aspect name="erreur59:infosBaseSas"/>
 				<aspect name="acme:securityClassified"/>
+				<aspect name="affichage59:affichage"/>
 				<aspect name="stockageactes59:informationDossier"/>
 			</visible>
 			<addable> 
@@ -291,71 +295,6 @@
 			</form>
 		</forms>
 	</config>
-	<config evaluator="node-type" condition="acme:document">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="acme:documentId"/>
-					<show id="acme:securityClassification"/>
-					<show id="cm:name"/>
-					<show id="cm:title" force="true"/>
-					<show id="cm:description" force="true"/>
-					<show id="cm:created" force="true"/>
-					<show id="cm:modifier" force="true"/>
-					<show id="cm:modified" force="true"/>
-					<show id="cm:creator" for-mode="view"/>
-				</field-visibility>
-			</form>
-		</forms>
-	</config>
-	<config evaluator="aspect" condition="actes59:docinfos">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="actes59:empreinte"/>
-					<show id="actes59:typedocument"/>
-					<show id="cm:name"/>
-					<show id="cm:title" force="true"/>
-					<show id="cm:description" force="true"/>
-					<show id="cm:created" force="true"/>
-					<show id="cm:modifier" force="true"/>
-					<show id="cm:modified" force="true"/>
-					<show id="cm:creator" for-mode="view"/>
-				</field-visibility>
-			</form>
-		</forms>
-	</config>
-	<config evaluator="aspect" condition="actes59:dossierinfos">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="actes59:resume"/>
-					<show id="actes59:erreurinternet"/>
-					<show id="actes59:signataire"/>
-					<show id="actes59:dossiercomplet"/>
-					<show id="actes59:source"/>
-					<show id="actes59:annee"/>
-					<show id="actes59:statutaffichage"/>
-					<show id="actes59:objet"/>
-					<show id="actes59:dateaffichageged"/>
-					<show id="actes59:orgasigle"/>
-					<show id="actes59:numeroacte"/>
-					<show id="actes59:typedossier"/>
-					<show id="actes59:urlaffichage"/>
-					<show id="actes59:iddossier"/>
-					<show id="actes59:dateaffichageinternet"/>
-					<show id="actes59:datedossier"/>
-					<show id="cm:name"/>
-					<show id="cm:title" force="true"/>
-					<show id="cm:description" force="true"/>
-					<show id="cm:created" force="true"/>
-					<show id="cm:modifier" force="true"/>
-					<show id="cm:modified" force="true"/>
-					<show id="cm:creator" for-mode="view"/>
-				</field-visibility>
-			</form>
-		</forms>
-	</config>
 	<config evaluator="aspect" condition="erreur59:erreurBase">
 		<forms>
 			<form>
@@ -458,11 +397,142 @@
 			</form>
 		</forms>
 	</config>
+	<config evaluator="node-type" condition="acme:document">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="acme:documentId"/>
+					<show id="acme:securityClassification"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="actes59:docinfos">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="actes59:empreinte"/>
+					<show id="actes59:typedocument"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="actes59:dossierinfos">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="actes59:resume"/>
+					<show id="actes59:erreurinternet"/>
+					<show id="actes59:signataire"/>
+					<show id="actes59:dossiercomplet"/>
+					<show id="actes59:source"/>
+					<show id="actes59:annee"/>
+					<show id="actes59:statutaffichage"/>
+					<show id="actes59:objet"/>
+					<show id="actes59:dateaffichageged"/>
+					<show id="actes59:orgasigle"/>
+					<show id="actes59:numeroacte"/>
+					<show id="actes59:typedossier"/>
+					<show id="actes59:urlaffichage"/>
+					<show id="actes59:iddossier"/>
+					<show id="actes59:dateaffichageinternet"/>
+					<show id="actes59:datedossier"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="erreur59:dossierActeInfo">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="erreur59:fichierActeInfo">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="erreur59:infosBaseSas">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="erreur59:dateInfoSas"/>
+					<show id="erreur59:messageInfoSas"/>
+					<show id="erreur59:etatInfoSas"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 	<config evaluator="aspect" condition="acme:securityClassified">
 		<forms>
 			<form>
 				<field-visibility>
 					<show id="acme:securityClassification"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="affichage59:affichage">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="affichage59:etat"/>
+					<show id="affichage59:tentativeEnvoi"/>
+					<show id="affichage59:dateAffichage"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
@@ -559,9 +629,6 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="stockageactes59:nbActes"/>
-					<show id="stockageactes59:nbActesEnErreurs"/>
-					<show id="stockageactes59:nbActesTraites"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
@@ -652,6 +719,7 @@
 					<show id="stockageactes59:objet"/>
 					<show id="stockageactes59:date"/>
 					<show id="stockageactes59:signataire"/>
+					<show id="stockageactes59:resume"/>
 					<show id="stockageactes59:typologieDossier"/>
 					<show id="stockageactes59:jour"/>
 					<show id="stockageactes59:mois"/>

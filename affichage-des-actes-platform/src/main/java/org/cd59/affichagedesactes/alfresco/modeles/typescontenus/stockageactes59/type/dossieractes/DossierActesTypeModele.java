@@ -14,13 +14,4 @@ public class DossierActesTypeModele {
 	/** Le nom du type de contenu. */
 	public final static QName NOM = QName.createQName( URI , "dossierActes");
 
-	/** Modèle pour la propriété 'stockageactes59:nbActes'. */
-	public final static QName NB_ACTES = QName.createQName( URI , "nbActes");
-
-	/** Modèle pour la propriété 'stockageactes59:nbActesEnErreurs'. */
-	public final static QName NB_ACTES_EN_ERREURS = QName.createQName( URI , "nbActesEnErreurs");
-
-	/** Modèle pour la propriété 'stockageactes59:nbActesTraites'. */
-	public final static QName NB_ACTES_TRAITES = QName.createQName( URI , "nbActesTraites");
-
 }

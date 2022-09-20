@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="affichage59:affichage">
+    <description>Modèles pour l'affichage des actes du CD59 </description>
+    <author>ANDRIANAIVO MICHEL</author>
+    <imports>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://cd59.fr/model/stockageacte/1.0." prefix="affichage59"/>
+    </namespaces>
+
+    <constraints>
+        <constraint name="affichage59:etatOption" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>Envoyé</value>
+                    <value>Affiché</value>
+                    <value>Prêt à être envoyer</value>
+                    <value>Erreur lors de l'envoie</value>
+                </list>
+            </parameter>
+        </constraint>
+    </constraints>
+
+    <aspects>
+
+        <!-- ASPECT - AFFICHAGE -->
+        <aspect name="affichage59:affichage">
+
+            <title>Affichage</title>
+            <description>Informations sur l'affichage des actes.</description>
+
+            <!-- PROPRIETES -->
+            <properties>
+
+                <!-- ÉTAT -->
+                <property name="affichage59:etat">
+                    <title>État</title>
+                    <description>L'état d'affichage</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+
+                    <!-- LISTE DES CONTRAINTES DE L'ÉTAT -->
+                    <constraints>
+                        <constraint ref="affichage59:etatOption"/>
+                    </constraints>
+                    <!-- FIN - LISTE DES CONTRAINTES DE L'ÉTAT -->
+
+                </property>
+                <!-- FIN - ETAT -->
+
+                <!-- DATE -->
+                <property name="affichage59:tentativeEnvoi">
+                    <title>La dernière date tentative d'envoi</title>
+                    <type>d:date</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <!-- FIN - DATE -->
+
+                <!-- DATE D'AFFICHAGE -->
+                <property name="affichage59:dateAffichage">
+                    <title>La date d'affichage</title>
+                    <description>La date d'affichage de l'acte.</description>
+                    <type>d:date</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <!-- FIN - DATE D'AFFICHAGE -->
+                
+            </properties>
+            <!-- FIN - PROPRIETES -->
+
+        </aspect>
+        <!-- FIN - ASPECT - AFFICHAGE -->
+
+    </aspects>
+
+</model>

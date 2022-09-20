@@ -141,6 +141,24 @@ public class DossierActeTypeHelperModele extends AlfrescoModeleHelper {
 		return ( this.getSignataire() != null && !this.getSignataire().isBlank());
 	}
 
+	/** Méthode permettant de récupérer la valeur de la propriété 'stockageactes59:resume'. 
+	 * @return String La valeur de la propriété 'stockageactes59:resume'. */
+	public String getResume() { 
+		return (String) this.getPropriete(DossierActeTypeModele.RESUME);
+	}
+
+	/** Méthode permettant de récupérer la valeur de la propriété 'stockageactes59:resume'. 
+	 * @param valeur La nouvelle valeur de la propriété 'stockageactes59:resume'. */ 
+	public void setResume(String valeur) { 
+		this.majPropriete(DossierActeTypeModele.RESUME, valeur);
+	}
+
+	/** Méthode permettant de vérifier si la valeur de la propriété 'stockageactes59:resume' est valide. 
+	 * @return <c>true</c> si la valeur est valide; sinon <c>false</c>'.  */
+	public boolean estResumeValide() { 
+		return ( this.getResume() != null && !this.getResume().isBlank());
+	}
+
 	/** Méthode permettant de récupérer la valeur de la propriété 'stockageactes59:typologieDossier'. 
 	 * @return String La valeur de la propriété 'stockageactes59:typologieDossier'. */
 	public String getTypologieDossier() { 
@@ -222,6 +240,7 @@ public class DossierActeTypeHelperModele extends AlfrescoModeleHelper {
 		&& this.estObjetValide()
 		&& this.estDateValide()
 		&& this.estSignataireValide()
+		&& this.estResumeValide()
 		&& this.estTypologieDossierValide()
 		&& this.estJourValide()
 		&& this.estMoisValide()
