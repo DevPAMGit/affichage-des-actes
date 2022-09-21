@@ -49,7 +49,10 @@ public class EnvoiActeService extends BearerUrlPostPostMultipartRequest {
     protected void ecrireLeCorps() throws IOException {
 
         this.envoyerFichier("file", this.acte.nom, this.acte.contenu);
-        this.envoyerFichier("annexe", this.annexe.nom, this.annexe.contenu);
+
+        if(this.annexe != null)
+            this.envoyerFichier("annexe", this.annexe.nom, this.annexe.contenu);
+
         this.envoyerChampJson("metadonnees", this.metadonnees);
         this.redacteur.append(String.format("--%s--", LIMITE));
         this.redacteur.flush();

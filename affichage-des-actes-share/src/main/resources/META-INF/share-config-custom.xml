@@ -12,6 +12,7 @@
 				<aspect name="erreur59:infosDossierActeSas"/>
 				<aspect name="erreur59:infosFichierActeSas"/>
 				<aspect name="erreur59:infosBaseSAS"/>
+				<aspect name="stockageactes59:informationDossier"/>
 				<aspect name="actes59:docinfos"/>
 				<aspect name="actes59:dossierinfos"/>
 				<aspect name="erreur59:dossierActeInfo"/>
@@ -19,7 +20,8 @@
 				<aspect name="erreur59:infosBaseSas"/>
 				<aspect name="acme:securityClassified"/>
 				<aspect name="affichage59:affichage"/>
-				<aspect name="stockageactes59:informationDossier"/>
+				<aspect name="affichage59:informationAffichage"/>
+				<aspect name="affichage59:erreur"/>
 			</visible>
 			<addable> 
             </addable>
@@ -397,6 +399,24 @@
 			</form>
 		</forms>
 	</config>
+	<config evaluator="aspect" condition="stockageactes59:informationDossier">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="stockageactes59:nbActes"/>
+					<show id="stockageactes59:nbActesEnErreurs"/>
+					<show id="stockageactes59:nbActesTraites"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 	<config evaluator="node-type" condition="acme:document">
 		<forms>
 			<form>
@@ -532,7 +552,6 @@
 				<field-visibility>
 					<show id="affichage59:etat"/>
 					<show id="affichage59:tentativeEnvoi"/>
-					<show id="affichage59:dateAffichage"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>
@@ -544,13 +563,28 @@
 			</form>
 		</forms>
 	</config>
-	<config evaluator="aspect" condition="stockageactes59:informationDossier">
+	<config evaluator="aspect" condition="affichage59:informationAffichage">
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="stockageactes59:nbActes"/>
-					<show id="stockageactes59:nbActesEnErreurs"/>
-					<show id="stockageactes59:nbActesTraites"/>
+					<show id="affichage59:dateAffichage"/>
+					<show id="affichage59:urlAffichage"/>
+					<show id="cm:name"/>
+					<show id="cm:title" force="true"/>
+					<show id="cm:description" force="true"/>
+					<show id="cm:created" force="true"/>
+					<show id="cm:modifier" force="true"/>
+					<show id="cm:modified" force="true"/>
+					<show id="cm:creator" for-mode="view"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="aspect" condition="affichage59:erreur">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="affichage59:erreurAffichageMessage"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>

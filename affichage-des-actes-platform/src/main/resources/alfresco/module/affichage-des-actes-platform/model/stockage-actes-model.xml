@@ -31,7 +31,7 @@
             <parent>cm:folder</parent>
             <properties>
                 <property name="stockageactes59:annee">
-                    <title>L'année des actes contenus</title>
+                    <title>Année</title>
                     <description>L'année des actes contenus</description>
                     <type>d:int</type>
                     <mandatory>true</mandatory>
@@ -62,7 +62,7 @@
             <properties>
 
                 <property name="stockageactes59:jour">
-                    <title>Le jour des actes contenus</title>
+                    <title>Jour</title>
                     <description>Le jour des actes contenus</description>
                     <type>d:int</type>
                     <mandatory>true</mandatory>
@@ -95,14 +95,14 @@
             <properties>
                 
                 <property name="stockageactes59:identifiant">
-                    <title>L'identifiant du dossier</title>
+                    <title>Numéro</title>
                     <description>L'identifiant du dossier</description>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
 
                 <property name="stockageactes59:sigleDirection">
-                    <title>Sigle de la direction</title>
+                    <title>Direction</title>
                     <description>Sigle de la direction</description>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
@@ -116,8 +116,8 @@
                 </property>
 
                 <property name="stockageactes59:date">
-                    <title>Objet</title>
-                    <description>Objet</description>
+                    <title>Date</title>
+                    <description>Date</description>
                     <type>d:date</type>
                     <mandatory>true</mandatory>
                 </property>
@@ -184,7 +184,10 @@
         
     </types>
 
+    <!--
     <aspects>
+
+
         <aspect name="stockageactes59:informationDossier">
             <title>Informations dossier</title>
             <description>Informations sur le dossier</description>
@@ -216,6 +219,8 @@
                 
             </properties>
         </aspect>
+
     </aspects>
+    -->
 
 </model>

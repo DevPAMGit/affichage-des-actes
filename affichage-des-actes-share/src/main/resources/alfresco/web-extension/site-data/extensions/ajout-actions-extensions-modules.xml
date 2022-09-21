@@ -1,0 +1,62 @@
+<extension>
+    <modules>
+
+        <module>
+            <id>Envoie d'acte pour affichage</id>
+            <version>1.0</version>
+            <auto-deploy>true</auto-deploy>
+
+            <configurations>
+                <config evaluator="string-compare" condition="DocumentLibrary">
+                    <indicators>
+                        <indicator id="org.cd59.affichagedesactes.indicateur.estEnvoye"
+                                   index="100"
+                                   label="org.cd59.affichagedesactes.indicateur.estEnvoye.label">
+                            <evaluator>org.cd59.affichagedesactes.evaluateur.estEnvoye</evaluator>
+                        </indicator>
+                    </indicators>
+                </config>
+
+                <config evaluator="string-compare" condition="DocLibActions">
+                    <actions>
+                        <action id="org.cd59.affichagedesactes.action.envoyerActe"
+                                icon="email"
+                                type="javascript"
+                                label="alfresco.affichage.action.envoyerActe.label">
+                            <param name="function">onActionFormDialog</param>
+                            <param name="itemKind">action</param>
+                            <param name="itemId">Envoyer-Dossier-Acte</param> <!-- Repository action id = Spring Bean id -->
+                            <param name="mode">create</param>
+                            <param name="destination">{node.nodeRef}</param>
+                            <param name="successMessage">org.cd59.affichagedesactes.action.envoyerActe.msg.success</param>
+                            <param name="failureMessage">org.cd59.affichagedesactes.action.envoyerActe.failure</param>
+                            <evaluator negate="false">org.cd59.affichagedesactes.evaluateur.estEnvoye</evaluator>
+                        </action>
+                    </actions>
+
+                    <actionGroups>
+                        <actionGroup id="folder-details">
+                            <action index="400" id="org.cd59.affichagedesactes.action.envoyerActe" />
+                        </actionGroup>
+                        <actionGroup id="folder-browse">
+                            <action index="400" id="org.cd59.affichagedesactes.action.envoyerActe" />
+                        </actionGroup>
+                    </actionGroups>
+
+                </config>
+
+                <config evaluator="string-compare" condition="Envoyer-Dossier-Acte">
+                    <forms>
+                        <form>
+                            <field-visibility></field-visibility>
+                            <appearance></appearance>
+                        </form>
+                    </forms>
+                </config>
+
+            </configurations>
+
+        </module>
+
+    </modules>
+</extension>

@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 /**
  * Classe personnalisée pour gérer les requêtes utilisant la methode GET.
@@ -52,6 +53,11 @@ public abstract class UrlPostMultipartRequestPost extends RequeteURLPost {
      * @throws IOException Si une E/S est lancée lors de l'écriture sur la sortie.
      */
     protected void envoyerFichier(String nomParametre, String nomFichier, byte[] contenu) throws IOException {
+        System.out.println("=======================================================================");
+        System.out.println("NOM PARAMETRE " + nomParametre +"\nNOM FICHIER " + nomFichier);
+        System.out.println("TYPE " + URLConnection.guessContentTypeFromName(nomFichier));
+        System.out.println("=======================================================================");
+
         this.redacteur.append(String.format("--%s%s", LIMITE, RETOUR));
         this.redacteur.append(String.format("Content-Disposition: form-data; name=\"%s\"; filename=\"%s\"%s",
                 nomParametre, nomFichier, RETOUR));
@@ -79,6 +85,11 @@ public abstract class UrlPostMultipartRequestPost extends RequeteURLPost {
     }
 
     protected void envoyerChampJson(String nomParametre, JSONObject valeur) {
+        System.out.println("=======================================================================");
+        System.out.println("NOM PARAMETRE " + nomParametre );
+        System.out.println("VALEUR " + valeur.toString());
+        System.out.println("=======================================================================");
+
         this.redacteur.append(String.format("--%s%s", LIMITE, RETOUR));
         this.redacteur.append((String.format("Content-Disposition: form-data; name=\"%s\"%s", nomParametre, RETOUR)));
         this.redacteur.append((String.format("Content-Type: application/json%s", RETOUR)));

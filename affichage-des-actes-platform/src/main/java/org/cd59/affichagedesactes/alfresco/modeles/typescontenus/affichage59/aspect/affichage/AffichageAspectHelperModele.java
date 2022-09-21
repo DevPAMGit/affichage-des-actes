@@ -82,18 +82,6 @@ public class AffichageAspectHelperModele extends AlfrescoModeleHelper {
 		this.majPropriete(AffichageAspectModele.TENTATIVE_ENVOI, valeur);
 	}
 
-	/** Méthode permettant de récupérer la valeur de la propriété 'affichage59:dateAffichage'. 
-	 * @return Date La valeur de la propriété 'affichage59:dateAffichage'. */
-	public Date getDateAffichage() { 
-		return (Date) this.getPropriete(AffichageAspectModele.DATE_AFFICHAGE);
-	}
-
-	/** Méthode permettant de récupérer la valeur de la propriété 'affichage59:dateAffichage'. 
-	 * @param valeur La nouvelle valeur de la propriété 'affichage59:dateAffichage'. */ 
-	public void setDateAffichage(Date valeur) { 
-		this.majPropriete(AffichageAspectModele.DATE_AFFICHAGE, valeur);
-	}
-
 	/** Méthode permettant de vérifier la validité de le type de contenu 'affichage59:affichage'. 
 	 * @return <c>true</c> si le type de contenu à toutes ces propriétés valides sinon <c>false</c>. */ 
 	public boolean estAspectValide() { 

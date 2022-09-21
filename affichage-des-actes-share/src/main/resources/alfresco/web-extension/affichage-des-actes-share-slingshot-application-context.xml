@@ -23,4 +23,6 @@
       </property>
    </bean>
 
+   <bean id="org.cd59.affichagedesactes.evaluateur.estEnvoye" class="org.cd59.evaluateur.VerifierSiDossierEnvoyer" />
+
 </beans>

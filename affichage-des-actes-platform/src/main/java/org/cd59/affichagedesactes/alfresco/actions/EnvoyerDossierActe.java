@@ -5,7 +5,7 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.cd59.affichagedesactes.v2.action.EnvoyerDossierActeAction;
+import org.cd59.affichagedesactes.v2.action.envoi.EnvoyerDossierActeAction;
 
 import java.util.List;
 

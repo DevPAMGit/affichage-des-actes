@@ -5,7 +5,6 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.cd59.affichagedesactes.v2.action.StockerDossierActe;
 
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 /**
  * Action permettant de gérer le stockage d'un dossier dans le SAS.
  */
-public class StockerDossierActeSAS extends ActionExecuterAbstractBase {
+public class StockerDossierActeSas extends ActionExecuterAbstractBase {
 
     /**
      * Le registre des services Alfresco.
@@ -30,7 +29,8 @@ public class StockerDossierActeSAS extends ActionExecuterAbstractBase {
 
     @Override
     protected void executeImpl(Action action, NodeRef nodeRef) {
-        new StockerDossierActe(this.serviceRegistry, nodeRef).executer();
+        // new StockerDossierActe(this.serviceRegistry, nodeRef).executer();
+        new org.cd59.affichagedesactes.v2.action.stockage.StockerDossierActeSas(this.serviceRegistry, nodeRef).executer();
     }
 
     @Override

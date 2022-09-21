@@ -55,7 +55,9 @@ public class AffichageDesActesWebservice {
     public String envoyerActe(String nomUtilisateur, String motDePasse, EnvoiActeFichierModel acte,
                               EnvoiActeFichierModel annexe, JSONObject metadonnees) throws IOException, ServiceException
     {
-        return new EnvoiActeService(this.host, this.authentification(nomUtilisateur, motDePasse), acte, annexe,
+        String resultat = new EnvoiActeService(this.host, this.authentification(nomUtilisateur, motDePasse), acte, annexe,
                 metadonnees).call();
+        System.out.print(resultat);
+        return resultat;
     }
 }

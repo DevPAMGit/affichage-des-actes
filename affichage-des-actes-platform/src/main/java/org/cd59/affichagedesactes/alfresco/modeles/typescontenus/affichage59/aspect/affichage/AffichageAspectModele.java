@@ -9,7 +9,7 @@ public class AffichageAspectModele {
 	public final static String PREFIX = "affichage59";
 
 	/** L'URI du type de contenu. */
-	public final static String URI =  "http://cd59.fr/model/stockageacte/1.0.";
+	public final static String URI =  "http://cd59.fr/model/affichage59/1.0.";
 
 	/** Le nom du type de contenu. */
 	public final static QName NOM = QName.createQName( URI , "affichage");
@@ -19,8 +19,5 @@ public class AffichageAspectModele {
 
 	/** Modèle pour la propriété 'affichage59:tentativeEnvoi'. */
 	public final static QName TENTATIVE_ENVOI = QName.createQName( URI , "tentativeEnvoi");
-
-	/** Modèle pour la propriété 'affichage59:dateAffichage'. */
-	public final static QName DATE_AFFICHAGE = QName.createQName( URI , "dateAffichage");
 
 }
