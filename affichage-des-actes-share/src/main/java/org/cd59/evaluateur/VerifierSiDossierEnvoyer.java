@@ -13,7 +13,7 @@ public class VerifierSiDossierEnvoyer extends BaseEvaluator {
     /**
      * L'aspect à récupérer.
      */
-    private static final String ASPECT_ETAT = "affichage59:affichage";
+    private static final String ASPECT_ETAT = "actes59:dossierinfos";
 
     @Override
     public boolean evaluate(JSONObject jsonObject) {
@@ -26,11 +26,13 @@ public class VerifierSiDossierEnvoyer extends BaseEvaluator {
             if (!nodeAspects.contains(ASPECT_ETAT)) return false;
 
             // Vérification de l'état du dossier.
-            String etat = (String) getProperty(jsonObject, "affichage59:etat");
-            if (etat == null) return false;
+            //String etat = (String) getProperty(jsonObject, "affichage59:etat");
+            //if (etat == null) return false;
+            String etat = (String) getProperty(jsonObject, "actes59:statutaffichage");
+            return (etat == null || etat.trim().isEmpty());
 
             // Vérification de l'état.
-            return etat.equals("Prêt à être envoyer");
+            //return etat.equals("Prêt à être envoyer");
 
         }catch (Exception e) {
             throw new RuntimeException(e.getMessage());

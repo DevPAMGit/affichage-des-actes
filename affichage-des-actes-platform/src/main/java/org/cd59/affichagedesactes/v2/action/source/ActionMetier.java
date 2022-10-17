@@ -73,7 +73,7 @@ public abstract class ActionMetier {
         // Vérification du nœud.
         if(nodeRef == null) throw new NoeudNullException("Le noeud en paramètre ne peut être null.");
 
-        ByteArrayOutputStream resultat = new ByteArrayOutputStream();
+        // ByteArrayOutputStream resultat = new ByteArrayOutputStream();
         // Récupération du contenu.
         ContentReader contentReader = this.registryService.getContentService().getReader(nodeRef,
                 ContentModel.PROP_CONTENT
@@ -251,6 +251,8 @@ public abstract class ActionMetier {
     protected List<NodeRef> rechercherNoeuds(NodeRef nodeRef, String requete) throws ActionMetierException {
         if(nodeRef == null) throw new NoeudNullException("Le noeud en paramètre ne peut être null.");
         if(requete == null || requete.isEmpty()) throw new RequeteRechercheNullException();
+
+        requete = String.format("%s and CONTAINS('PATH:\\\"%s\\\"')", requete, this.registryService.getNodeService().getPath(nodeRef));
 
         ResultSet resultat = this.registryService.getSearchService().query(
                  nodeRef.getStoreRef(), SearchService.LANGUAGE_CMIS_STRICT, requete

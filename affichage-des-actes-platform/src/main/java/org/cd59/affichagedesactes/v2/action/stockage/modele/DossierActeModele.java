@@ -142,6 +142,6 @@ public class DossierActeModele {
     }
 
     public String obtenirMois() {
-        return MOIS[this.mois-1];
+        return MOIS[this.mois];
     }
 }

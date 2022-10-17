@@ -1,7 +1,8 @@
 package org.cd59.affichagedesactes.v2.action.envoi;
 
 
-import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.affichage59.aspect.informationaffichage.InformationAffichageAspectModele;
+import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.aspect.dossierinfos.DossierinfosAspectModele;
+// import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.affichage59.aspect.informationaffichage.InformationAffichageAspectModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.acteoriginal.ActeOriginalTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.dossieracte.DossierActeTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.affichage59.aspect.affichage.AffichageAspectModele;
@@ -89,7 +90,7 @@ public class EnvoyerDossierActeAction extends ActionMetier {
             if(!this.verifierPrecondition()) return;
 
             // Suppression de l'aspect d'erreur si celui-ci existe.
-            this.miseAZeroAspectErreur();
+            // this.miseAZeroAspectErreur();
 
             // Envoi du document.
             AffichageDesActesWebservice serviceWebAffichage = new AffichageDesActesWebservice(HOTE);
@@ -163,14 +164,14 @@ public class EnvoyerDossierActeAction extends ActionMetier {
      * @throws ActionMetierException Si l'aspect ou le nœud sont null.
      */
     private void miseAZeroAspectErreur() throws ActionMetierException {
-        if(this.acteOriginal != null)
-            this.supprimerAspect(this.acteOriginal, ErreurAspectModele.NOM);
+        /*if(this.acteOriginal != null)
+            this.supprimerAspect(this.acteOriginal, ErreurAspectModele.NOM);*/
 
         if(this.dossierActe != null)
             this.supprimerAspect(this.dossierActe, ErreurAspectModele.NOM);
 
-        if(this.annexes != null && this.annexes.size() > 0)
-            this.supprimerAspect(this.annexes.get(0), ErreurAspectModele.NOM);
+        /*if(this.annexes != null && this.annexes.size() > 0)
+            this.supprimerAspect(this.annexes.get(0), ErreurAspectModele.NOM);*/
     }
 
     /**
@@ -182,13 +183,13 @@ public class EnvoyerDossierActeAction extends ActionMetier {
     private void miseAJourEtatNoeudsEnAffiches(Date date, String url) throws ActionMetierException {
         // Mise à jour des métadonnées d'envoi.
         //  Sur le fichier d'acte.
-        if(this.acteOriginal != null) this.modifierEtatEnAffiche(this.acteOriginal, date, url);
+        //if(this.acteOriginal != null) this.modifierEtatEnAffiche(this.acteOriginal, date, url);
 
         //  Sur le dossier d'acte.
         if(this.dossierActe != null) this.modifierEtatEnAffiche(this.dossierActe, date, url);
 
         // Sur l'annexe
-        if(this.annexes != null && this.annexes.size() > 0) this.modifierEtatEnAffiche(this.annexes.get(0), date, url);
+        //if(this.annexes != null && this.annexes.size() > 0) this.modifierEtatEnAffiche(this.annexes.get(0), date, url);
     }
 
     /**
@@ -198,16 +199,16 @@ public class EnvoyerDossierActeAction extends ActionMetier {
     private void miseAJourEtatNoeudsEnEnvoyeMaisErreur() throws ActionMetierException {
         // Mise à jour des métadonnées d'envoi.
         //  Sur le fichier d'acte.
-        if(this.acteOriginal != null)
-            this.modifierEtatEnvoiEnEnvoyeMaisErreur(this.acteOriginal);
+        /*if(this.acteOriginal != null)
+            this.modifierEtatEnvoiEnEnvoyeMaisErreur(this.acteOriginal);*/
 
         //  Sur le dossier d'acte.
         if(this.dossierActe != null)
             this.modifierEtatEnvoiEnEnvoyeMaisErreur(this.dossierActe);
 
-        // Su l'annexe
-        if(this.annexes != null && this.annexes.size() > 0)
-            this.modifierEtatEnvoiEnEnvoyeMaisErreur(this.annexes.get(0));
+        // Sur l'annexe
+        // if(this.annexes != null && this.annexes.size() > 0)
+        //    this.modifierEtatEnvoiEnEnvoyeMaisErreur(this.annexes.get(0));
     }
 
     /**
@@ -218,14 +219,14 @@ public class EnvoyerDossierActeAction extends ActionMetier {
     private void miseAJourEtatNoeudsEnErreur(String message) throws ActionMetierException {
         // Mise à jour des métadonnées d'envoi.
         //  Sur le fichier d'acte.
-        if(this.acteOriginal != null)
-            this.modifierEtatEnErreur(this.acteOriginal, message);
+        // if(this.acteOriginal != null)
+        //    this.modifierEtatEnErreur(this.acteOriginal, message) ;
         //  Sur le dossier d'acte.
         if(this.dossierActe != null)
             this.modifierEtatEnErreur(this.dossierActe, message);
 
         // Sur l'annexe
-        if(this.annexes != null && this.annexes.size() > 0) this.modifierEtatEnErreur(this.annexes.get(0), message);
+        // if(this.annexes != null && this.annexes.size() > 0) this.modifierEtatEnErreur(this.annexes.get(0), message);
     }
 
     /**
@@ -235,9 +236,11 @@ public class EnvoyerDossierActeAction extends ActionMetier {
      */
     private void modifierEtatEnvoiEnEnvoyeMaisErreur(NodeRef nodeRef) throws ActionMetierException {
         if(nodeRef == null) return;
-        this.modifierPropriete(nodeRef, AffichageAspectModele.ETAT,
+        /*this.modifierPropriete(nodeRef, AffichageAspectModele.ETAT,
                 "Envoyé mais erreur lors la récupération du résultat du webservice");
-        this.modifierPropriete(nodeRef, AffichageAspectModele.TENTATIVE_ENVOI, new Date());
+        this.modifierPropriete(nodeRef, AffichageAspectModele.TENTATIVE_ENVOI, new Date());*/
+        this.modifierPropriete(nodeRef, DossierinfosAspectModele.ERREURINTERNET,
+                "Envoyé mais erreur lors la récupération du résultat du webservice");
     }
 
     /**
@@ -246,14 +249,19 @@ public class EnvoyerDossierActeAction extends ActionMetier {
      * @throws ActionMetierException Si le nœud ou la propriété en paramètre est null ou vide.
      */
     private void modifierEtatEnAffiche(NodeRef nodeRef, Date date, String url) throws ActionMetierException {
-        this.modifierEtatEnvoi(nodeRef, "Affiché");
+        /*this.modifierEtatEnvoi(nodeRef, "Affiché");
         this.modifierPropriete(nodeRef, AffichageAspectModele.TENTATIVE_ENVOI, new Date());
 
         HashMap<QName, Serializable> proprietes = new HashMap<>();
         proprietes.put(InformationAffichageAspectModele.URL_AFFICHAGE, url);
-        proprietes.put(InformationAffichageAspectModele.DATE_AFFICHAGE, date);
+        proprietes.put(InformationAffichageAspectModele.DATE_AFFICHAGE, date);*/
+        HashMap<QName, Serializable> proprietes = new HashMap<>(this.registryService.getNodeService().getProperties(nodeRef));
+        proprietes.put(DossierinfosAspectModele.URLAFFICHAGE, url);
+        proprietes.put(DossierinfosAspectModele.STATUTAFFICHAGE, true);
+        proprietes.put(DossierinfosAspectModele.DATEAFFICHAGEGED, date);
+        proprietes.put(DossierinfosAspectModele.DATEAFFICHAGEINTERNET, date);
 
-        this.miseAJourAspect(nodeRef, InformationAffichageAspectModele.NOM, proprietes);
+        this.miseAJourAspect(nodeRef, DossierinfosAspectModele.NOM, proprietes);
     }
 
     /**
@@ -263,11 +271,12 @@ public class EnvoyerDossierActeAction extends ActionMetier {
      * @throws ActionMetierException Si le nœud ou la propriété en paramètre est null ou vide.
      */
     private void modifierEtatEnErreur(NodeRef nodeRef, String message) throws ActionMetierException {
-        this.modifierEtatEnvoi(nodeRef, "Erreur lors de l'envoie");
-        this.modifierPropriete(nodeRef, AffichageAspectModele.TENTATIVE_ENVOI, new Date());
+        // this.modifierEtatEnvoi(nodeRef, "Erreur lors de l'envoie");
+        // this.modifierPropriete(nodeRef, AffichageAspectModele.TENTATIVE_ENVOI, new Date());
 
         HashMap<QName, Serializable> proprietes = new HashMap<>(this.registryService.getNodeService().getProperties(nodeRef));
-        proprietes.put(ErreurAspectModele.ERREUR_AFFICHAGE_MESSAGE, message);
+        // proprietes.put(ErreurAspectModele.ERREUR_AFFICHAGE_MESSAGE, message);
+        proprietes.put(DossierinfosAspectModele.ERREURINTERNET , message);
 
         this.miseAJourAspect(nodeRef, ErreurAspectModele.NOM, proprietes);
     }
@@ -322,7 +331,7 @@ public class EnvoyerDossierActeAction extends ActionMetier {
      * @throws IOException Si une erreur d'E/S à lieu durant la lecture du contenu du nœud.
      */
     private byte[] obtenirContenuPremiereAnnexe() throws IOException {
-        try { return this.obtenirContenuFichier(this.acteOriginal); }
+        try { return this.obtenirContenuFichier(this.annexes.get(0)); }
         catch (NoeudNullException e) { return null; }
     }
 
@@ -373,7 +382,7 @@ public class EnvoyerDossierActeAction extends ActionMetier {
                 DossierActeTypeModele.SIGNATAIRE));
         metadonnees.put("numero_acte", this.obtenirValeurProprieteEnChaine(this.dossierActe,
                 DossierActeTypeModele.IDENTIFIANT));
-        metadonnees.put("typologie", String.format("%sS", this.obtenirValeurProprieteEnChaine(this.dossierActe,
+        metadonnees.put("typologie", String.format("%s", this.obtenirValeurProprieteEnChaine(this.dossierActe,
                 DossierActeTypeModele.TYPOLOGIE_DOSSIER)));
 
         Date date = this.obtenirValeurProprieteEnDate(this.dossierActe, DossierActeTypeModele.DATE);
@@ -395,20 +404,28 @@ public class EnvoyerDossierActeAction extends ActionMetier {
     private boolean verifierPrecondition() throws ActionMetierException {
         // 1. Vérification Le nœud est un dossier de type stockageactes59:dossierActe.
         // Erreur le nœud ne contient pas le type : pas de traitement.
-        if(!this.aType(this.dossierActe, DossierActeTypeModele.NOM)) {
+        if(!/*this.aType(this.dossierActe, DossierinfosAspectModele.NOM)*/ this.aAspect(this.dossierActe, DossierinfosAspectModele.NOM)) {
             this.miseAJourEtatNoeudsEnErreur(
                     String.format("Le dossier d'acte n'a pas le type requis (%s:%s).",
-                            DossierActeTypeModele.NOM.getPrefixString(), DossierActeTypeModele.NOM.getLocalName())
+                            DossierActeTypeModele.NOM.getPrefixString(), DossierinfosAspectModele.NOM.getLocalName())
             );
             return false;
         }
 
         // Vérifie que le dossier puisse partir.
         // String etat = new AffichageAspectHelperModele(this.registryService, this.dossierActe).getEtat();
-        String etat = this.obtenirValeurProprieteEnChaine(this.dossierActe, AffichageAspectModele.ETAT);
+        /*String etat = this.obtenirValeurProprieteEnChaine(this.dossierActe, AffichageAspectModele.ETAT);
         if(etat == null || !etat.equals("Prêt à être envoyer")) {
             this.miseAJourEtatNoeudsEnErreur(
                     "Le dossier n'est pas à l'état ('Prêt à être envoyer') adéquat pour être envoyé."
+            );
+            return false;
+        }*/
+        String etat = this.obtenirValeurProprieteEnChaine(this.dossierActe, DossierinfosAspectModele.URLAFFICHAGE);
+        if(etat != null && !etat.isEmpty()) {
+            this.miseAJourEtatNoeudsEnErreur(
+                    // "Le dossier n'est pas à l'état ('Prêt à être envoyé') adéquat pour être envoyé."
+                    "Le dossier a déjà une URL d'affichage."
             );
             return false;
         }
@@ -417,25 +434,28 @@ public class EnvoyerDossierActeAction extends ActionMetier {
         SearchService searchService = this.registryService.getSearchService();
 
         // Recherche de tous les actes originaux dans le dossier.
-        ResultSet resultatActe = searchService.query(
+        /*ResultSet resultatActe = searchService.query(
                 this.dossierActe.getStoreRef(),
                 SearchService.LANGUAGE_CMIS_STRICT, "select * from stockageactes59:acteOriginal"
-        );
+        );*/
+        List<NodeRef> resultatActe = this.rechercherNoeuds(this.dossierActe,
+                "select * from stockageactes59:acteOriginal from actes59:docinfos where actes59:typedocument = 'ACTE_ORIGINAL'");
 
         // Arrêt s'il n'y a pas de fichier de type 'stockageactes59:acteOriginal'.
-        if(resultatActe == null ||resultatActe.length() == 0) {
+        if(resultatActe == null || resultatActe.size() == 0) {
             this.miseAJourEtatNoeudsEnErreur("Le dossier n'a pas d'acte original.");
             return false;
         }
 
         // Initialisation de l'acte original.
-        this.acteOriginal = resultatActe.getNodeRef(0);
+        this.acteOriginal = resultatActe.get(0);
 
         // Récupération des annexes.
-        ResultSet resultatAnnexe = searchService.query(this.dossierActe.getStoreRef(),
-                SearchService.LANGUAGE_CMIS_STRICT, "select * from stockageactes59:annexe");
-        if(resultatAnnexe == null ||resultatAnnexe.length() == 0) this.annexes = new ArrayList<>();
-        else this.annexes = resultatAnnexe.getNodeRefs();
+        //ResultSet resultatAnnexe = searchService.query(this.dossierActe.getStoreRef(),
+        List resultatAnnexe = this.rechercherNoeuds(this.dossierActe,
+                /*SearchService.LANGUAGE_CMIS_STRICT,*/ "select * from actes59:docinfos where actes59:typedocument = 'ANNEXE'");
+        if(resultatAnnexe == null ||resultatAnnexe.size() == 0) this.annexes = new ArrayList<>();
+        else this.annexes = resultatAnnexe;
 
         return true;
     }
