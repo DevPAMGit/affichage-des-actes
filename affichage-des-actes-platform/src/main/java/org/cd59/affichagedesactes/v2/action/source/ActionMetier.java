@@ -1,22 +1,34 @@
 package org.cd59.affichagedesactes.v2.action.source;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ContentReader;
+import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.TempFileProvider;
 import org.apache.commons.io.IOUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.cd59.affichagedesactes.v2.action.source.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 
 /**
  * Source pour toutes les actions métiers
@@ -252,8 +264,6 @@ public abstract class ActionMetier {
         if(nodeRef == null) throw new NoeudNullException("Le noeud en paramètre ne peut être null.");
         if(requete == null || requete.isEmpty()) throw new RequeteRechercheNullException();
 
-        requete = String.format("%s and CONTAINS('PATH:\\\"%s\\\"')", requete, this.registryService.getNodeService().getPath(nodeRef));
-
         ResultSet resultat = this.registryService.getSearchService().query(
                  nodeRef.getStoreRef(), SearchService.LANGUAGE_CMIS_STRICT, requete
         );
@@ -369,6 +379,55 @@ public abstract class ActionMetier {
     protected void supprimerNoeud(NodeRef nodeRef) {
         if(nodeRef == null) return;
         this.registryService.getNodeService().deleteNode(nodeRef);
+    }
+
+    protected void tamponnerNoeud(NodeRef nodeRef) throws ActionMetierException {
+        ContentReader reader = this.registryService.getContentService().getReader(nodeRef, ContentModel.PROP_CONTENT);
+        if(!MimetypeMap.MIMETYPE_PDF.equals(reader.getMimetype()))
+            throw new ActionMetierException("Le fichier à signer n'est pas un pdf.");
+
+        try {
+            File newPdf = TempFileProvider.createTempFile("tmp", "tampon");
+            FileOutputStream fos = new FileOutputStream(newPdf);
+
+            PDDocument doc = PDDocument.load(reader.getContentInputStream());
+            PDPage page = doc.getDocumentCatalog().getPages().get(0);
+            PDFont font = PDType0Font.load(doc, PDDocument.class.getResourceAsStream("/Roboto-Medium.ttf"));
+
+            float h = page.getMediaBox().getHeight();
+            float w = page.getMediaBox().getWidth();
+            System.out.println(h + " x " + w + " in internal units");
+            h = h / 72 * 2.54f * 10;
+            w = w / 72 * 2.54f * 10;
+            System.out.println(h + " x " + w + " in mm");
+
+            // Dessin du rectangle de fond
+            PDPageContentStream contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true, true);
+            contentStream.setNonStrokingColor(Color.WHITE);
+            contentStream.addRect(3, 3, 255, 15);
+            contentStream.fill();
+            // Dessin du Texte du tampon
+            contentStream.beginText();
+            contentStream.setFont(font, 12);
+            contentStream.setNonStrokingColor(0f, 0.663f, 0.808f);
+            contentStream.newLineAtOffset(5, 5);
+
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
+            String formatDateTime = now.format(formatter);
+            contentStream.showText("Publié sur le site lenord.fr le " + formatDateTime);
+            contentStream.endText();
+            contentStream.close();
+            doc.save(fos);
+            fos.close();
+            doc.close();
+
+            ContentWriter writer = this.registryService.getContentService().getWriter(nodeRef, ContentModel.PROP_CONTENT, true);
+            writer.putContent(newPdf);
+        }catch (Exception e) {
+            LOGGER.error("Une erreur est survenue.", e);
+            throw new ActionMetierException("Une erreur est survenue lors de la signature de l'acte.");
+        }
     }
 
 }

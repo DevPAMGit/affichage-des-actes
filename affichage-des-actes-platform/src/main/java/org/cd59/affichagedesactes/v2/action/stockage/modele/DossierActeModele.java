@@ -1,16 +1,15 @@
 package org.cd59.affichagedesactes.v2.action.stockage.modele;
 
-import java.util.Calendar;
+
+import org.cd59.utils.DateUtils;
+
 import java.util.Date;
-import java.util.GregorianCalendar;
+
 
 /**
  * Modele pour le dossier d'acte.
  */
 public class DossierActeModele {
-
-    private static final String[] MOIS = {"janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
-            "septembre", "décembre"};
 
     /**
      * Le signataire de l'acte.
@@ -73,6 +72,16 @@ public class DossierActeModele {
     public String resume;
 
     /**
+     * L'identifiant du dossier.
+     */
+    public String identifiant;
+
+    /**
+     * La source du dossier.
+     */
+    public String source;
+
+    /**
      * Initialise une nouvelle instance de la classe {@link DossierActeModele}.
      */
     public DossierActeModele() {
@@ -105,25 +114,29 @@ public class DossierActeModele {
         // Formatage du type.
         else this.formatterTypeDossier();
 
-        if(this.date == null)
-            this.message.append("La date n'est pas renseignée. ");
-
         // Récupération des données de la date.
+        if(this.date == null) this.message.append("La date n'est pas renseignée. ");
         else this.extraireDonneesDate();
 
         return (this.message.length() == 0);
     }
 
     /**
+     * Indique si la source est manuelle ou non.
+     * @return <c>true</c> si la source est manuelle, sinon <c>false</c>.
+     */
+    public boolean estDeSourceManuelle() {
+        if(this.source == null || this.source.trim().isEmpty()) return false;
+        return (this.source.equalsIgnoreCase("manuel"));
+    }
+
+    /**
      * Extrait les données de la date du dossier.
      */
     private void extraireDonneesDate() {
-        Calendar calendrier = new GregorianCalendar();
-        calendrier.setTime(this.date);
-
-        this.mois = calendrier.get(Calendar.MONTH);
-        this.annee = calendrier.get(Calendar.YEAR);
-        this.jour = calendrier.get(Calendar.DAY_OF_MONTH);
+        this.jour = DateUtils.obtenirJour(this.date);
+        this.mois = DateUtils.obtenirMois(this.date);
+        this.annee = DateUtils.obtenirAnnee(this.date);
     }
 
     /**
@@ -142,6 +155,7 @@ public class DossierActeModele {
     }
 
     public String obtenirMois() {
-        return MOIS[this.mois];
+        if(this.date == null) return "";
+        return DateUtils.obtenirCorrespondanceMois(this.date);
     }
 }

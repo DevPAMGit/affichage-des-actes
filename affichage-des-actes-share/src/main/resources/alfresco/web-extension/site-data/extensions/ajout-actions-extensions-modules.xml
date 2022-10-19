@@ -23,7 +23,8 @@
                                 icon="email"
                                 type="javascript"
                                 label="alfresco.affichage.action.envoyerActe.label">
-                            <param name="function">onActionFormDialog</param>
+                            <!--param name="function">onActionFormDialog</param-->
+                            <param name="function">onActionSimpleRepoAction</param>
                             <param name="itemKind">action</param>
                             <param name="itemId">Envoyer-Dossier-Acte</param> <!-- Repository action id = Spring Bean id -->
                             <param name="mode">create</param>

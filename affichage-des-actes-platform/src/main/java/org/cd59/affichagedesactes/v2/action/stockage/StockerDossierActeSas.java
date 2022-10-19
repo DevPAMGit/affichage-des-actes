@@ -2,24 +2,22 @@ package org.cd59.affichagedesactes.v2.action.stockage;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.model.FileNotFoundException;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
+import org.cd59.affichagedesactes.v2.action.MutexAction;
+import org.alfresco.service.cmr.model.FileNotFoundException;
+import org.cd59.affichagedesactes.v2.action.source.ActionMetier;
+import org.cd59.affichagedesactes.v2.action.source.exception.ActionMetierException;
+import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.type.sas.SasTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.aspect.docinfos.DocinfosAspectModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.aspect.dossierinfos.DossierinfosAspectModele;
-import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.type.sas.SasTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.affichage59.aspect.affichage.AffichageAspectModele;
-import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.acteoriginal.ActeOriginalTypeModele;
-import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.annexe.AnnexeTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.dossieractes.DossierActesTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.dossierannee.DossierAnneeTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.dossierjour.DossierJourTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.dossiermois.DossierMoisTypeModele;
 import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.stockageactes59.type.dossiertypologie.DossierTypologieTypeModele;
-import org.cd59.affichagedesactes.v2.action.MutexAction;
-import org.cd59.affichagedesactes.v2.action.source.ActionMetier;
-import org.cd59.affichagedesactes.v2.action.source.exception.ActionMetierException;
 import org.cd59.affichagedesactes.v2.action.source.exception.AspectException;
 import org.cd59.affichagedesactes.v2.action.source.exception.NoeudNullException;
 import org.cd59.affichagedesactes.v2.action.source.exception.PreconditionException;
@@ -76,7 +74,6 @@ public class StockerDossierActeSas extends ActionMetier {
 
     /**
      * Initialise une nouvelle instance de la classe {@link StockerDossierActeSas}.
-     *
      * @param serviceRegistry Le registre de service Alfresco.
      * @param noeudDossier Le nœud référençant un dossier d'acte.
      */
@@ -115,10 +112,11 @@ public class StockerDossierActeSas extends ActionMetier {
                 NodeRef actes = this.obtenirDossierActes();
 
                 // Vérification que le dossier d'acte n'existe pas sur l'arborescence.
-                /* List<NodeRef> acte = this.rechercherNoeuds(actes,  String.format("select * from " +
-                        "stockageactes59:dossierActe where cmis:name = '%s'", this.dossierModele.numero)); */
-                List<NodeRef> acte = this.rechercherNoeuds(actes,  String.format("select * from " +
-                        "actes59:dossierinfos where cmis:name = '%s'", this.dossierModele.numero));
+                List<NodeRef> acte = this.rechercherNoeuds(actes,
+                        String.format(
+                                "select * from actes59:dossierinfos " +
+                                "where cmis:name = '%s' " +
+                                "and IN_TREE('%s')", this.dossierModele.numero, actes.getId()));
 
                 if(acte.size() > 0)
                     throw new PreconditionException(String.format("Le dossier %s existe déjà l'arborescence.",
@@ -132,17 +130,6 @@ public class StockerDossierActeSas extends ActionMetier {
             // Déplacement des documents.
             this.deplacerActe(dossierActe);
             this.deplacerAnnexes(dossierActe);
-
-            // Suppression du dossier
-            this.supprimerNoeud(this.noeudDossier);
-
-        }catch (ActionMetierException e2) {
-            LOGGER.error(e2.getMessage(), e2);
-
-            try { this.modifierPropriete(this.noeudDossier, DossierinfosAspectModele.DOSSIERCOMPLET, false); }
-            catch (Exception e4) { LOGGER.error(e4.getMessage(), e4); }
-
-            throw new RuntimeException(e2);
 
         }catch (Exception e3) {
             LOGGER.error(e3.getMessage(), e3);
@@ -164,47 +151,34 @@ public class StockerDossierActeSas extends ActionMetier {
                 // Initialisation du nom du nœud.
                 String nom;
                 if( this.noeudsAnnexes.size() > 1  )
-                    nom = String.format("%s_ACTE_ANNEXE_%s", this.dossierModele.numero,
+                    nom = String.format("%s_ANNEXE_%s", this.dossierModele.numero,
                             this.entierSurNChiffres(cpt, 2));
-                else nom = String.format("%s_ACTE_ANNEXE", this.dossierModele.numero);
+                else nom = String.format("%s_ANNEXE", this.dossierModele.numero);
 
                 // Déplacement du nœud.
                 this.registryService.getFileFolderService().move(nodeRef, destination, nom);
 
                 // Modification des métadonnées.
-                // nodeService.setType(nodeRef, AnnexeTypeModele.NOM);
                 nodeService.setProperty(nodeRef, ContentModel.PROP_TITLE, nom);
-                nodeService.setProperty(nodeRef, AnnexeTypeModele.EMPREINTE, this.obtenirEmpreinte(nodeRef));
-
-                //nodeService.removeAspect(nodeRef, DossierinfosAspectModele.NOM);
+                nodeService.setProperty(nodeRef, ContentModel.PROP_DESCRIPTION, String.format("Annexe de la %s %s.",
+                        this.dossierModele.type, this.dossierModele.numero));
+                nodeService.setProperty(nodeRef, DocinfosAspectModele.EMPREINTE , this.obtenirEmpreinte(nodeRef));
 
                 cpt++;
             }
     }
 
-    private void deplacerActe(NodeRef destination)
-            throws FileNotFoundException, NoSuchAlgorithmException, IOException, ActionMetierException {
+    private void deplacerActe(NodeRef destination) throws FileNotFoundException, NoSuchAlgorithmException, IOException {
         NodeService nodeService = this.registryService.getNodeService();
 
         // Déplacement du fichier
         this.registryService.getFileFolderService().move(
-                this.noeudFichier, destination, String.format("%s_ACTE_ORIGINAL", this.dossierModele.numero)
+                this.noeudFichier, destination, String.format("%s_ACTE_ORIGINAL", this.dossierModele.identifiant)
         );
 
         // Modification des métadonnées.
-        // nodeService.setType(this.noeudFichier, ActeOriginalTypeModele.NOM);
-        nodeService.setProperty(this.noeudFichier, ContentModel.PROP_TITLE, String.format("%s_ACTE_ORIGINAL", this.dossierModele.numero));
-
-        // nodeService.setProperty(this.noeudFichier, ActeOriginalTypeModele.EMPREINTE,this.obtenirEmpreinte(this.noeudFichier));
+        nodeService.setProperty(this.noeudFichier, ContentModel.PROP_TITLE, String.format("%s_ACTE_ORIGINAL", this.dossierModele.identifiant));
         nodeService.setProperty(this.noeudFichier, DocinfosAspectModele.EMPREINTE,this.obtenirEmpreinte(this.noeudFichier));
-
-        // Mise à jour des propriétés d'affichage.
-        /* HashMap<QName, Serializable> proprietes = new HashMap<>(this.registryService.getNodeService().getProperties(this.noeudFichier));
-        proprietes.putAll(this.obtenirProprieteAffichageBase());
-        this.miseAJourAspect(this.noeudFichier, AffichageAspectModele.NOM, proprietes); */
-
-        // Retrait de l'aspect de dépôt.
-        // nodeService.removeAspect(this.noeudFichier, DossierinfosAspectModele.NOM);
     }
 
     /**
@@ -230,57 +204,26 @@ public class StockerDossierActeSas extends ActionMetier {
     private NodeRef deplacerDossierActe(NodeRef nodeRef) throws ActionMetierException, FileNotFoundException {
         // Déplacement du dossier d'acte.
         this.registryService.getFileFolderService().move(
-                this.noeudDossier, nodeRef, String.format("%s_ACTE_ORIGINAL", this.dossierModele.numero)
+                this.noeudDossier, nodeRef, String.format("%s_ACTE_ORIGINAL", this.dossierModele.identifiant)
         );
 
         // Initialisation des propriétés.
         HashMap<QName, Serializable> proprietes = new HashMap<>(this.registryService.getNodeService().getProperties(this.noeudDossier));
-        proprietes.put(ContentModel.PROP_TITLE, this.dossierModele.numero);
-        proprietes.put(ContentModel.PROP_NAME, this.dossierModele.numero);
+        proprietes.put(ContentModel.PROP_TITLE, this.dossierModele.identifiant);
+        proprietes.put(ContentModel.PROP_NAME, this.dossierModele.identifiant);
         proprietes.put(ContentModel.PROP_DESCRIPTION,
                 String.format("Dossier %s numéro %s du %s %s %d",
                         this.dossierModele.type.equals("ACTE") ? "de l'arrêté" : "de la délibération",
-                        this.dossierModele.numero, this.entierSurNChiffres(this.dossierModele.jour, 2),
+                        this.dossierModele.identifiant, this.entierSurNChiffres(this.dossierModele.jour, 2),
                         this.dossierModele.obtenirMois(), this.dossierModele.annee)
         );
         proprietes.put(DossierinfosAspectModele.ANNEE, Integer.toString(this.dossierModele.annee));
         proprietes.put(DossierinfosAspectModele.NUMEROACTE, this.dossierModele.numero);
+        proprietes.put(DossierinfosAspectModele.IDDOSSIER, this.dossierModele.identifiant);
+
         this.miseAJourAspect(this.noeudDossier, DossierinfosAspectModele.NOM, proprietes);
 
         return this.noeudDossier;
-
-
-        // Recherche du dossier d'acte.
-        /*NodeRef resultat = this.creerDossier(nodeRef, this.dossierModele.numero);
-        this.modifierType(resultat, DossierActeTypeModele.NOM);
-
-        HashMap<QName, Serializable> proprietes = this.obtenirProprieteAffichageBase();
-        
-        proprietes.put(ContentModel.PROP_TITLE, this.dossierModele.numero);
-        proprietes.put(ContentModel.PROP_NAME, this.dossierModele.numero);
-        proprietes.put(ContentModel.PROP_DESCRIPTION,
-                String.format("Dossier %s numéro %s du %s %s %d",
-                        this.dossierModele.type.equals("ACTE") ? "de l'arrêté" : "de la délibération",
-                        this.dossierModele.numero, this.entierSurNChiffres(this.dossierModele.jour, 2),
-                        this.dossierModele.obtenirMois(), this.dossierModele.annee)
-        );
-
-        proprietes.put(DossierActeTypeModele.MOIS, this.dossierModele.mois);
-        proprietes.put(DossierActeTypeModele.JOUR, this.dossierModele.jour);
-        proprietes.put(DossierActeTypeModele.ANNEE, this.dossierModele.annee);
-
-        proprietes.put(DossierActeTypeModele.DATE, this.dossierModele.date);
-        proprietes.put(DossierActeTypeModele.OBJET, this.dossierModele.objet);
-        proprietes.put(DossierActeTypeModele.RESUME, this.dossierModele.resume);
-        proprietes.put(DossierActeTypeModele.IDENTIFIANT, this.dossierModele.numero);
-        proprietes.put(DossierActeTypeModele.SIGNATAIRE, this.dossierModele.signataire);
-        proprietes.put(DossierActeTypeModele.TYPOLOGIE_DOSSIER, this.dossierModele.type);
-        proprietes.put(DossierActeTypeModele.SIGLE_DIRECTION, this.dossierModele.sigleOrganisation);
-
-        // Mise à jour des propriétés d'affichage.
-        this.miseAJourAspect(resultat, AffichageAspectModele.NOM, proprietes);
-
-        return resultat;*/
     }
 
     /**
@@ -305,7 +248,12 @@ public class StockerDossierActeSas extends ActionMetier {
         // Recherche du dossier d'acte.
         String type = this.dossierModele.type;
         List<NodeRef> recherche = this.rechercherNoeuds(nodeRef,
-                String.format("select * from stockageactes59:dossierTypologie where cmis:name = '%s'", type)
+                String.format(
+                        "select * from stockageactes59:dossierTypologie " +
+                        "where cmis:name = '%s' " +
+                        "and IN_TREE('%s') "
+                        , type, nodeRef.getId()
+                )
         );
 
         if(recherche.size() > 0) return recherche.get(0);
@@ -341,7 +289,9 @@ public class StockerDossierActeSas extends ActionMetier {
         // Recherche du dossier d'acte.
         String jour = this.entierSurNChiffres(this.dossierModele.jour, 2);
         List<NodeRef> recherche = this.rechercherNoeuds(nodeRef,
-                String.format("select * from stockageactes59:dossierJour where cmis:name = '%s'", jour)
+                String.format(
+                        "select * from stockageactes59:dossierJour " +
+                        "where cmis:name = '%s' and IN_TREE('%s')", jour, nodeRef.getId())
         );
 
         if(recherche.size() > 0) return recherche.get(0);
@@ -375,7 +325,10 @@ public class StockerDossierActeSas extends ActionMetier {
         // Recherche du dossier d'acte.
         String mois = this.entierSurNChiffres(this.dossierModele.mois, 2);
         List<NodeRef> recherche = this.rechercherNoeuds(nodeRef,
-                String.format("select * from stockageactes59:dossierMois where cmis:name = '%s'", mois)
+                String.format(
+                        "select * from stockageactes59:dossierMois " +
+                        "where cmis:name = '%s' " +
+                        "and IN_TREE('%s')", mois, nodeRef.getId())
         );
 
         if(recherche.size() > 0) return recherche.get(0);
@@ -408,7 +361,10 @@ public class StockerDossierActeSas extends ActionMetier {
         // Recherche du dossier d'acte.
         String annee = Integer.toString(this.dossierModele.annee);
         List<NodeRef> recherche = this.rechercherNoeuds(nodeRef,
-                String.format("select * from stockageactes59:dossierAnnee where cmis:name = '%s'", annee)
+                String.format(
+                        "select * from stockageactes59:dossierAnnee " +
+                        "where  cmis:name = '%s' " +
+                        "and IN_TREE('%s')", annee, nodeRef.getId())
         );
 
         if(recherche.size() > 0) return recherche.get(0);
@@ -437,7 +393,10 @@ public class StockerDossierActeSas extends ActionMetier {
     private NodeRef obtenirDossierActes() throws ActionMetierException {
         // Recherche du dossier d'acte.
         List<NodeRef> recherche = this.rechercherNoeuds(this.noeudSource,
-                "select * from stockageactes59:dossierActes");
+                String.format(
+                    "select * from stockageactes59:dossierActes where IN_TREE('%s')", this.noeudSource.getId()
+                )
+        );
         if(recherche.size() > 0) return recherche.get(0);
 
         NodeRef resultat = this.creerDossier(this.noeudSource, "Actes");
@@ -471,6 +430,7 @@ public class StockerDossierActeSas extends ActionMetier {
         // Vérification des données.
         this.dossierModele.type = this.obtenirType();
         this.dossierModele.objet = this.obtenirObjet();
+        this.dossierModele.source = this.obtenirSource();
         this.dossierModele.resume = this.obtenirResume();
         this.dossierModele.date = this.obtenirDateDossier();
         this.dossierModele.signataire = this.obtenirSignataire();
@@ -482,6 +442,38 @@ public class StockerDossierActeSas extends ActionMetier {
 
         // Initialisation du numéro d'acte/
         this.dossierModele.numero = this.obtenirNumeroActe();
+        this.dossierModele.identifiant = this.obtenirIdDossier();
+    }
+
+    /**
+     * Indique la source du document.
+     * @return La valeur de la source du dossier.
+     */
+    private String obtenirSource() throws ActionMetierException {
+        try {
+            // Récupération de la valeur de la source.
+            String source = this.obtenirValeurProprieteEnChaine(this.noeudDossier, DossierinfosAspectModele.SOURCE);
+
+            // Récupération et transformation de la valeur.
+            if(source == null || source.trim().isEmpty()) return "manuel";
+            else return source.toLowerCase();
+
+        }catch (NoeudNullException e) {
+            throw new NoeudNullException("Le noeud du dossier d'acte ne peut être null.");
+        }
+    }
+
+    /**
+     * Permet de récupérer l'identifiant d'un dossier.
+     * @return La valeur de l'identifiant du dossier.
+     * @throws ActionMetierException Si le nœud ou la propriété est null ou vide.
+     */
+    private String obtenirIdDossier() throws ActionMetierException {
+        if(!this.dossierModele.estDeSourceManuelle())
+            return this.obtenirValeurProprieteEnChaine(this.noeudDossier, DossierinfosAspectModele.IDDOSSIER);
+
+        return String.format("%s_%s", this.dossierModele.type.substring(0,3)
+                .replaceAll("[éèêë]", "e").toUpperCase(), this.dossierModele.numero);
     }
 
     /**
@@ -491,8 +483,11 @@ public class StockerDossierActeSas extends ActionMetier {
     private void verifierPreconditionFichierActe() throws ActionMetierException {
         // Vérification qu'il y a UN fichier d'acte dans le dossier.
         List<NodeRef> acte = this.rechercherNoeuds(this.noeudDossier,
-                "select * from actes59:docinfos where actes59:typedocument = 'ACTE_ORIGINAL'");
-
+                String.format(
+                    "select * from actes59:docinfos " +
+                    "where actes59:typedocument = 'ACTE_ORIGINAL' and IN_TREE('%s')", this.noeudDossier.getId()
+                )
+        );
 
         // Il ne peut y avoir aucun fichier d'acte.
         if(acte.size() == 0)
@@ -517,11 +512,22 @@ public class StockerDossierActeSas extends ActionMetier {
     private void verifierPreconditionContenuDossier() throws ActionMetierException {
         // Récupération de toutes les annexes.
         this.noeudsAnnexes = this.rechercherNoeuds(this.noeudDossier,
-                "select * from actes59:docinfos where actes59:typedocument = 'ANNEXE'");
+                String.format(
+                    "select * from actes59:docinfos " +
+                    "where actes59:typedocument = 'ANNEXE' " +
+                    "and IN_TREE('%s')", this.noeudDossier.getId()
+                )
+        );
 
         // Récupération des nœuds non typés.
-        List<NodeRef> noeudsNonTypes = this.rechercherNoeuds(this.noeudDossier, "select * from " +
-                "actes59:docinfos where actes59:typedocument <> 'ANNEXE' and actes59:typedocument <> 'ACTE_ORIGINAL'");
+        List<NodeRef> noeudsNonTypes = this.rechercherNoeuds(this.noeudDossier,
+                String.format(
+                    "select * from actes59:docinfos " +
+                    "where actes59:typedocument <> 'ANNEXE' " +
+                    "and actes59:typedocument <> 'ACTE_ORIGINAL'" +
+                    "and IN_TREE('%s')", this.noeudDossier.getId()
+                )
+        );
 
         if(noeudsNonTypes.size() > 0)
             throw new PreconditionException(String.format("Le dossier comporte %d fichiers non typés (qui ne sont ni " +
@@ -630,20 +636,23 @@ public class StockerDossierActeSas extends ActionMetier {
     private String obtenirNumeroActe() throws ActionMetierException {
         try {
 
+            // Récupération du numéro
             String numero = this.obtenirValeurProprieteEnChaine(this.noeudDossier, DossierinfosAspectModele.NUMEROACTE);
 
-            // Génération du numéro s'il n'est pas présent.
-            if(numero == null || numero.isEmpty()) numero = this.genererNumeroActe();
+            // Vérification si le numéro est manuel ou null.
+            if(numero == null || numero.trim().isEmpty() || this.dossierModele.estDeSourceManuelle()) {
+                numero = String.format("%s_%d_%s", this.dossierModele.sigleOrganisation, this.dossierModele.annee,
+                        this.genererNumeroActe());
+            }else{
 
-            // Formatage du numéro d'acte (suppression des caractères interdits.
-            numero = numero.replaceAll("[\\*<>/\\?:\\|]", "_").trim();
+                // Formatage du numéro d'acte (suppression des caractères interdits).
+                numero = numero.replaceAll("[\\*<>/\\?:\\|]", "_").trim();
 
-            // Retrait du '.' en de fin.
-            if(numero.endsWith(".")) numero = numero.substring(0, numero.length() - 1);
+                // Formatage du numéro d'acte (suppression des caractères interdits) : Retrait du '.' en de fin.
+                if (numero.endsWith(".")) numero = numero.substring(0, numero.length() - 1);
+            }
 
-
-            return String.format("%s_%s_%d_%s",
-                    this.dossierModele.type.substring(0, 3), this.dossierModele.sigleOrganisation, this.dossierModele.annee, numero);
+            return numero;
 
         }catch (NoeudNullException e) {
             throw new NoeudNullException("Le noeud du dossier d'acte ne peut pas être null.");
@@ -672,6 +681,7 @@ public class StockerDossierActeSas extends ActionMetier {
         }
 
         // Retour du résultat.
-        return resultat;
+        return String.format("M%s", resultat);
     }
+
 }
