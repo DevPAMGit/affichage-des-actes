@@ -103,6 +103,7 @@ public class StockerDossierActeSas extends ActionMetier {
             }catch (PreconditionException e1) {
                 LOGGER.error(e1.getMessage(), e1);
                 this.modifierPropriete(this.noeudDossier, DossierinfosAspectModele.DOSSIERCOMPLET, false);
+                this.modifierPropriete(this.noeudDossier, DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER, "Erreur");
                 return;
             }
 
@@ -115,30 +116,49 @@ public class StockerDossierActeSas extends ActionMetier {
                 List<NodeRef> acte = this.rechercherNoeuds(actes,
                         String.format(
                                 "select * from actes59:dossierinfos " +
-                                "where cmis:name = '%s' " +
-                                "and IN_TREE('%s')", this.dossierModele.numero, actes.getId()));
+                                "where actes59:iddossier = '%s' " +
+                                "and IN_TREE('%s') and orderby cmis:cmis:creationDate",
+                                this.dossierModele.identifiant, actes.getId()));
 
-                if(acte.size() > 0)
-                    throw new PreconditionException(String.format("Le dossier %s existe déjà l'arborescence.",
-                            this.dossierModele.numero)
-                    );
+                for (int i = 0; i < acte.size(); i++)
+                    this.renommerDossierActeMultiple(acte.get(i), i);
 
                 // Création du dossier d'acte.
-                dossierActe = this.creerDossierActe(actes);
+                dossierActe = this.creerDossierActe(actes, acte.size());
             }
 
             // Déplacement des documents.
             this.deplacerActe(dossierActe);
             this.deplacerAnnexes(dossierActe);
 
+            // Modification de l'état du dossier.
+            this.modifierPropriete(this.noeudDossier, DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER, "Stocké");
+            this.modifierPropriete(this.noeudDossier, DossierinfosAspectModele.ETAT_ENVOI_DOSSIER, "Prêt à être envoyé");
+
         }catch (Exception e3) {
             LOGGER.error(e3.getMessage(), e3);
 
-            try { this.modifierPropriete(this.noeudDossier, DossierinfosAspectModele.DOSSIERCOMPLET, false); }
-            catch (Exception e5) { LOGGER.error(e5.getMessage(), e5); }
+            try {
+                this.modifierPropriete(this.noeudDossier, DossierinfosAspectModele.DOSSIERCOMPLET, false);
+                this.modifierPropriete(this.noeudDossier, DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER, "Erreur");
+            }catch (Exception e5) { LOGGER.error(e5.getMessage(), e5); }
 
             throw new RuntimeException(e3);
         }
+    }
+
+    private void renommerDossierActeMultiple(NodeRef nodeRef, int incrementation) throws ActionMetierException {
+        // Vérification que le dossier n'a pas déjà été modifié.
+        if(this.obtenirValeurProprieteEnBooleen(nodeRef, DossierinfosAspectModele.EST_EN_REF_MULTIPLE)) return;
+
+        // Modification de la valeur indiquant la référence multiple.
+        this.modifierPropriete(nodeRef, DossierinfosAspectModele.EST_EN_REF_MULTIPLE, true);
+
+        // Modification des valeurs.
+        String identifiant = this.obtenirValeurProprieteEnChaine(nodeRef, DossierinfosAspectModele.IDDOSSIER);
+        String numero = this.entierSurNChiffres(incrementation, 2);
+        this.modifierPropriete(nodeRef, ContentModel.PROP_TITLE, String.format("%s_%s", identifiant, numero));
+        this.modifierPropriete(nodeRef, ContentModel.PROP_NAME, String.format("%s_%s", identifiant, numero));
     }
 
     private void deplacerAnnexes( NodeRef destination) throws FileNotFoundException, NoSuchAlgorithmException, IOException {
@@ -186,31 +206,38 @@ public class StockerDossierActeSas extends ActionMetier {
      * @return Un nœud référençant le dossier d'acte.
      * @throws ActionMetierException Si le nœud, la requete ou le type est null.
      */
-    private NodeRef creerDossierActe(NodeRef actes) throws ActionMetierException, FileNotFoundException {
+    private NodeRef creerDossierActe(NodeRef actes, int numero) throws ActionMetierException, FileNotFoundException {
         NodeRef annee = this.obtenirDossierAnnee(actes);
         NodeRef mois = this.obtenirDossierMois(annee);
         NodeRef jour = this.obtenirDossierJour(mois);
         NodeRef type = this.obtenirDossierType(jour);
 
-        return this.deplacerDossierActe(type);
+        return this.deplacerDossierActe(type, numero);
     }
 
     /**
      * Permet de récupérer le nœud concernant l'acte.
+     *
      * @param nodeRef Le nœud dans lequel créer le dossier 'acte'.
+     * @param numero
      * @return Le nœud de l'acte.
      * @throws ActionMetierException Si le nœud, la requete ou le type est null.
      */
-    private NodeRef deplacerDossierActe(NodeRef nodeRef) throws ActionMetierException, FileNotFoundException {
-        // Déplacement du dossier d'acte.
-        this.registryService.getFileFolderService().move(
-                this.noeudDossier, nodeRef, String.format("%s_ACTE_ORIGINAL", this.dossierModele.identifiant)
-        );
+    private NodeRef deplacerDossierActe(NodeRef nodeRef, int numero) throws ActionMetierException, FileNotFoundException {
+        // Récupération des propriétés du dossier d'acte.
+        HashMap<QName, Serializable> proprietes = new HashMap<>(this.registryService.getNodeService().getProperties(this.noeudDossier));
+
+        String nomDossier = this.dossierModele.identifiant;
+        boolean estEnReferenceMultiple = false;
+
+        if(numero > 0) {
+            nomDossier = String.format("%s_%s", nomDossier, this.entierSurNChiffres(numero, 2));
+            estEnReferenceMultiple = true;
+        }
 
         // Initialisation des propriétés.
-        HashMap<QName, Serializable> proprietes = new HashMap<>(this.registryService.getNodeService().getProperties(this.noeudDossier));
-        proprietes.put(ContentModel.PROP_TITLE, this.dossierModele.identifiant);
-        proprietes.put(ContentModel.PROP_NAME, this.dossierModele.identifiant);
+        proprietes.put(ContentModel.PROP_TITLE, nomDossier);
+        proprietes.put(ContentModel.PROP_NAME, nomDossier);
         proprietes.put(ContentModel.PROP_DESCRIPTION,
                 String.format("Dossier %s numéro %s du %s %s %d",
                         this.dossierModele.type.equals("ACTE") ? "de l'arrêté" : "de la délibération",
@@ -222,6 +249,9 @@ public class StockerDossierActeSas extends ActionMetier {
         proprietes.put(DossierinfosAspectModele.IDDOSSIER, this.dossierModele.identifiant);
 
         this.miseAJourAspect(this.noeudDossier, DossierinfosAspectModele.NOM, proprietes);
+
+        // Déplacement du dossier.
+        this.registryService.getFileFolderService().move(this.noeudDossier, nodeRef, nomDossier);
 
         return this.noeudDossier;
     }
@@ -423,6 +453,18 @@ public class StockerDossierActeSas extends ActionMetier {
             throw new AspectException(
                     String.format("%s:%s", DossierinfosAspectModele.PREFIX, DossierinfosAspectModele.NOM.getLocalName())
             );
+
+        // Vérification que le dossier est du bon état.
+        String etat = this.obtenirValeurProprieteEnChaine(this.noeudDossier, DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER);
+        if(etat == null || etat.isEmpty()) {
+            this.modifierPropriete(this.noeudDossier, DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER, "Prêt à être stocké");
+            etat = this.obtenirValeurProprieteEnChaine(this.noeudDossier, DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER);
+        }
+
+        if(!etat.equals("Prêt à être stocké"))
+            throw new ActionMetierException("Le dossier n'est pas dans le bon état de stockage 'Prêt à être stocké' " +
+                    "pour être pris en charge.");
+
 
         this.noeudSas = this.obtenirNoeudParent(this.noeudDossier);
         this.noeudSource = this.obtenirAncetre(this.noeudDossier, 2);

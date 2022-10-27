@@ -34,12 +34,12 @@ Les métadonnées du dossier de l'acte créé par l'application tierce devra per
             └── 01
                 ├── DELIBERATIONS
                 |	 └── DEL_DAJAP_2022_001
-	            |    	 ├── Acte_original                
+	            |    	 ├── Acte_original                          
 	            |    	 └── Annexe_1
                 └── ARRETES
-	                ├── Acte_original                
-	                ├── Annexe_1
-	                └── Annexe_2
+	                └── ARR_DAJAP_2022_001
+	                 	 ├── Acte_original                
+	                	 └── Annexe_1
 ```
 Pour explication, à la racine de la GED se trouvera un dossier appelé **Actes** dans lequel on placera tous les dossiers d'actes.
 
@@ -47,4 +47,4 @@ Tout d'abord, pour rappel **un dossier est signé à une date**. Cette date sera
 
 Ensuite, un dossier est d'un certain **type** (pour le moment **arrêté** ou **délibération**), ce type donnera profondeur supplémentaire au plan de classement.
 
-Enfin, grâce aux métadonnées fournies. La GED sera en capacité de générer un nom de dossier.
+Enfin, grâce aux métadonnées fournies, la GED sera en capacité de générer dossier qui contiendra les éléments de l'acte.

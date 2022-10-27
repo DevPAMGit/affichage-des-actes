@@ -273,6 +273,42 @@ public class DossierinfosAspectHelperModele extends AlfrescoModeleHelper {
 	public boolean estDatedossierValide() { 
 		return (this.getDatedossier() != null);	}
 
+	/** Méthode permettant de récupérer la valeur de la propriété 'actes59:estEnRefMultiple'. 
+	 * @return boolean La valeur de la propriété 'actes59:estEnRefMultiple'. */
+	public boolean getEstEnRefMultiple() { 
+		return (boolean) this.getPropriete(DossierinfosAspectModele.EST_EN_REF_MULTIPLE);
+	}
+
+	/** Méthode permettant de récupérer la valeur de la propriété 'actes59:estEnRefMultiple'. 
+	 * @param valeur La nouvelle valeur de la propriété 'actes59:estEnRefMultiple'. */ 
+	public void setEstEnRefMultiple(boolean valeur) { 
+		this.majPropriete(DossierinfosAspectModele.EST_EN_REF_MULTIPLE, valeur);
+	}
+
+	/** Méthode permettant de récupérer la valeur de la propriété 'actes59:etatStockageDossier'. 
+	 * @return String La valeur de la propriété 'actes59:etatStockageDossier'. */
+	public String getEtatStockageDossier() { 
+		return (String) this.getPropriete(DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER);
+	}
+
+	/** Méthode permettant de récupérer la valeur de la propriété 'actes59:etatStockageDossier'. 
+	 * @param valeur La nouvelle valeur de la propriété 'actes59:etatStockageDossier'. */ 
+	public void setEtatStockageDossier(String valeur) { 
+		this.majPropriete(DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER, valeur);
+	}
+
+	/** Méthode permettant de récupérer la valeur de la propriété 'actes59:etatEnvoiDossier'. 
+	 * @return String La valeur de la propriété 'actes59:etatEnvoiDossier'. */
+	public String getEtatEnvoiDossier() { 
+		return (String) this.getPropriete(DossierinfosAspectModele.ETAT_ENVOI_DOSSIER);
+	}
+
+	/** Méthode permettant de récupérer la valeur de la propriété 'actes59:etatEnvoiDossier'. 
+	 * @param valeur La nouvelle valeur de la propriété 'actes59:etatEnvoiDossier'. */ 
+	public void setEtatEnvoiDossier(String valeur) { 
+		this.majPropriete(DossierinfosAspectModele.ETAT_ENVOI_DOSSIER, valeur);
+	}
+
 	/** Méthode permettant de vérifier la validité de le type de contenu 'actes59:dossierinfos'. 
 	 * @return <c>true</c> si le type de contenu à toutes ces propriétés valides sinon <c>false</c>. */ 
 	public boolean estAspectValide() { 

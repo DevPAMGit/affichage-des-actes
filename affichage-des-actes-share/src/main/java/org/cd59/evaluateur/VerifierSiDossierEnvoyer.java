@@ -28,8 +28,8 @@ public class VerifierSiDossierEnvoyer extends BaseEvaluator {
             // Vérification de l'état du dossier.
             // String etat = (String) getProperty(jsonObject, "affichage59:etat");
             //if (etat == null) return false;
-            String etat = (String) getProperty(jsonObject, "actes59:statutaffichage");
-            return (etat == null || etat.trim().isEmpty() || !Boolean.getBoolean(etat) );
+            String etat = (String) getProperty(jsonObject, "actes59:etatEnvoiListe");
+            return (etat != null && !etat.trim().isEmpty() && etat.equals("Prêt à être envoyé"));
 
             // Vérification de l'état.
             //return etat.equals("Prêt à être envoyer");

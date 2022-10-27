@@ -471,6 +471,9 @@
 					<show id="actes59:iddossier"/>
 					<show id="actes59:dateaffichageinternet"/>
 					<show id="actes59:datedossier"/>
+					<show id="actes59:estEnRefMultiple"/>
+					<show id="actes59:etatStockageDossier"/>
+					<show id="actes59:etatEnvoiDossier"/>
 					<show id="cm:name"/>
 					<show id="cm:title" force="true"/>
 					<show id="cm:description" force="true"/>

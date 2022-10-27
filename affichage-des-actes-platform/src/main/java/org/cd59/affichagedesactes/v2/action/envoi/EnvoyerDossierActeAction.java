@@ -43,17 +43,17 @@ public class EnvoyerDossierActeAction extends ActionMetier {
     /**
      * L'hôte de destination des
      */
-    private static final String HOTE = "XXXXXXXXXXXXX";
+    private static final String HOTE = "xx";
 
     /**
      * Le login du webservice.
      */
-    private static final String LOGIN = "XXXXXXXXXXXXXXXXX";
+    private static final String LOGIN = "XX";
 
     /**
      * Le mot de passe du webservice.
      */
-    private static final String MOT_DE_PASSE = "XXXXXXXXXXXXXXXXXXXX";
+    private static final String MOT_DE_PASSE = "XX";
 
     /**
      * Le nœud représentant le dossier d'acte à envoyer.
@@ -107,7 +107,8 @@ public class EnvoyerDossierActeAction extends ActionMetier {
                     this.obtenirMetadonneesJson()));
 
             // Si le JSON a l'identifiant 'url_image' alors l'envoi est 'OK'.
-            if(resultat.has("url_image")) this.modifierEtatEnvoiEnAffiche(resultat);
+            if(resultat.has("url_image"))
+                this.modifierEtatEnvoiEnAffiche(resultat);
 
             // Sinon une erreur est survenue.
             else throw new ActionMetierException(resultat.getString("message"));
@@ -122,7 +123,10 @@ public class EnvoyerDossierActeAction extends ActionMetier {
             if(this.acte != null) this.supprimerNoeud(this.acte);
 
             // Mise à jour des états du nœud.
-            try { this.modifierPropriete(this.dossierActe, DossierinfosAspectModele.ERREURINTERNET, e1.getMessage()); }
+            try {
+                this.modifierPropriete(this.dossierActe, DossierinfosAspectModele.ERREURINTERNET, e1.getMessage());
+                this.modifierPropriete(this.dossierActe, DossierinfosAspectModele.ETAT_ENVOI_DOSSIER, "Erreur");
+            }
             catch (Exception e3) { LOGGER.error(e3.getMessage(), e3); }
 
         // Erreur quelconque.
@@ -135,8 +139,10 @@ public class EnvoyerDossierActeAction extends ActionMetier {
             if(this.acte != null) this.supprimerNoeud(this.acte);
 
             // Mise à jour des métadonnées d'envoi.
-            try{ this.modifierPropriete(this.dossierActe, DossierinfosAspectModele.ERREURINTERNET, e2.getMessage()); }
-            catch (Exception e4) { LOGGER.error(e4.getMessage(), e4); }
+            try{
+                this.modifierPropriete(this.dossierActe, DossierinfosAspectModele.ERREURINTERNET, e2.getMessage());
+                this.modifierPropriete(this.dossierActe, DossierinfosAspectModele.ETAT_ENVOI_DOSSIER, "Erreur");
+            }catch (Exception e4) { LOGGER.error(e4.getMessage(), e4); }
         }
     }
 
@@ -171,6 +177,7 @@ public class EnvoyerDossierActeAction extends ActionMetier {
         }
 
         this.miseAJourEtatNoeudsEnAffiches(date, url);
+        this.modifierPropriete(this.dossierActe, DossierinfosAspectModele.ETAT_ENVOI_DOSSIER, "Envoyé");
     }
 
     /**
@@ -259,6 +266,7 @@ public class EnvoyerDossierActeAction extends ActionMetier {
     private void modifierEtatEnErreur(NodeRef nodeRef, String message) throws ActionMetierException {
         HashMap<QName, Serializable> proprietes = new HashMap<>(this.registryService.getNodeService().getProperties(nodeRef));
         proprietes.put(DossierinfosAspectModele.ERREURINTERNET , message);
+        proprietes.put(DossierinfosAspectModele.ETAT_ENVOI_DOSSIER, "Erreur");
         this.miseAJourAspect(nodeRef, ErreurAspectModele.NOM, proprietes);
     }
 

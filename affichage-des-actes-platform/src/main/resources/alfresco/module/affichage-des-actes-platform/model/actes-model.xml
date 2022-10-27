@@ -9,6 +9,34 @@
     <namespaces>
         <namespace uri="http://cd59.fr/model/actes/1.0." prefix="actes59"/>
     </namespaces>
+
+    <constraints>
+        <!-- Contrainte pour l'état de stockage. -->
+        <constraint name="actes59:etatStockageListe" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>Prêt à être stocké</value>
+                    <value>Stocké</value>
+                    <value>Erreur</value>
+                </list>
+            </parameter>
+        </constraint>
+        <!-- FIN - Contrainte pour l'état de stockage. -->
+
+        <!-- Contrainte pour l'état de stockage. -->
+        <constraint name="actes59:etatEnvoiListe" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>Prêt à être envoyé</value>
+                    <value>Envoyé</value>
+                    <value>Erreur</value>
+                </list>
+            </parameter>
+        </constraint>
+        <!-- FIN - Contrainte pour l'état de stockage. -->
+
+    </constraints>
+
     <types>
         <type name="actes59:sas">
             <title>SAS</title>
@@ -274,6 +302,47 @@
                         <tokenised>true</tokenised>
                     </index>
                 </property>
+                <property name="actes59:estEnRefMultiple">
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                    <default>false</default>
+                </property>
+
+
+                <!-- Etat de stockage du dossier. -->
+                <property name="actes59:etatStockageDossier">
+
+                    <title>Etat de stockage du dossier</title>
+                    <description>L'état de stockage du dossier</description>
+
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <default>Prêt à être stocké</default>
+
+                    <constraints>
+                        <constraint ref="actes59:etatStockageListe" />
+                    </constraints>
+
+                </property>
+                <!-- fin - Etat de stockage du dossier. -->
+
+                <!-- Etat d'envoi du dossier. -->
+                <property name="actes59:etatEnvoiDossier">
+
+                    <title>Etat d'envoi du dossier</title>
+                    <description>L'état d'envoi du dossier</description>
+
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <default>Prêt à être envoyé</default>
+
+                    <constraints>
+                        <constraint ref="actes59:etatEnvoiListe" />
+                    </constraints>
+
+                </property>
+                <!-- fin - Etat de stockage du dossier. -->
+
             </properties>
             <associations/>
         </aspect>

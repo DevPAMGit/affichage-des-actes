@@ -62,4 +62,13 @@ public class DossierinfosAspectModele {
 	/** Modèle pour la propriété 'actes59:datedossier'. */
 	public final static QName DATEDOSSIER = QName.createQName( URI , "datedossier");
 
+	/** Modèle pour la propriété 'actes59:estEnRefMultiple'. */
+	public final static QName EST_EN_REF_MULTIPLE = QName.createQName( URI , "estEnRefMultiple");
+
+	/** Modèle pour la propriété 'actes59:etatStockageDossier'. */
+	public final static QName ETAT_STOCKAGE_DOSSIER = QName.createQName( URI , "etatStockageDossier");
+
+	/** Modèle pour la propriété 'actes59:etatEnvoiDossier'. */
+	public final static QName ETAT_ENVOI_DOSSIER = QName.createQName( URI , "etatEnvoiDossier");
+
 }
