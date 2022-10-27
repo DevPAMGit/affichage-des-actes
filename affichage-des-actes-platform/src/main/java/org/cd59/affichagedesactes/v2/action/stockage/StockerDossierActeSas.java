@@ -111,20 +111,21 @@ public class StockerDossierActeSas extends ActionMetier {
             synchronized (MutexAction.MUTEX_ARBORESCENCE) {
 
                 NodeRef actes = this.obtenirDossierActes();
+                LOGGER.info("ID INFO " + actes.getId());
 
                 // Vérification que le dossier d'acte n'existe pas sur l'arborescence.
                 List<NodeRef> acte = this.rechercherNoeuds(actes,
                         String.format(
                                 "select * from actes59:dossierinfos " +
                                 "where actes59:iddossier = '%s' " +
-                                "and IN_TREE('%s') and orderby cmis:creationDate",
+                                "and IN_TREE('%s') order by cmis:creationDate",
                                 this.dossierModele.identifiant, actes.getId()));
 
                 for (int i = 0; i < acte.size(); i++)
-                    this.renommerDossierActeMultiple(acte.get(i), i);
+                    this.renommerDossierActeMultiple(acte.get(i), i+1);
 
                 // Création du dossier d'acte.
-                dossierActe = this.creerDossierActe(actes, acte.size());
+                dossierActe = this.creerDossierActe(actes, acte.size()+1);
             }
 
             // Déplacement des documents.
@@ -151,12 +152,18 @@ public class StockerDossierActeSas extends ActionMetier {
         // Vérification que le dossier n'a pas déjà été modifié.
         if(this.obtenirValeurProprieteEnBooleen(nodeRef, DossierinfosAspectModele.EST_EN_REF_MULTIPLE)) return;
 
+
+
         // Modification de la valeur indiquant la référence multiple.
         this.modifierPropriete(nodeRef, DossierinfosAspectModele.EST_EN_REF_MULTIPLE, true);
 
         // Modification des valeurs.
         String identifiant = this.obtenirValeurProprieteEnChaine(nodeRef, DossierinfosAspectModele.IDDOSSIER);
         String numero = this.entierSurNChiffres(incrementation, 2);
+
+        LOGGER.info("RENOMMAGE DE DOSSIER ID " + identifiant);
+        LOGGER.info("RENOMMAGE DE NUMERO " + numero);
+
         this.modifierPropriete(nodeRef, ContentModel.PROP_TITLE, String.format("%s_%s", identifiant, numero));
         this.modifierPropriete(nodeRef, ContentModel.PROP_NAME, String.format("%s_%s", identifiant, numero));
     }
@@ -228,12 +235,12 @@ public class StockerDossierActeSas extends ActionMetier {
         HashMap<QName, Serializable> proprietes = new HashMap<>(this.registryService.getNodeService().getProperties(this.noeudDossier));
 
         String nomDossier = this.dossierModele.identifiant;
-        boolean estEnReferenceMultiple = false;
 
         if(numero > 0) {
             nomDossier = String.format("%s_%s", nomDossier, this.entierSurNChiffres(numero, 2));
-            estEnReferenceMultiple = true;
-        }
+            proprietes.put(DossierinfosAspectModele.EST_EN_REF_MULTIPLE, true);
+        }else
+            proprietes.put(DossierinfosAspectModele.EST_EN_REF_MULTIPLE, false);
 
         // Initialisation des propriétés.
         proprietes.put(ContentModel.PROP_TITLE, nomDossier);
@@ -247,6 +254,7 @@ public class StockerDossierActeSas extends ActionMetier {
         proprietes.put(DossierinfosAspectModele.ANNEE, Integer.toString(this.dossierModele.annee));
         proprietes.put(DossierinfosAspectModele.NUMEROACTE, this.dossierModele.numero);
         proprietes.put(DossierinfosAspectModele.IDDOSSIER, this.dossierModele.identifiant);
+        proprietes.put(DossierinfosAspectModele.SOURCE, this.dossierModele.source);
 
         this.miseAJourAspect(this.noeudDossier, DossierinfosAspectModele.NOM, proprietes);
 
