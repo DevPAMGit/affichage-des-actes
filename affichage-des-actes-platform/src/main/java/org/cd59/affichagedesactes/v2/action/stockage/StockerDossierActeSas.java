@@ -117,7 +117,7 @@ public class StockerDossierActeSas extends ActionMetier {
                         String.format(
                                 "select * from actes59:dossierinfos " +
                                 "where actes59:iddossier = '%s' " +
-                                "and IN_TREE('%s') and orderby cmis:cmis:creationDate",
+                                "and IN_TREE('%s') and orderby cmis:creationDate",
                                 this.dossierModele.identifiant, actes.getId()));
 
                 for (int i = 0; i < acte.size(); i++)
