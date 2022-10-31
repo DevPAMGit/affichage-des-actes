@@ -43,17 +43,17 @@ public class EnvoyerDossierActeAction extends ActionMetier {
     /**
      * L'hôte de destination des
      */
-    private static final String HOTE = "https://lenordged.spontaneit.fr";
+    private static final String HOTE = "XX";
 
     /**
      * Le login du webservice.
      */
-    private static final String LOGIN = "8b5Ex34Vw7EeweHq";
+    private static final String LOGIN = "XX";
 
     /**
      * Le mot de passe du webservice.
      */
-    private static final String MOT_DE_PASSE = "s7pYCFhkUVGdes4Q";
+    private static final String MOT_DE_PASSE = "XX";
 
     /**
      * Le nœud représentant le dossier d'acte à envoyer.
