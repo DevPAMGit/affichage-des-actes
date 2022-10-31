@@ -23,6 +23,21 @@
       </property>
    </bean>
 
-   <bean id="org.cd59.affichagedesactes.evaluateur.estEnvoye" class="org.cd59.evaluateur.VerifierSiDossierEnvoyer" />
+   <!-- EVALUATEUR DE STOCKAGE -->
+   <bean id="org.cd59.affichagedesactes.evalueur.estPretAEtreStocke" class="org.cd59.evalueur.EstPretAEtreStocke" />
+   <bean id="org.cd59.affichagedesactes.evalueur.peutEtreStocke" class="org.cd59.evalueur.PeutEtreStocke" />
+   <bean id="org.cd59.affichagedesactes.evalueur.estStocke" class="org.cd59.evalueur.EstStocke" />
+   <!-- FIN  EVALUATEUR DE STOCKAGE -->
+
+   <!-- EVALUATEUR D'ENVOI -->
+   <bean id="org.cd59.affichagedesactes.evalueur.peutEtreEnvoye" class="org.cd59.evalueur.PeutEtreEnvoye" />
+   <bean id="org.cd59.affichagedesactes.evalueur.estPretAEtreEnvoye" class="org.cd59.evalueur.EstPretAEnvoi" />
+   <bean id="org.cd59.affichagedesactes.evalueur.estEnvoye" class="org.cd59.evalueur.EstEnvoye" />
+   <!-- FIN  EVALUATEUR D'ENVOI -->
+
+   <!-- EVALUATEUR D'ENVOI ET STOCKAGE -->
+   <bean id="org.cd59.affichagedesactes.evalueur.estEnErreur" class="org.cd59.evalueur.EstEnErreur" />
+   <!-- FIN - EVALUATEUR D'ENVOI ET STOCKAGE -->
+
 
 </beans>

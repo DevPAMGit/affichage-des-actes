@@ -129,8 +129,8 @@ public class StockerDossierActeSas extends ActionMetier {
             }
 
             // Déplacement des documents.
-            this.deplacerActe(dossierActe);
-            this.deplacerAnnexes(dossierActe);
+            this.deplacerActe(/*dossierActe*/);
+            this.deplacerAnnexes(/*dossierActe*/);
 
             // Modification de l'état du dossier.
             this.modifierPropriete(this.noeudDossier, DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER, "Stocké");
@@ -141,6 +141,7 @@ public class StockerDossierActeSas extends ActionMetier {
 
             try {
                 this.modifierPropriete(this.noeudDossier, DossierinfosAspectModele.DOSSIERCOMPLET, false);
+                this.modifierPropriete(this.noeudDossier, DossierinfosAspectModele.ERREURINTERNET, e3.getMessage());
                 this.modifierPropriete(this.noeudDossier, DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER, "Erreur");
             }catch (Exception e5) { LOGGER.error(e5.getMessage(), e5); }
 
@@ -151,8 +152,6 @@ public class StockerDossierActeSas extends ActionMetier {
     private void renommerDossierActeMultiple(NodeRef nodeRef, int incrementation) throws ActionMetierException {
         // Vérification que le dossier n'a pas déjà été modifié.
         if(this.obtenirValeurProprieteEnBooleen(nodeRef, DossierinfosAspectModele.EST_EN_REF_MULTIPLE)) return;
-
-
 
         // Modification de la valeur indiquant la référence multiple.
         this.modifierPropriete(nodeRef, DossierinfosAspectModele.EST_EN_REF_MULTIPLE, true);
@@ -168,7 +167,7 @@ public class StockerDossierActeSas extends ActionMetier {
         this.modifierPropriete(nodeRef, ContentModel.PROP_NAME, String.format("%s_%s", identifiant, numero));
     }
 
-    private void deplacerAnnexes( NodeRef destination) throws FileNotFoundException, NoSuchAlgorithmException, IOException {
+    private void deplacerAnnexes(/* NodeRef destination*/) throws FileNotFoundException, NoSuchAlgorithmException, IOException {
         NodeService nodeService = this.registryService.getNodeService();
         int cpt = 1;
         // Déplacement du fichier
@@ -183,10 +182,11 @@ public class StockerDossierActeSas extends ActionMetier {
                 else nom = String.format("%s_ANNEXE", this.dossierModele.numero);
 
                 // Déplacement du nœud.
-                this.registryService.getFileFolderService().move(nodeRef, destination, nom);
+                //this.registryService.getFileFolderService().move(nodeRef, destination, nom);
 
                 // Modification des métadonnées.
                 nodeService.setProperty(nodeRef, ContentModel.PROP_TITLE, nom);
+                nodeService.setProperty(nodeRef, ContentModel.PROP_NAME, nom);
                 nodeService.setProperty(nodeRef, ContentModel.PROP_DESCRIPTION, String.format("Annexe de la %s %s.",
                         this.dossierModele.type, this.dossierModele.numero));
                 nodeService.setProperty(nodeRef, DocinfosAspectModele.EMPREINTE , this.obtenirEmpreinte(nodeRef));
@@ -195,16 +195,18 @@ public class StockerDossierActeSas extends ActionMetier {
             }
     }
 
-    private void deplacerActe(NodeRef destination) throws FileNotFoundException, NoSuchAlgorithmException, IOException {
+    private void deplacerActe(/*NodeRef destination*/) throws /*FileNotFoundException,*/ NoSuchAlgorithmException, IOException {
         NodeService nodeService = this.registryService.getNodeService();
 
         // Déplacement du fichier
-        this.registryService.getFileFolderService().move(
+        /*this.registryService.getFileFolderService().move(
                 this.noeudFichier, destination, String.format("%s_ACTE_ORIGINAL", this.dossierModele.identifiant)
-        );
+        );*/
+
 
         // Modification des métadonnées.
         nodeService.setProperty(this.noeudFichier, ContentModel.PROP_TITLE, String.format("%s_ACTE_ORIGINAL", this.dossierModele.identifiant));
+        nodeService.setProperty(this.noeudFichier, ContentModel.PROP_NAME, String.format("%s_ACTE_ORIGINAL", this.dossierModele.identifiant));
         nodeService.setProperty(this.noeudFichier, DocinfosAspectModele.EMPREINTE,this.obtenirEmpreinte(this.noeudFichier));
     }
 
@@ -236,7 +238,7 @@ public class StockerDossierActeSas extends ActionMetier {
 
         String nomDossier = this.dossierModele.identifiant;
 
-        if(numero > 0) {
+        if(numero > 1) {
             nomDossier = String.format("%s_%s", nomDossier, this.entierSurNChiffres(numero, 2));
             proprietes.put(DossierinfosAspectModele.EST_EN_REF_MULTIPLE, true);
         }else
@@ -288,8 +290,8 @@ public class StockerDossierActeSas extends ActionMetier {
         List<NodeRef> recherche = this.rechercherNoeuds(nodeRef,
                 String.format(
                         "select * from stockageactes59:dossierTypologie " +
-                        "where cmis:name = '%s' " +
-                        "and IN_TREE('%s') "
+                        "where  cmis:name = '%s' " +
+                        "and cmis:parentId = '%s'"
                         , type, nodeRef.getId()
                 )
         );
@@ -329,7 +331,8 @@ public class StockerDossierActeSas extends ActionMetier {
         List<NodeRef> recherche = this.rechercherNoeuds(nodeRef,
                 String.format(
                         "select * from stockageactes59:dossierJour " +
-                        "where cmis:name = '%s' and IN_TREE('%s')", jour, nodeRef.getId())
+                        "where cmis:name = '%s' " +
+                        "and cmis:parentId = '%s'", jour, nodeRef.getId())
         );
 
         if(recherche.size() > 0) return recherche.get(0);
@@ -365,8 +368,8 @@ public class StockerDossierActeSas extends ActionMetier {
         List<NodeRef> recherche = this.rechercherNoeuds(nodeRef,
                 String.format(
                         "select * from stockageactes59:dossierMois " +
-                        "where cmis:name = '%s' " +
-                        "and IN_TREE('%s')", mois, nodeRef.getId())
+                        "where  cmis:name = '%s' " +
+                        "and cmis:parentId = '%s' ", mois, nodeRef.getId())
         );
 
         if(recherche.size() > 0) return recherche.get(0);

@@ -5,14 +5,14 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
-
+import org.cd59.affichagedesactes.alfresco.modeles.typescontenus.actes59.aspect.dossierinfos.DossierinfosAspectModele;
 
 import java.util.List;
 
 /**
- * Action permettant de gérer le stockage d'un dossier dans le SAS.
+ * Action permettant de stocker un dossier par
  */
-public class StockerDossierActeSas extends ActionExecuterAbstractBase {
+public class StockerDossierActeSasIU extends ActionExecuterAbstractBase {
 
     /**
      * Le registre des services Alfresco.
@@ -29,7 +29,16 @@ public class StockerDossierActeSas extends ActionExecuterAbstractBase {
 
     @Override
     protected void executeImpl(Action action, NodeRef nodeRef) {
-        new org.cd59.affichagedesactes.v2.action.stockage.StockerDossierActeSas(this.serviceRegistry, nodeRef).executer();
+        // Préparation du dossier pour stockage.
+        // Indication que le dossier est prêt à l'envoi.
+        this.serviceRegistry.getNodeService().setProperty(
+                nodeRef, DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER, "Prêt à être stocké"
+        );
+        // Indication que le dossier est complet.
+        this.serviceRegistry.getNodeService().setProperty(
+                nodeRef, DossierinfosAspectModele.DOSSIERCOMPLET, true
+        );
+        // Pise en charge du stockage par la règle dans le dossier SAS :).
     }
 
     @Override

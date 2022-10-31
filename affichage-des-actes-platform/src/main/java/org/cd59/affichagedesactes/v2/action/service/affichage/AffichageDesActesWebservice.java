@@ -32,6 +32,7 @@ public class AffichageDesActesWebservice {
      */
     private String authentification(String nomUtilisateur, String motDePasse) throws IOException, ServiceException {
         String response = new LoginCheckService(this.host, nomUtilisateur, motDePasse).call();
+        System.out.println(response);
         JSONObject json = new JSONObject(response);
         String message = null;
 
