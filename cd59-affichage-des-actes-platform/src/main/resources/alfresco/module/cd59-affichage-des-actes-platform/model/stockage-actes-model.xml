@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="stockageactes59:stockageacte">
+    <description>Modèles pour l'affichage des actes du CD59 </description>
+    <author>ANDRIANAIVO MICHEL</author>
+    <imports>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://cd59.fr/model/stockageacte/1.0." prefix="stockageactes59"/>
+    </namespaces>
+
+    <types>
+
+        <type name="stockageactes59:dossierActes">
+            <title>Dossier de tous les actes</title>
+            <description>Dossiers de stockage des actes du département du Nord.</description>
+            <parent>cm:folder</parent>
+            <properties />
+            <associations />
+        </type>
+
+        <type name="stockageactes59:dossierAnnee">
+            <title>Dossier de tous les actes pour une année</title>
+            <description>Dossier de stockage pour les actes du département du Nord pour une année.</description>
+            <parent>cm:folder</parent>
+            <properties>
+                <property name="stockageactes59:annee">
+                    <title>Année</title>
+                    <description>L'année des actes contenus</description>
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </type>
+
+        <type name="stockageactes59:dossierMois">
+            <title>Dossier de tous les actes pour un mois dans année</title>
+            <description>Dossier de stockage pour les actes du département du Nord pour un mois dans une année</description>
+            <parent>stockageactes59:dossierAnnee</parent>
+            <properties>
+
+                <property name="stockageactes59:mois">
+                    <title>Le mois des actes contenus</title>
+                    <description>Le mois des actes</description>
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+            </properties>
+        </type>
+
+        <type name="stockageactes59:dossierJour">
+            <title>Dossier de tous les actes pour un jour dans un mois de l'année</title>
+            <description>Dossier de stockage pour les actes du département du Nord pour un jour dans un mois de l'année</description>
+            <parent>stockageactes59:dossierMois</parent>
+            <properties>
+
+                <property name="stockageactes59:jour">
+                    <title>Jour</title>
+                    <description>Le jour des actes contenus</description>
+                    <type>d:int</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+            </properties>
+        </type>
+
+        <type name="stockageactes59:dossierTypologie">
+            <title>Dossier pour tous les actes d'un type pour un jour dans un mois de l'année</title>
+            <description>Dossier de stockage pour les actes du département du Nord d'un type pour un jour dans un mois de l'année</description>
+            <parent>stockageactes59:dossierJour</parent>
+            <properties>
+
+                <property name="stockageactes59:typologieDossier">
+                    <title>Le type des actes contenus</title>
+                    <description>Le type des actes contenus</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
+            </properties>
+        </type>
+        
+    </types>
+
+</model>

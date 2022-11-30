@@ -79,16 +79,16 @@ echo "Usage: %0 {build_start|start|stop|purge|tail|reload_share|reload_acs|build
 EXIT /B %ERRORLEVEL%
 
 :start
-    docker volume create affichage-des-actes-acs-volume
-    docker volume create affichage-des-actes-db-volume
-    docker volume create affichage-des-actes-ass-volume
+    docker volume create cd59-affichage-des-actes-acs-volume
+    docker volume create cd59-affichage-des-actes-db-volume
+    docker volume create cd59-affichage-des-actes-ass-volume
     docker-compose -f "%COMPOSE_FILE_PATH%" up --build -d
 EXIT /B 0
 :start_share
-    docker-compose -f "%COMPOSE_FILE_PATH%" up --build -d affichage-des-actes-share
+    docker-compose -f "%COMPOSE_FILE_PATH%" up --build -d cd59-affichage-des-actes-share
 EXIT /B 0
 :start_acs
-    docker-compose -f "%COMPOSE_FILE_PATH%" up --build -d affichage-des-actes-acs
+    docker-compose -f "%COMPOSE_FILE_PATH%" up --build -d cd59-affichage-des-actes-acs
 EXIT /B 0
 :down
     if exist "%COMPOSE_FILE_PATH%" (
@@ -99,14 +99,14 @@ EXIT /B 0
 	call %MVN_EXEC% clean package
 EXIT /B 0
 :build_share
-    docker-compose -f "%COMPOSE_FILE_PATH%" kill affichage-des-actes-share
-    docker-compose -f "%COMPOSE_FILE_PATH%" rm -f affichage-des-actes-share
-	call %MVN_EXEC% clean package -pl affichage-des-actes-share,affichage-des-actes-share-docker
+    docker-compose -f "%COMPOSE_FILE_PATH%" kill cd59-affichage-des-actes-share
+    docker-compose -f "%COMPOSE_FILE_PATH%" rm -f cd59-affichage-des-actes-share
+	call %MVN_EXEC% clean package -pl cd59-affichage-des-actes-share,cd59-affichage-des-actes-share-docker
 EXIT /B 0
 :build_acs
-    docker-compose -f "%COMPOSE_FILE_PATH%" kill affichage-des-actes-acs
-    docker-compose -f "%COMPOSE_FILE_PATH%" rm -f affichage-des-actes-acs
-	call %MVN_EXEC% clean package -pl affichage-des-actes-integration-tests,affichage-des-actes-platform,affichage-des-actes-platform-docker
+    docker-compose -f "%COMPOSE_FILE_PATH%" kill cd59-affichage-des-actes-acs
+    docker-compose -f "%COMPOSE_FILE_PATH%" rm -f cd59-affichage-des-actes-acs
+	call %MVN_EXEC% clean package -pl cd59-affichage-des-actes-integration-tests,cd59-affichage-des-actes-platform,cd59-affichage-des-actes-platform-docker
 EXIT /B 0
 :tail
     docker-compose -f "%COMPOSE_FILE_PATH%" logs -f
@@ -115,13 +115,13 @@ EXIT /B 0
     docker-compose -f "%COMPOSE_FILE_PATH%" logs --tail="all"
 EXIT /B 0
 :prepare-test
-    call %MVN_EXEC% verify -DskipTests=true -pl affichage-des-actes-platform,affichage-des-actes-integration-tests,affichage-des-actes-platform-docker
+    call %MVN_EXEC% verify -DskipTests=true -pl cd59-affichage-des-actes-platform,cd59-affichage-des-actes-integration-tests,cd59-affichage-des-actes-platform-docker
 EXIT /B 0
 :test
-    call %MVN_EXEC% verify -pl affichage-des-actes-platform,affichage-des-actes-integration-tests
+    call %MVN_EXEC% verify -pl cd59-affichage-des-actes-platform,cd59-affichage-des-actes-integration-tests
 EXIT /B 0
 :purge
-    docker volume rm -f affichage-des-actes-acs-volume
-    docker volume rm -f affichage-des-actes-db-volume
-    docker volume rm -f affichage-des-actes-ass-volume
+    docker volume rm -f cd59-affichage-des-actes-acs-volume
+    docker volume rm -f cd59-affichage-des-actes-db-volume
+    docker volume rm -f cd59-affichage-des-actes-ass-volume
 EXIT /B 0

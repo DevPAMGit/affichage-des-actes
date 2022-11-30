@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="actes59:actes">
+    <description>Modèles pour l'affichage des actes du CD59 </description>
+    <author>PHILIPPE LAROCHETTE</author>
+    <imports>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://cd59.fr/model/actes/1.0." prefix="actes59"/>
+    </namespaces>
+
+    <constraints>
+        <!-- Contrainte pour l'état de stockage. -->
+        <constraint name="actes59:etatStockageListe" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>Prêt à être stocké</value>
+                    <value>Stocké</value>
+                    <value>Erreur</value>
+                </list>
+            </parameter>
+        </constraint>
+        <!-- FIN - Contrainte pour l'état de stockage. -->
+
+        <!-- Contrainte pour l'état de stockage. -->
+        <constraint name="actes59:etatEnvoiListe" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>En attente du stockage</value>
+                    <value>Prêt à être envoyé</value>
+                    <value>Envoyé</value>
+                    <value>Erreur</value>
+                </list>
+            </parameter>
+        </constraint>
+        <!-- FIN - Contrainte pour l'état de stockage. -->
+
+    </constraints>
+
+    <types>
+        <type name="actes59:sas">
+            <title>SAS</title>
+            <parent>cm:folder</parent>
+            <properties>
+                <property name="actes59:compteur">
+                    <title>Compteur</title>
+                    <description>Le compteur du SAS</description>
+                    <type>d:int</type>
+                    <default>1</default>
+                </property>
+            </properties>
+            <associations/>
+        </type>
+        <type name="actes59:dossier">
+            <title>Dossier Acte</title>
+            <parent>cm:folder</parent>
+            <properties/>
+            <associations/>
+        </type>
+        <type name="actes59:doc">
+            <title>Document Acte</title>
+            <parent>cm:content</parent>
+            <properties/>
+            <associations/>
+        </type>
+    </types>
+    <aspects>
+        <aspect name="actes59:docinfos">
+            <title>Infos document acte</title>
+            <description>Infos document acte</description>
+            <properties>
+                <property name="actes59:empreinte">
+                    <title>Empreinte</title>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                        <facetable>false</facetable>
+                    </index>
+                </property>
+                <property name="actes59:typedocument">
+                    <title>Typologie du document</title>
+                    <description>Typologie du document</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                        <facetable>false</facetable>
+                    </index>
+                    <constraints>
+                        <constraint name="actes59:LIST_80ed9ea5-f287-4258-87fa-20cbbf5666b4" type="LIST">
+                            <parameter name="allowedValues">
+                                <list>
+                                    <value>ACTE</value>
+                                    <value>ACTE_ORIGINAL</value>
+                                    <value>ANNEXE</value>
+                                </list>
+                            </parameter>
+                            <parameter name="caseSensitive">
+                                <value>true</value>
+                            </parameter>
+                            <parameter name="sorted">
+                                <value>false</value>
+                            </parameter>
+                        </constraint>
+                    </constraints>
+                </property>
+            </properties>
+            <associations/>
+        </aspect>
+        <aspect name="actes59:dossierinfos">
+            <title>Infos dossier acte</title>
+            <description>Infos dossier acte</description>
+            <properties>
+                <property name="actes59:resume">
+                    <title>Résumé</title>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                        <facetable>false</facetable>
+                    </index>
+                    <constraints>
+                        <constraint name="actes59:LENGTH_fd1f64ec-2e58-4386-8217-1d42a02643f8" type="LENGTH">
+                            <parameter name="maxLength">
+                                <value>4000</value>
+                            </parameter>
+                            <parameter name="minLength">
+                                <value>0</value>
+                            </parameter>
+                        </constraint>
+                    </constraints>
+                </property>
+                <property name="actes59:erreurinternet">
+                    <title>Message d'erreur site Internet</title>
+                    <description>Message d'erreur site Internet</description>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                        <facetable>false</facetable>
+                    </index>
+                </property>
+                <property name="actes59:signataire">
+                    <title>Signataire</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                        <facetable>false</facetable>
+                    </index>
+                </property>
+                <property name="actes59:dossiercomplet">
+                    <title>Dossier complet</title>
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                    <default>false</default>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                    </index>
+                </property>
+                <property name="actes59:source">
+                    <title>Source</title>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                        <facetable>false</facetable>
+                    </index>
+                </property>
+                <property name="actes59:annee">
+                    <title>Année</title>
+                    <description>Année</description>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                        <facetable>false</facetable>
+                    </index>
+                </property>
+                <property name="actes59:statutaffichage">
+                    <title>Affiché</title>
+                    <description>Statut Affichage</description>
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                    <default>false</default>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                    </index>
+                </property>
+                <property name="actes59:objet">
+                    <title>Objet de l'acte</title>
+                    <description>Objet de l'acte</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                        <facetable>false</facetable>
+                    </index>
+                    <constraints>
+                        <constraint name="actes59:LENGTH_705b994b-0ab4-4802-86f4-6518cd427662" type="LENGTH">
+                            <parameter name="maxLength">
+                                <value>1024</value>
+                            </parameter>
+                            <parameter name="minLength">
+                                <value>1</value>
+                            </parameter>
+                        </constraint>
+                    </constraints>
+                </property>
+                <property name="actes59:dateaffichageged">
+                    <title>Date d'affichage GED</title>
+                    <description>Date d'affichage GED</description>
+                    <type>d:date</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                    </index>
+                </property>
+                <property name="actes59:orgasigle">
+                    <title>Sigle Organisation</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                        <facetable>false</facetable>
+                    </index>
+                </property>
+                <property name="actes59:numeroacte">
+                    <title>Numéro de l’acte</title>
+                    <description>Numéro de l’acte</description>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                        <facetable>false</facetable>
+                    </index>
+                </property>
+                <property name="actes59:typedossier">
+                    <title>Typologie du dossier d'acte</title>
+                    <description>Typologie du dossier d'acte</description>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                        <facetable>false</facetable>
+                    </index>
+                    <constraints>
+                        <constraint name="actes59:LIST_0c2cdb23-d1b4-4dcd-8bca-6e4c1ce93c6d" type="LIST">
+                            <parameter name="allowedValues">
+                                <list>
+                                    <value>Délibération</value>
+                                    <value>Arrêté</value>
+                                    <value>ARRETE</value>
+                                    <value>DELIBERATION</value>
+                                </list>
+                            </parameter>
+                            <parameter name="caseSensitive">
+                                <value>true</value>
+                            </parameter>
+                            <parameter name="sorted">
+                                <value>false</value>
+                            </parameter>
+                        </constraint>
+                    </constraints>
+                </property>
+                <property name="actes59:urlaffichage">
+                    <title>Url Affichage</title>
+                    <description>Url Affichage</description>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                        <facetable>false</facetable>
+                    </index>
+                </property>
+                <property name="actes59:iddossier">
+                    <title>Identifiant du dossier</title>
+                    <description>Identifiant du dossier</description>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                        <facetable>false</facetable>
+                    </index>
+                </property>
+                <property name="actes59:dateaffichageinternet">
+                    <title>Date Affichage Internet</title>
+                    <description>Date Affichage Internet</description>
+                    <type>d:datetime</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                    </index>
+                </property>
+                <property name="actes59:datedossier">
+                    <title>Date du dossier</title>
+                    <description>Date de séance ou date de signature</description>
+                    <type>d:date</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <tokenised>true</tokenised>
+                    </index>
+                </property>
+                <property name="actes59:estEnRefMultiple">
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                    <default>false</default>
+                </property>
+
+                <!-- Etat de stockage du dossier. -->
+                <property name="actes59:etatStockageDossier">
+
+                    <title>Etat de stockage du dossier</title>
+                    <description>L'état de stockage du dossier</description>
+
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <default>Prêt à être stocké</default>
+
+                    <constraints>
+                        <constraint ref="actes59:etatStockageListe" />
+                    </constraints>
+
+                </property>
+                <!-- fin - Etat de stockage du dossier. -->
+
+                <!-- Etat d'envoi du dossier. -->
+                <property name="actes59:etatEnvoiDossier">
+
+                    <title>Etat d'envoi du dossier</title>
+                    <description>L'état d'envoi du dossier</description>
+
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <default>En attente du stockage</default>
+
+                    <constraints>
+                        <constraint ref="actes59:etatEnvoiListe" />
+                    </constraints>
+
+                </property>
+                <!-- fin - Etat de stockage du dossier. -->
+
+            </properties>
+            <associations/>
+        </aspect>
+    </aspects>
+</model>

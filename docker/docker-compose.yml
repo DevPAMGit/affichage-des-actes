@@ -1,76 +1,75 @@
 version: '3.4'
 services:
-  affichage-des-actes-share:
-    image: alfresco-share-affichage-des-actes:development
+  cd59-affichage-des-actes-share:
+    image: alfresco-share-cd59-affichage-des-actes:development
     build:
       dockerfile: ./Dockerfile
-      context: ../../../affichage-des-actes-share-docker/target
+      context: ../../../cd59-affichage-des-actes-share-docker/target
     environment:
       CATALINA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8888"
-      REPO_HOST: affichage-des-actes-acs
+      REPO_HOST: cd59-affichage-des-actes-acs
       REPO_PORT: 8080
+      TZ: "Europe/Paris"
+      JAVA_OPTS: " -Duser.language=fr -Duser.country=FR"
     ports:
       - "${share.port}:8080"
       - "${share.debug.port}:8888"
-  affichage-des-actes-acs:
-    image: alfresco-content-services-affichage-des-actes:development
+  cd59-affichage-des-actes-acs:
+    image: alfresco-content-services-cd59-affichage-des-actes:development
     build:
       dockerfile: ./Dockerfile
-      context: ../../../affichage-des-actes-platform-docker/target
+      context: ../../../cd59-affichage-des-actes-platform-docker/target
     environment:
       JAVA_TOOL_OPTIONS: "${keystore.settings}"
-      JAVA_OPTS: "
-        -Dsolr.secureComms=secret
-        -Dsolr.sharedSecret=secret
-        -Dmessaging.broker.url=\"failover:(nio://affichage-des-actes-activemq:61616)?timeout=3000&jms.useCompression=true\"
-        "
       CATALINA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8888"
+      TZ: "Europe/Paris"
+      JAVA_OPTS: " -Duser.language=fr -Duser.country=FR"
     ports:
       - "${acs.port}:8080"
       - "${acs.debug.port}:8888"
     volumes:
-      - affichage-des-actes-acs-volume:/usr/local/tomcat/alf_data
+      - cd59-affichage-des-actes-acs-volume:/usr/local/tomcat/alf_data
     depends_on:
-      - affichage-des-actes-postgres
-  affichage-des-actes-postgres:
+      - cd59-affichage-des-actes-postgres
+  cd59-affichage-des-actes-postgres:
     image: postgres:9.6
     environment:
       POSTGRES_DB: alfresco
       POSTGRES_USER: alfresco
       POSTGRES_PASSWORD: alfresco
+      TZ: "Europe/Paris"
+      JAVA_OPTS: " -Duser.language=fr -Duser.country=FR"
     command: postgres -c max_connections=300 -c log_min_messages=LOG
     ports:
       - "${postgres.port}:5432"
     volumes:
-      - affichage-des-actes-db-volume:/var/lib/postgresql/data
-  affichage-des-actes-ass:
-    image: alfresco/alfresco-search-services:2.0.3
+      - cd59-affichage-des-actes-db-volume:/var/lib/postgresql/data
+  cd59-affichage-des-actes-ass:
+    image: alfresco/alfresco-search-services:1.2.0
     environment:
-      SOLR_ALFRESCO_HOST: affichage-des-actes-acs
+      SOLR_ALFRESCO_HOST: cd59-affichage-des-actes-acs
       SOLR_ALFRESCO_PORT: 8080
-      SOLR_SOLR_HOST: affichage-des-actes-ass
+      SOLR_SOLR_HOST: cd59-affichage-des-actes-ass
       SOLR_SOLR_PORT: 8983
       SOLR_CREATE_ALFRESCO_DEFAULTS: alfresco,archive
-      ALFRESCO_SECURE_COMMS: "secret"
-      JAVA_TOOL_OPTIONS: "-Dalfresco.secureComms.secret=secret"
+      TZ: "Europe/Paris"
+      JAVA_OPTS: " -Duser.language=fr -Duser.country=FR"
     ports:
       - "8983:8983"
     volumes:
-      - affichage-des-actes-ass-volume:/opt/alfresco-search-services/contentstore
-      - affichage-des-actes-ass-volume:/opt/alfresco-search-services/data
-  affichage-des-actes-activemq:
-      image: alfresco/alfresco-activemq:5.16.1
-      mem_limit: 1g
-      ports:
-        - 8161:8161 # Web Console
-        - 5672:5672 # AMQP
-        - 61616:61616 # OpenWire
-        - 61613:61613 # STOMP
-
+      - cd59-affichage-des-actes-ass-volume:/opt/alfresco-search-services/contentstore
+      - cd59-affichage-des-actes-ass-volume:/opt/alfresco-search-services/data
+  activemq:
+    image: alfresco/alfresco-activemq:5.15.8
+    ports:
+      - 8161:8161 # Web Console
+      - 5672:5672 # AMQP
+      - 61616:61616 # OpenWire
+      - 61613:61613 # STOMP
 volumes:
-  affichage-des-actes-acs-volume:
+  cd59-affichage-des-actes-acs-volume:
     external: true
-  affichage-des-actes-db-volume:
+  cd59-affichage-des-actes-db-volume:
     external: true
-  affichage-des-actes-ass-volume:
+  cd59-affichage-des-actes-ass-volume:
     external: true

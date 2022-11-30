@@ -9,18 +9,18 @@ else
 fi
 
 start() {
-    docker volume create affichage-des-actes-acs-volume
-    docker volume create affichage-des-actes-db-volume
-    docker volume create affichage-des-actes-ass-volume
+    docker volume create cd59-affichage-des-actes-acs-volume
+    docker volume create cd59-affichage-des-actes-db-volume
+    docker volume create cd59-affichage-des-actes-ass-volume
     docker-compose -f "$COMPOSE_FILE_PATH" up --build -d
 }
 
 start_share() {
-    docker-compose -f "$COMPOSE_FILE_PATH" up --build -d affichage-des-actes-share
+    docker-compose -f "$COMPOSE_FILE_PATH" up --build -d cd59-affichage-des-actes-share
 }
 
 start_acs() {
-    docker-compose -f "$COMPOSE_FILE_PATH" up --build -d affichage-des-actes-acs
+    docker-compose -f "$COMPOSE_FILE_PATH" up --build -d cd59-affichage-des-actes-acs
 }
 
 down() {
@@ -30,9 +30,9 @@ down() {
 }
 
 purge() {
-    docker volume rm -f affichage-des-actes-acs-volume
-    docker volume rm -f affichage-des-actes-db-volume
-    docker volume rm -f affichage-des-actes-ass-volume
+    docker volume rm -f cd59-affichage-des-actes-acs-volume
+    docker volume rm -f cd59-affichage-des-actes-db-volume
+    docker volume rm -f cd59-affichage-des-actes-ass-volume
 }
 
 build() {
@@ -40,15 +40,15 @@ build() {
 }
 
 build_share() {
-    docker-compose -f "$COMPOSE_FILE_PATH" kill affichage-des-actes-share
-    yes | docker-compose -f "$COMPOSE_FILE_PATH" rm -f affichage-des-actes-share
-    $MVN_EXEC clean package -pl affichage-des-actes-share,affichage-des-actes-share-docker
+    docker-compose -f "$COMPOSE_FILE_PATH" kill cd59-affichage-des-actes-share
+    yes | docker-compose -f "$COMPOSE_FILE_PATH" rm -f cd59-affichage-des-actes-share
+    $MVN_EXEC clean package -pl cd59-affichage-des-actes-share,cd59-affichage-des-actes-share-docker
 }
 
 build_acs() {
-    docker-compose -f "$COMPOSE_FILE_PATH" kill affichage-des-actes-acs
-    yes | docker-compose -f "$COMPOSE_FILE_PATH" rm -f affichage-des-actes-acs
-    $MVN_EXEC clean package -pl affichage-des-actes-integration-tests,affichage-des-actes-platform,affichage-des-actes-platform-docker
+    docker-compose -f "$COMPOSE_FILE_PATH" kill cd59-affichage-des-actes-acs
+    yes | docker-compose -f "$COMPOSE_FILE_PATH" rm -f cd59-affichage-des-actes-acs
+    $MVN_EXEC clean package -pl cd59-affichage-des-actes-integration-tests,cd59-affichage-des-actes-platform,cd59-affichage-des-actes-platform-docker
 }
 
 tail() {
@@ -60,11 +60,11 @@ tail_all() {
 }
 
 prepare_test() {
-    $MVN_EXEC verify -DskipTests=true -pl affichage-des-actes-platform,affichage-des-actes-integration-tests,affichage-des-actes-platform-docker
+    $MVN_EXEC verify -DskipTests=true -pl cd59-affichage-des-actes-platform,cd59-affichage-des-actes-integration-tests,cd59-affichage-des-actes-platform-docker
 }
 
 test() {
-    $MVN_EXEC verify -pl affichage-des-actes-platform,affichage-des-actes-integration-tests
+    $MVN_EXEC verify -pl cd59-affichage-des-actes-platform,cd59-affichage-des-actes-integration-tests
 }
 
 case "$1" in

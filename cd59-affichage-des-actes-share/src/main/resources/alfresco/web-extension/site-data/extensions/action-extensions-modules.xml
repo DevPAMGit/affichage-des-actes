@@ -1,0 +1,188 @@
+<extension>
+
+    <modules>
+        <module>
+            <id>Actions pour l'affichage des actes (stockage, envoie)</id>
+            <version>1.0</version>
+            <auto-deploy>true</auto-deploy>
+            <configurations>
+                <config evaluator="string-compare" condition="DocumentLibrary">
+
+                    <!-- Indicateurs d'état pour le dossier. -->
+                    <indicators>
+
+                        <!-- L'indicateur d'état pour l'état d'un dossier : prêt à être stocké. -->
+                        <indicator id="org.cd59.affichagedesactes.indicateur.estStockable"
+                                   icon="boite-16.png" index="100"
+                                   label="org.cd59.affichagedesactes.indicateur.estStockable.label">
+
+                            <!-- Evalueur pour afficher l'icône.  -->
+                            <evaluator>org.cd59.affichagedesactes.evalueur.estStockable</evaluator>
+
+                        </indicator>
+                        <!-- Fin - L'indicateur d'état pour l'état d'un dossier : prêt à être stocké. -->
+
+                        <!-- L'indicateur d'état pour l'état d'un dossier : est en erreur de stockage. -->
+                        <indicator id="org.cd59.affichagedesactes.indicateur.estEnErreurStockage"
+                                   icon="rupture-16.png" index="100"
+                                   label="org.cd59.affichagedesactes.indicateur.estEnErreurStockage.label">
+
+                            <!-- Evalueur pour afficher l'icône.  -->
+                            <evaluator>org.cd59.affichagedesactes.evalueur.estEnErreurStockage</evaluator>
+
+                        </indicator>
+                        <!-- Fin - L'indicateur d'état pour l'état d'un dossier : est en erreur de stockage. -->
+
+                        <!-- L'indicateur d'état pour l'état d'un dossier : est stocké. -->
+                        <indicator id="org.cd59.affichagedesactes.indicateur.estStocke"
+                                   icon="protection-16.png" index="100"
+                                   label="org.cd59.affichagedesactes.indicateur.estStocke.label">
+
+                            <!-- Evalueur pour afficher l'icône.  -->
+                            <evaluator>org.cd59.affichagedesactes.evalueur.estStocke</evaluator>
+
+                        </indicator>
+                        <!-- Fin - L'indicateur d'état pour l'état d'un dossier : est en erreur de stockage. -->
+
+                        <!-- L'indicateur d'état pour l'état d'un dossier : en attente du stockage. -->
+                        <indicator id="org.cd59.affichagedesactes.indicateur.estEnAttenteStockage"
+                                   icon="livraison-16.png" index="101"
+                                   label="org.cd59.affichagedesactes.indicateur.estEnAttenteStockage.label">
+
+                            <!-- Evalueur pour afficher l'icône.  -->
+                            <evaluator>org.cd59.affichagedesactes.evalueur.estEnAttenteStockage</evaluator>
+
+                        </indicator>
+                        <!-- Fin - L'indicateur d'état pour l'état d'un dossier : prêt à être envoyé. -->
+
+                        <!-- L'indicateur d'état pour l'état d'un dossier : prêt à être envoyé. -->
+                        <indicator id="org.cd59.affichagedesactes.indicateur.estPretAEtreEnvoye"
+                                   icon="pending-16.png" index="101"
+                                   label="org.cd59.affichagedesactes.indicateur.estPretAEtreEnvoye.label">
+
+                            <!-- Evalueur pour afficher l'icône.  -->
+                            <evaluator>org.cd59.affichagedesactes.evalueur.estEnvoyable</evaluator>
+
+                        </indicator>
+                        <!-- Fin - L'indicateur d'état pour l'état d'un dossier : prêt à être envoyé. -->
+
+                        <!-- L'indicateur d'état pour l'état d'un dossier : Est en erreur d'envoi. -->
+                        <indicator id="org.cd59.affichagedesactes.indicateur.estEnErreurEnvoi"
+                                   icon="blocker-16.png" index="101"
+                                   label="org.cd59.affichagedesactes.indicateur.estEnErreurEnvoi.label">
+
+                            <!-- Evalueur pour afficher l'icône.  -->
+                            <evaluator>org.cd59.affichagedesactes.evalueur.estEnErreurEnvoi</evaluator>
+
+                        </indicator>
+                        <!-- Fin - L'indicateur d'état pour l'état d'un dossier : Est en erreur d'envoi. -->
+
+                        <!-- L'indicateur d'état pour l'état d'un dossier : envoyé. -->
+                        <indicator id="org.cd59.affichagedesactes.indicateur.estAffiche"
+                                   icon="affiche-16.png" index="101"
+                                   label="org.cd59.affichagedesactes.indicateur.estAffiche.label">
+
+                            <!-- Evalueur pour afficher l'icône.  -->
+                            <evaluator>org.cd59.affichagedesactes.evalueur.estAffiche</evaluator>
+
+                        </indicator>
+                        <!-- Fin - L'indicateur d'état pour l'état d'un dossier : envoyé. -->
+
+                        <!-- L'indicateur d'état pour l'état d'un dossier : envoyé. -->
+                        <indicator id="org.cd59.affichagedesactes.indicateur.estApprouve"
+                                   icon="thumb-16.png" index="102"
+                                   label="org.cd59.affichagedesactes.indicateur.estApprouve.label">
+
+                            <!-- Evalueur pour afficher l'icône.  -->
+                            <evaluator>org.cd59.affichagedesactes.evalueur.estApprouve</evaluator>
+
+                        </indicator>
+                        <!-- Fin - L'indicateur d'état pour l'état d'un dossier : envoyé. -->
+
+                    </indicators>
+                    <!-- Fin - Indicateurs d'état pour un dossier. -->
+                </config>
+
+                <config evaluator="string-compare" condition="DocLibActions">
+                    <actions>
+
+                        <!-- Action permettant de stocker un dossier. -->
+                        <action id="stocker-dossier-acte-sas-ui" icon="livraison" type="javascript"
+                                label="org.cd59.affichagedesactes.actions.stocker.label">
+
+                            <!-- Execution de l'action sur click -->
+                            <param name="function">onActionSimpleRepoAction</param>
+
+                            <!-- id de l'action à executer -->
+                            <param name="action">stocker-acte-ui</param>
+
+                            <!-- Message en cas de succès de l'action -->
+                            <param name="successMessage">
+                                org.cd59.affichagedesactes.actions.message.succes
+                            </param>
+
+                            <!-- Message en cas d'erreur de l'action -->
+                            <param name="failureMessage">
+                                org.cd59.affichagedesactes.actions.message.erreur
+                            </param>
+
+                            <!-- La condition d'affichage de l'action. -->
+                            <evaluator negate="false">org.cd59.affichagedesactes.evalueur.estStockable</evaluator>
+
+                        </action>
+                        <!-- Fin - Action permettant de stocker un dossier. -->
+
+                        <!-- Action permettant de d'envoyer un dossier. -->
+                        <action id="envoyer-dossier-acte-ui" icon="envoi-en-cours" type="javascript"
+                                label="org.cd59.affichagedesactes.actions.envoyer.label">
+
+                            <!-- Execution de l'action sur click -->
+                            <param name="function">onActionSimpleRepoAction</param>
+
+                            <!-- id de l'action à executer -->
+                            <param name="action">envoyer-acte</param>
+
+                            <!-- Message en cas de succès de l'action -->
+                            <param name="successMessage">
+                                org.cd59.affichagedesactes.actions.message.succes
+                            </param>
+
+                            <!-- Message en cas d'erreur de l'action -->
+                            <param name="failureMessage">
+                                org.cd59.affichagedesactes.actions.message.erreur
+                            </param>
+
+                            <!-- La condition d'affichage de l'action. -->
+                            <evaluator negate="false">org.cd59.affichagedesactes.evalueur.estEnvoyable</evaluator>
+
+                        </action>
+                        <!-- Fin - Action permettant de stocker un dossier. -->
+
+
+                    </actions>
+
+
+                    <!-- Définition du lieu d'affichage des actions. -->
+                    <actionGroups>
+
+                        <!-- Actions visibles sur la page de navigation des dossiers -->
+                        <actionGroup id="folder-browse">
+                            <action index="400" id="stocker-dossier-acte-sas-ui" />
+                            <action index="400" id="envoyer-dossier-acte-ui" />
+                        </actionGroup>
+
+                        <!-- Actions visibles sur la page de détail d'un dossier -->
+                        <actionGroup id="folder-details">
+                            <action index="400" id="stocker-dossier-acte-sas-ui" />
+                            <action index="400" id="envoyer-dossier-acte-ui" />
+                        </actionGroup>
+
+                    </actionGroups>
+                    <!-- Fin - Définition du lieu d'affichage des actions. -->
+                </config>
+
+            </configurations>
+        </module>
+    </modules>
+
+</extension>

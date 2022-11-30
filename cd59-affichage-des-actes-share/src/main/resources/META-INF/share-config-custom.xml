@@ -1,0 +1,282 @@
+<!-- Share configuration related to this particular Share module extension, such as:
+     - Doclib action config
+     - Form config
+     - Aspect and Type config
+     - Advanced Search
+
+    Note. Any configuration related to the whole Share.war webapp
+           (i.e. not specific to this share extension) should be
+            placed in the environment specific config file:
+             alfresco/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml
+     -->
+<alfresco-config>
+    <!--================================================================================================================
+        Make custom types and aspects visible in "Change Type" and "Manage Aspects" actions.
+         This will also make them visible when creating rules.
+        (will be merged with out-of-the-box configured types and aspects)
+    =============================================================================================================-->
+
+    <config evaluator="string-compare" condition="DocumentLibrary">
+        <aspects>
+            <visible>
+                <aspect name="actes59:docinfos" />
+                <aspect name="actes59:dossierinfos" />
+
+
+            </visible>
+            <addable> <!-- defaults to visible config -->
+            </addable>
+            <removeable> <!-- defaults to visible config -->
+            </removeable>
+        </aspects>
+        <types>
+            <!-- Define the ACME base doc type as decedent from cm:content -->
+            <type name="cm:content">
+
+            </type>
+
+            <type name="cm:folder">
+                <subtype name="actes59:sas"/>
+                <subtype name="stockageactes59:dossierActes"/>
+            </type>
+
+            <type name="stockageactes59:dossierActes">
+                <subtype name="stockageactes59:dossierAnnee" />
+            </type>
+
+            <type name="stockageactes59:dossierAnnee">
+                <subtype name="stockageactes59:dossierMois"/>
+            </type>
+
+            <type name="stockageactes59:dossierMois">
+                <subtype name="stockageactes59:dossierJour"/>
+            </type>
+
+            <type name="stockageactes59:dossierJour">
+                <subtype name="stockageactes59:dossierTypologie"/>
+            </type>
+
+            <type name="stockageactes59:dossierTypologie">
+                <subtype name="stockageactes59:dossierActe"/>
+            </type>
+
+        </types>
+    </config>
+
+    <!--================================================================================================================
+          Advanced Search Forms for types
+          (search forms for aspects are not available)
+      =============================================================================================================-->
+
+    <config evaluator="string-compare" condition="AdvancedSearch" replace="true">
+        <advanced-search>
+            <forms>
+                <!-- Standard out-of-the-box types -->
+                <form labelId="search.form.label.cm_content" descriptionId="search.form.desc.cm_content">cm:content
+                </form>
+                <form labelId="search.form.label.cm_folder" descriptionId="search.form.desc.cm_folder">cm:folder</form>
+
+                <!-- Custom type -->
+            </forms>
+        </advanced-search>
+    </config>
+
+    <!--================================================================================================================
+         View, Edit, Create, and Search forms for custom types
+
+         The following form configurations for the custom types
+         have not been created from scratch. We have instead copied
+         out-of-the-box form configurations for cm:content and cm:folder
+         from the tomcat/webapps/share/WEB-INF/classes/alfresco/share-form-config.xml file
+         in a standard Alfresco installation (with the version matching)
+         and used them as a starting point.
+
+        =============================================================================================================-->
+
+    <!-- __________________________________ actes59:docinfos base type ______________________________________________-->
+    <config evaluator="aspect" condition="actes59:docinfos">
+        <forms>
+            <form>
+                <field-visibility>
+
+                    <show id="cm:name" for-mode="view" />
+                    <show id="cm:description" for-mode="view" force="true" />
+
+                    <show id="actes59:empreinte" read-only="true" />
+                    <show id="actes59:typedocument"/>
+
+                    <show id="cm:created" for-mode="view" />
+                    <show id="cm:creator" for-mode="view"/>
+
+                    <show id="cm:modified" for-mode="view" />
+                    <show id="cm:modifier" for-mode="view" />
+
+                </field-visibility>
+
+                <appearance>
+
+                    <set id="setDocument" appearance="bordered-panel" label-id="form.set.label.acte59.set.document" />
+                    <field id="actes59:empreinte" label-id="prop.acte59_empreinte" set="setDocument" />
+                    <field id="actes59:typedocument" label-id="prop.acte59_typedocument" set="setDocument" />
+
+                </appearance>
+
+            </form>
+        </forms>
+    </config>
+
+    <!-- __________________________________ actes59:dossierinfos base type __________________________________________-->
+    <config evaluator="aspect" condition="actes59:dossierinfos">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" for-mode="view" />
+                    <show id="cm:title" for-mode="view" />
+                    <show id="cm:description" for-mode="view" force="true" />
+
+                    <show id="actes59:iddossier" />
+                    <show id="actes59:numeroacte" />
+                    <show id="actes59:resume" />
+                    <show id="actes59:objet" />
+                    <show id="actes59:orgasigle" />
+                    <show id="actes59:annee" read-only="true" />
+                    <show id="actes59:typedossier" />
+
+                    <show id="actes59:erreurinternet" />
+                    <show id="actes59:signataire" />
+                    <show id="actes59:dossiercomplet" />
+                    <show id="actes59:source" />
+
+
+
+                    <show id="actes59:etatStockageDossier" />
+                    <show id="actes59:etatEnvoiDossier" />
+                    <show id="actes59:dateaffichageged" />
+                    <show id="actes59:dateaffichageinternet" />
+                    <show id="actes59:datedossier" />
+                    <show id="actes59:urlaffichage" />
+                    <show id="actes59:estEnRefMultiple" read-only="true" />
+
+                </field-visibility>
+
+                <appearance>
+
+                    <set id="setDossier" appearance="bordered-panel" label-id="form.set.label.acte59.set.dossier" />
+                    <field id="actes59:iddossier" label-id="prop.acte59_iddossier" set="setDossier" />
+                    <field id="actes59:resume" label-id="prop.acte59_resume" set="setDossier" />
+                    <field id="actes59:objet" label-id="prop.acte59_objet" set="setDossier" />
+                    <field id="actes59:dossiercomplet" label-id="prop.acte59_dossiercomplet" set="setDossier" />
+                    <field id="actes59:estEnRefMultiple" label-id="prop.acte59_estEnRefMultiple" set="setDossier" />
+
+
+                    <set id="setDossierDetail" appearance="bordered-panel" label-id="form.set.label.acte59.set.dossier.detail" />
+                    <field id="actes59:typedossier" label-id="prop.acte59_typedossier" set="setDossierDetail" />
+                    <field id="actes59:orgasigle" label-id="prop.acte59_orgasigle" set="setDossierDetail" />
+                    <field id="actes59:numeroacte" label-id="prop.acte59_numeroacte" set="setDossierDetail" />
+                    <field id="actes59:datedossier" label-id="prop.acte59_datedossier" set="setDossierDetail" />
+                    <field id="actes59:annee" label-id="prop.acte59_annee" set="setDossierDetail" />
+                    <field id="actes59:signataire" label-id="prop.acte59_signataire" set="setDossierDetail" />
+                    <field id="actes59:source" label-id="prop.acte59_source" set="setDossierDetail" />
+
+                    <set id="setDossierAffichage" appearance="bordered-panel" label-id="form.set.label.acte59.set.dossier.affichage" />
+                    <field id="actes59:etatStockageDossier" label-id="prop.acte59_etatStockageDossier" set="setDossierAffichage" />
+                    <field id="actes59:etatEnvoiDossier" label-id="prop.acte59_etatEnvoiDossier" set="setDossierAffichage" />
+                    <field id="actes59:dateaffichageged" label-id="prop.acte59_dateaffichageged" set="setDossierAffichage" />
+                    <field id="actes59:dateaffichageinternet" label-id="prop.acte59_dateaffichageinternet" set="setDossierAffichage" />
+                    <field id="actes59:urlaffichage" label-id="prop.acte59_urlaffichage" set="setDossierAffichage" />
+
+                    <set id="setDossierDetailErreur" appearance="bordered-panel" label-id="form.set.label.acte59.set.dossier.erreur" />
+                    <field id="actes59:erreurinternet" label-id="prop.acte59_erreurinternet" set="setDossierDetailErreur" />
+
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="stockageactes59:dossierActes">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="cm:title" force="true"/>
+                    <show id="cm:description" force="true"/>
+                    <show id="cm:created" force="true"/>
+                    <show id="cm:modifier" force="true"/>
+                    <show id="cm:modified" force="true"/>
+                    <show id="cm:creator" for-mode="view"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+    <config evaluator="node-type" condition="stockageactes59:dossierAnnee">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="stockageactes59:annee"/>
+                    <show id="cm:name"/>
+                    <show id="cm:title" force="true"/>
+                    <show id="cm:description" force="true"/>
+                    <show id="cm:created" force="true"/>
+                    <show id="cm:modifier" force="true"/>
+                    <show id="cm:modified" force="true"/>
+                    <show id="cm:creator" for-mode="view"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+    <config evaluator="node-type" condition="stockageactes59:dossierMois">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="stockageactes59:mois"/>
+                    <show id="stockageactes59:annee"/>
+                    <show id="cm:name"/>
+                    <show id="cm:title" force="true"/>
+                    <show id="cm:description" force="true"/>
+                    <show id="cm:created" force="true"/>
+                    <show id="cm:modifier" force="true"/>
+                    <show id="cm:modified" force="true"/>
+                    <show id="cm:creator" for-mode="view"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+    <config evaluator="node-type" condition="stockageactes59:dossierJour">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="stockageactes59:jour"/>
+                    <show id="stockageactes59:mois"/>
+                    <show id="stockageactes59:annee"/>
+                    <show id="cm:name"/>
+                    <show id="cm:title" force="true"/>
+                    <show id="cm:description" force="true"/>
+                    <show id="cm:created" force="true"/>
+                    <show id="cm:modifier" force="true"/>
+                    <show id="cm:modified" force="true"/>
+                    <show id="cm:creator" for-mode="view"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+    <config evaluator="node-type" condition="stockageactes59:dossierTypologie">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="stockageactes59:typologieDossier"/>
+                    <show id="stockageactes59:jour"/>
+                    <show id="stockageactes59:mois"/>
+                    <show id="stockageactes59:annee"/>
+                    <show id="cm:name"/>
+                    <show id="cm:title" force="true"/>
+                    <show id="cm:description" force="true"/>
+                    <show id="cm:created" force="true"/>
+                    <show id="cm:modifier" force="true"/>
+                    <show id="cm:modified" force="true"/>
+                    <show id="cm:creator" for-mode="view"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+</alfresco-config>
