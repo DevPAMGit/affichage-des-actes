@@ -285,10 +285,10 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
                 cpt++;
                 if(max == 1)
                     this.annexes.add(new ModeleDocumentAnnexeStockage(
-                            /*this.serviceRegistry*/ this.modeleNoeudAction, nodeRef, this.identifiant, this.date));
+                            this.modeleNoeudAction, nodeRef, this.identifiant, this.date));
                 else
                     this.annexes.add(new ModeleDocumentAnnexeStockage(
-                            /*this.serviceRegistry*/ this.modeleNoeudAction, nodeRef, this.identifiant, this.date, cpt));
+                            this.modeleNoeudAction, nodeRef, this.identifiant, this.date, cpt));
             }
     }
 

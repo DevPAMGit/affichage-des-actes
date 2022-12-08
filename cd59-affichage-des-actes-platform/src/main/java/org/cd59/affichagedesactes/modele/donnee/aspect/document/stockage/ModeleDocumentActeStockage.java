@@ -29,6 +29,7 @@ public class ModeleDocumentActeStockage extends ModeleDocumentActe {
         super(modeleNoeudAction, nodeRef);
 
         String nomActuel = this.modeleNoeudAction.getProprieteChaine(nodeRef, ContentModel.PROP_NAME);
+
         int dernierePosition = nomActuel.lastIndexOf('.');
         String extension = "";
         if(dernierePosition > -1)

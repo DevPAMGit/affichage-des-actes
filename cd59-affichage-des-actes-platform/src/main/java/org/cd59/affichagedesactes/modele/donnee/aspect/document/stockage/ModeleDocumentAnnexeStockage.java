@@ -29,8 +29,14 @@ public class ModeleDocumentAnnexeStockage extends ModeleDocumentAnnexe {
             throws ModeleException, IOException, NoSuchAlgorithmException, PreRequisException, NoSuchMethodException {
         super(modeleNoeudAction, nodeRef);
 
-        this.setPropriete(ContentModel.PROP_NAME, String.format("%s_%s", identifiant, this.type.valeur));
-        this.setPropriete(ContentModel.PROP_TITLE, String.format("%s_%s", identifiant, this.type.valeur));
+        String nomActuel = this.modeleNoeudAction.getProprieteChaine(nodeRef, ContentModel.PROP_NAME);
+        int dernierePosition = nomActuel.lastIndexOf('.');
+        String extension = "";
+        if(dernierePosition > -1)
+            extension = nomActuel.substring(dernierePosition);
+
+        this.setPropriete(ContentModel.PROP_NAME, String.format("%s_%s%s", identifiant, this.type.valeur, extension));
+        this.setPropriete(ContentModel.PROP_TITLE, String.format("%s_%s%s", identifiant, this.type.valeur, extension));
         this.setPropriete(ContentModel.PROP_DESCRIPTION, String.format("Annexe pour le dossier %s du %s %s %d",
                 identifiant, date.jourChaine, date.nomMois, date.annee));
     }

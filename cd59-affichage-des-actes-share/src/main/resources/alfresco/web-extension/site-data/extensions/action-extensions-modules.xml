@@ -107,7 +107,7 @@
                     <actions>
 
                         <!-- Action permettant de stocker un dossier. -->
-                        <action id="stocker-dossier-acte-sas-ui" icon="livraison" type="javascript"
+                        <action id="stocker-dossier-acte-sas-ui" icon="logistique" type="javascript"
                                 label="org.cd59.affichagedesactes.actions.stocker.label">
 
                             <!-- Execution de l'action sur click -->

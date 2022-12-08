@@ -25,7 +25,6 @@ public class ModeleNoeud {
     /**
      * Le service de registre du nœud.
      */
-    // protected final ServiceRegistry serviceRegistry;
     protected IModeleNoeudAction modeleNoeudAction;
 
     /**
@@ -34,7 +33,7 @@ public class ModeleNoeud {
      * @param nodeRef Le nœud source.
      * @throws ModeleException Si le registre de services ou le nœud sont null.
      */
-    public ModeleNoeud(/*ServiceRegistry serviceRegistry*/ IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef) throws ModeleException {
+    public ModeleNoeud(IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef) throws ModeleException {
         // Vérification des préconditions.
         // 1. Vérification du registre de services.
         if(modeleNoeudAction == null)

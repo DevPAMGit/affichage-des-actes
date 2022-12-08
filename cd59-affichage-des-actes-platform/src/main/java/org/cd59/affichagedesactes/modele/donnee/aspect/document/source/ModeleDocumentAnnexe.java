@@ -1,6 +1,5 @@
 package org.cd59.affichagedesactes.modele.donnee.aspect.document.source;
 
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.cd59.affichagedesactes.action.custom.source.exception.prerequis.PreRequisException;
 import org.cd59.affichagedesactes.action.custom.source.v1.action.IModeleNoeudAction;
@@ -19,9 +18,9 @@ public class ModeleDocumentAnnexe extends ModeleDocument {
      * @throws IOException          Si une erreur entrée/sortie à lieu lors de la lecture du nœud.
      * @throws NoSuchFieldException Si l'algorithme de hachage n'existe pas.
      */
-    public ModeleDocumentAnnexe(/*ServiceRegistry serviceRegistry*/ IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef)
+    public ModeleDocumentAnnexe(IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef)
             throws ModeleException, IOException, NoSuchAlgorithmException, PreRequisException, NoSuchMethodException {
-        super(/*serviceRegistry*/ modeleNoeudAction, nodeRef);
+        super(modeleNoeudAction, nodeRef);
 
         // Vérification que le type du document est de type acte original.
         if(this.type != ModeleDocumentType.ANNEXE)

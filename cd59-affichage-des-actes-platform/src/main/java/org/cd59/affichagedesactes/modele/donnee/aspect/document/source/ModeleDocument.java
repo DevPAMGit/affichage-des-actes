@@ -46,10 +46,9 @@ public class ModeleDocument extends ModeleNoeud {
      * @throws ModeleException Si le registre de services ou le nœud sont null.
      * @throws IOException     Si une erreur entrée/sortie à lieu lors de la lecture du nœud.
      */
-    public ModeleDocument(/*ServiceRegistry serviceRegistry*/ IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef)
+    public ModeleDocument(IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef)
             throws ModeleException, IOException, NoSuchAlgorithmException, PreRequisException, NoSuchMethodException {
-
-        super(/*serviceRegistry*/ modeleNoeudAction, nodeRef);
+        super(modeleNoeudAction, nodeRef);
 
         // Vérification que le nœud est de type document.
         if(!this.avoirAspect(DocinfosAspectModele.NOM))
