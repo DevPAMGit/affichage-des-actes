@@ -13,12 +13,10 @@ import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.stockage.ModeleDo
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.stockage.multiple.IModeleDossierStockageMultiple;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.stockage.multiple.ModeleDossierStockageMultiple;
 import org.cd59.affichagedesactes.modele.donnee.exception.ModeleException;
-import org.cd59.affichagedesactes.utilitaire.UtilitaireException;
+import org.cd59.affichagedesactes.utilitaire.exception.UtilitaireException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
@@ -43,8 +41,7 @@ public class StockerDossierActeAction extends ModeleAction {
      * @throws ModeleException Si une erreur de modèle survient.
      * @throws PreRequisException Si le nœud en paramètre est null.
      */
-    public StockerDossierActeAction(ServiceRegistry serviceRegistry, NodeRef nodeRef)
-            throws UtilitaireException, IOException, NoSuchAlgorithmException, NoSuchMethodException {
+    public StockerDossierActeAction(ServiceRegistry serviceRegistry, NodeRef nodeRef) throws Exception {
         super(serviceRegistry);
 
         try {
@@ -107,7 +104,8 @@ public class StockerDossierActeAction extends ModeleAction {
      * @throws ModeleException Si la propriété du modèle à modifier est null.
      * @throws FileNotFoundException Si le nœud à déplacer n'est pas trouvé.
      */
-    private void deplacerDossierActe(NodeRef nodeRef) throws PreRequisException, ModeleException, FileNotFoundException, NoSuchMethodException {
+    private void deplacerDossierActe(NodeRef nodeRef) throws PreRequisException, ModeleException, FileNotFoundException,
+            NoSuchMethodException {
         // Récupération de la liste des dossiers du même identifiant.
         List<NodeRef> nodeRefList = this.requeterNoeuds(nodeRef,
                 String.format(StockerDossierActeRequete.RECHERCHE_DOSSIER_ACTE,

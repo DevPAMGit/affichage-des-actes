@@ -1,6 +1,6 @@
 package org.cd59.affichagedesactes.modele.donnee.exception;
 
-import org.cd59.affichagedesactes.utilitaire.UtilitaireException;
+import org.cd59.affichagedesactes.utilitaire.exception.UtilitaireException;
 
 /**
  * Exception personnalisée pour les modèles de données.

@@ -63,8 +63,8 @@ public abstract class ModeleDossier extends ModeleNoeud {
      * @param nodeRef         Le nœud source.
      * @throws ModeleException Si le registre de services ou le nœud sont null.
      */
-    public ModeleDossier(/*ServiceRegistry serviceRegistry,*/
-            IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef) throws ModeleException, PreRequisException {
+    public ModeleDossier(IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef)
+            throws ModeleException, PreRequisException {
         super(modeleNoeudAction, nodeRef);
 
         this.objet = this.getProprieteChaine(DossierinfosAspectModele.OBJET);

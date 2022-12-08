@@ -9,7 +9,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.cd59.affichagedesactes.action.custom.stockage.StockerDossierActeAction;
 import org.cd59.affichagedesactes.modele.alfresco.aspect.DossierinfosAspectModele;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.ModeleDossierEtatEnvoi;
-import org.cd59.affichagedesactes.utilitaire.UtilitaireException;
+import org.cd59.affichagedesactes.utilitaire.exception.UtilitaireException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

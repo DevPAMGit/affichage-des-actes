@@ -73,12 +73,12 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
      * @param nodeRef         Le nœud source.
      * @throws ModeleException Si le registre de services ou le nœud sont null.
      */
-    public ModeleDossierStockage(
-            /*ServiceRegistry serviceRegistry,*/ IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef) throws ModeleException, PreRequisException, NoSuchMethodException {
-        super(/*serviceRegistry,*/ modeleNoeudAction, nodeRef);
+    public ModeleDossierStockage(IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef)
+            throws Exception {
+        super(modeleNoeudAction, nodeRef);
 
-        try { this.sas = new SasModele(/*this.serviceRegistry*/ modeleNoeudAction, this.getNoeudParent(nodeRef)); }
-        catch (Exception e) { throw new ModeleException("Le dossier d'acte n'est pas contenu dans un dossier 'sas'."); }
+        try { this.sas = new SasModele(modeleNoeudAction, this.getNoeudParent(nodeRef)); }
+        catch (Exception e) { throw new Exception("Le dossier d'acte n'est pas contenu dans un dossier 'sas'."); }
 
         if(!this.avoirAspect(DossierinfosAspectModele.NOM))
             throw new ModeleException("Le dossier d'acte n'est pas d'aspect 'dossierinfos'.");
@@ -270,7 +270,7 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
             throw new ModeleException("Le dossier d'acte ne contient plus d'un fichier d'acte original.");
 
         // Traitement du fichier d'acte.
-        this.acteOriginal = new ModeleDocumentActeStockage(/*this.serviceRegistry*/ this.modeleNoeudAction, nodeRefList.get(0), this.identifiant, this.date);
+        this.acteOriginal = new ModeleDocumentActeStockage(this.modeleNoeudAction, nodeRefList.get(0), this.identifiant, this.date);
     }
 
     @Override

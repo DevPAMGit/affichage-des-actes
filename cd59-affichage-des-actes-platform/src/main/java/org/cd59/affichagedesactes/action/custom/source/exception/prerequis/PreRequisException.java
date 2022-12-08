@@ -1,6 +1,6 @@
 package org.cd59.affichagedesactes.action.custom.source.exception.prerequis;
 
-import org.cd59.affichagedesactes.utilitaire.UtilitaireException;
+import org.cd59.affichagedesactes.utilitaire.exception.UtilitaireException;
 
 /**
  * Exception personnalisée si d'utilisation de librairies ont lieu.

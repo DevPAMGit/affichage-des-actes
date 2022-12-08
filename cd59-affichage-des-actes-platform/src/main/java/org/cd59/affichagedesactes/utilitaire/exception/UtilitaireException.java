@@ -1,4 +1,4 @@
-package org.cd59.affichagedesactes.utilitaire;
+package org.cd59.affichagedesactes.utilitaire.exception;
 
 /**
  * Classe d'{@link Exception} personnalisée pour les exceptions du projet.

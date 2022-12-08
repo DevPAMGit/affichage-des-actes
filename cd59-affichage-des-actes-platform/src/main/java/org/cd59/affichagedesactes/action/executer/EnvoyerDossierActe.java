@@ -1,6 +1,6 @@
 package org.cd59.affichagedesactes.action.executer;
 
-import org.cd59.affichagedesactes.utilitaire.UtilitaireException;
+import org.cd59.affichagedesactes.utilitaire.exception.UtilitaireException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

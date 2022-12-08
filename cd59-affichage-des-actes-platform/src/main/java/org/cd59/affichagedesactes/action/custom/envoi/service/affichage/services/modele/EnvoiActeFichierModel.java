@@ -21,7 +21,7 @@ public class EnvoiActeFichierModel {
      * @param contenu Le contenu du fichier.
      */
     public EnvoiActeFichierModel(String nom, byte[] contenu) {
-        this.nom = String.format("%s.pdf", nom);
+        this.nom = nom;
         this.contenu = contenu;
     }
 }
