@@ -22,7 +22,7 @@ public enum ModeleDossierEtatStockage {
     /**
      * La valeur de l'énumération.
      */
-    String valeur;
+    public final String valeur;
 
     /**
      * Initialise une nouvelle valeur de l'énumération ModeleDossierStockage.
@@ -37,7 +37,6 @@ public enum ModeleDossierEtatStockage {
      * @param valeur La valeur dont on souhaite trouver l'énumération.
      */
     public static ModeleDossierEtatStockage searchValeur(String valeur) {
-        ModeleDossierEtatStockage resultat = null;
         ModeleDossierEtatStockage[] enums = values();
         int index = 0, max = valeur.length();
 

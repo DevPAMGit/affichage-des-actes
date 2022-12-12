@@ -5,7 +5,6 @@ import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.cd59.affichagedesactes.action.custom.source.exception.prerequis.PreRequisException;
 import org.cd59.affichagedesactes.action.custom.source.v1.action.ModeleAction;
-import org.cd59.affichagedesactes.modele.alfresco.aspect.DossierinfosAspectModele;
 import org.cd59.affichagedesactes.modele.alfresco.type.*;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.ModeleDossierEtatEnvoi;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.stockage.ModeleDossierEtatStockage;
@@ -13,7 +12,6 @@ import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.stockage.ModeleDo
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.stockage.multiple.IModeleDossierStockageMultiple;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.stockage.multiple.ModeleDossierStockageMultiple;
 import org.cd59.affichagedesactes.modele.donnee.exception.ModeleException;
-import org.cd59.affichagedesactes.utilitaire.exception.UtilitaireException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,56 +43,32 @@ public class StockerDossierActeAction extends ModeleAction {
         super(serviceRegistry);
         this.modele = null;
 
-        try {
+        LOGGER.info("Stockage d'un acte");
+        LOGGER.info("1. Initialisation du Modèle");
+        this.modele = new ModeleDossierStockage(this, nodeRef);
 
-            LOGGER.info("Stockage d'un acte");
-            LOGGER.info("1. Initialisation du Modèle");
-            this.modele = new ModeleDossierStockage(this, nodeRef);
+        LOGGER.info("2. Recherche du fichier d'acte dans le dossier.");
+        this.modele.initFichierActe(this.requeterNoeuds(nodeRef,
+                String.format(StockerDossierActeRequete.RECHERCHE_ACTE_ORIGINAL, nodeRef.getId())));
 
-            LOGGER.info("2. Recherche du fichier d'acte dans le dossier.");
-            this.modele.initFichierActe(this.requeterNoeuds(nodeRef,
-                    String.format(StockerDossierActeRequete.RECHERCHE_ACTE_ORIGINAL, nodeRef.getId())));
-
-            LOGGER.info("3. Recherche des fichiers annexes dans le dossier.");
-            this.modele.setFichierAnnexes(this.requeterNoeuds(nodeRef,
-                    String.format(StockerDossierActeRequete.RECHERCHE_AUTRES_DOCUMENTS, nodeRef.getId())));
-        }catch (UtilitaireException e) {
-
-            LOGGER.error(e.getMessage(), e);
-
-            // Vérification de l'aspect avant mise en erreur.
-            if(this.avoirAspect(nodeRef, DossierinfosAspectModele.NOM))
-                this.setErreur(e.getMessage());
-        }
+        LOGGER.info("3. Recherche des fichiers annexes dans le dossier.");
+        this.modele.setFichierAnnexes(this.requeterNoeuds(nodeRef,
+                String.format(StockerDossierActeRequete.RECHERCHE_AUTRES_DOCUMENTS, nodeRef.getId())));
     }
 
     @Override
     public void executer() throws Exception {
-        try {
-            // Synchronisation sur le mutex de l'arborescence.
-            synchronized (StockerDossierActeMutex.MUTEX_ARBORESCENCE) {
-                // 1. Récupération du chemin de dépôt de l'acte.
-                NodeRef destination = this.creerArborescence();
+        // Synchronisation sur le mutex de l'arborescence.
+        synchronized (StockerDossierActeMutex.MUTEX_ARBORESCENCE) {
+            // 1. Récupération du chemin de dépôt de l'acte.
+            NodeRef destination = this.creerArborescence();
 
-                // Renommage des dossiers multiples.
-                this.deplacerDossierActe(destination);
-            }
-
-            this.modele.setEtatStockage(ModeleDossierEtatStockage.STOCKE);
-            this.modele.setEtatEnvoi(ModeleDossierEtatEnvoi.PRET_A_ETRE_ENVOYE);
-
-        }catch (UtilitaireException e1) {
-            LOGGER.error(e1.getMessage(), e1);
-            this.setErreur(String.format("Une erreur d'utilisation de la librairie à eu lieu : %s.", e1.getMessage()));
+            // Renommage des dossiers multiples.
+            this.deplacerDossierActe(destination);
         }
-    }
 
-    private void setErreur(String message) throws ModeleException, PreRequisException, NoSuchMethodException {
-        this.modele.setCompletude(false);
-        this.modele.setMessageErreur(message);
-        this.modele.setReferenceMultiple(false);
-        this.modele.setEtatEnvoi(ModeleDossierEtatEnvoi.EN_ATTENTE);
-        this.modele.setEtatStockage(ModeleDossierEtatStockage.ERREUR);
+        this.modele.setEtatStockage(ModeleDossierEtatStockage.STOCKE);
+        this.modele.setEtatEnvoi(ModeleDossierEtatEnvoi.PRET_A_ETRE_ENVOYE);
     }
 
     /**

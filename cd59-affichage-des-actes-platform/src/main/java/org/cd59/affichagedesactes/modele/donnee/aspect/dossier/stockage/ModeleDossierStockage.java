@@ -21,6 +21,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe modèle pour un dossier pour stockage.
+ */
 public class ModeleDossierStockage extends ModeleDossier implements IModeleDossierStockageMultiple {
     /**
      * La date du dossier.
@@ -71,7 +74,6 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
      * Initialise une nouvelle instance de la classe {@link ModeleNoeud}.
      // @param serviceRegistry Le service de registre du nœud.
      * @param nodeRef         Le nœud source.
-     * @throws ModeleException Si le registre de services ou le nœud sont null.
      */
     public ModeleDossierStockage(IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef)
             throws Exception {
@@ -105,6 +107,20 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
                 this.typologie.typeMajuscule == ModeleDossierTypologieEnumeration.ARRETE ?
                 "de l'arrêté" : "de la délibération", this.identifiant, this.date.jourChaine, this.date.nomMois,
                 this.date.annee));
+
+        if(this.source.equals(SOURCE_MANUEL))
+            this.setObjet(String.format("%s - %s - %s %s %s",this.typologie.typeMinuscule.valeur, this.numero,
+                    this.date.jourChaine, this.date.nomMois, this.date.anneeChaine)
+            );
+    }
+
+    /**
+     * Modifie la valeur de l'objet
+     * @param objet La nouvelle valeur de l'objet.
+     */
+    private void setObjet(String objet) throws PreRequisException, NoSuchMethodException {
+        this.setPropriete(DossierinfosAspectModele.OBJET, objet);
+        this.objet = objet;
     }
 
     /**
@@ -122,7 +138,7 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
      * @param valeur La valeur de la complétude du dossier.
      // ModeleException Si la propriété à modifier est null.
      */
-    public void setCompletude(boolean valeur) throws /*ModeleException,*/ PreRequisException, NoSuchMethodException {
+    public void setCompletude(boolean valeur) throws PreRequisException, NoSuchMethodException {
         this.setPropriete(DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER, valeur);
     }
 
@@ -261,7 +277,8 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
     }
 
     @Override
-    public void initFichierActe(List<NodeRef> nodeRefList) throws ModeleException, IOException, NoSuchAlgorithmException, PreRequisException, NoSuchMethodException {
+    public void initFichierActe(List<NodeRef> nodeRefList)
+            throws ModeleException, IOException, NoSuchAlgorithmException, PreRequisException, NoSuchMethodException {
         // 1. Erreur s'il n'y a aucuns nœuds.
         if(nodeRefList == null || nodeRefList.size() == 0)
             throw new ModeleException("Le dossier d'acte ne contient aucun fichier d'acte original.");

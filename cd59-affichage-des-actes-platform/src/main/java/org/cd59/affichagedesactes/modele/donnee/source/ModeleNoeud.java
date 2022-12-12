@@ -29,7 +29,6 @@ public class ModeleNoeud {
 
     /**
      * Initialise une nouvelle instance de la classe {@link ModeleNoeud}.
-     // @param serviceRegistry Le service de registre du nœud.
      * @param nodeRef Le nœud source.
      * @throws ModeleException Si le registre de services ou le nœud sont null.
      */

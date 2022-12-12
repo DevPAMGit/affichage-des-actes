@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.cd59.affichagedesactes.action.custom.stockage.StockerDossierActeAction;
 import org.cd59.affichagedesactes.modele.alfresco.aspect.DossierinfosAspectModele;
+import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.ModeleDossierEtatEnvoi;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.stockage.ModeleDossierEtatStockage;
 import org.cd59.affichagedesactes.utilitaire.exception.UtilitaireException;
 import org.slf4j.Logger;
@@ -51,10 +52,16 @@ public class StockerDossierActe extends ActionExecuterAbstractBase {
         if(!nodeService.hasAspect(nodeRef, DossierinfosAspectModele.NOM))
             return;
 
-        // Modification du message.
+        // Modification des métadonnées du dossier.
         nodeService.setProperty(nodeRef, DossierinfosAspectModele.ERREURINTERNET, message);
-        // Modification de l'état d'envoi.
-        nodeService.setProperty(nodeRef, DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER, ModeleDossierEtatStockage.ERREUR);
+        nodeService.setProperty(nodeRef, DossierinfosAspectModele.DOSSIERCOMPLET, false);
+        nodeService.setProperty(nodeRef, DossierinfosAspectModele.EST_EN_REF_MULTIPLE, false);
+        nodeService.setProperty(
+                nodeRef, DossierinfosAspectModele.ETAT_ENVOI_DOSSIER, ModeleDossierEtatEnvoi.EN_ATTENTE.valeur
+        );
+        nodeService.setProperty(
+                nodeRef, DossierinfosAspectModele.ETAT_STOCKAGE_DOSSIER, ModeleDossierEtatStockage.ERREUR.valeur
+        );
     }
 
     @Override

@@ -1,5 +1,8 @@
 package org.cd59.affichagedesactes.action.custom.envoi;
 
+/**
+ * Fichier de requêtes pour l'action d'envoi de d'acte.
+ */
 public class EnvoyerDossierActeRequete {
     /**
      * Requête permettant de récupérer l'acte original du dossier.

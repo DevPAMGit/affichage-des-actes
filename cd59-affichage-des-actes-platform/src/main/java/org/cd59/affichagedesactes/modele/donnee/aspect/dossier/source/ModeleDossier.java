@@ -25,7 +25,7 @@ public abstract class ModeleDossier extends ModeleNoeud {
     /**
      * L'objet du dossier.
      */
-    public final String objet;
+    public String objet;
 
     /**
      * Le résumé du dossier.

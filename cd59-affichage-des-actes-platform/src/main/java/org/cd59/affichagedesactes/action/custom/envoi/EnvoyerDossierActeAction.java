@@ -38,6 +38,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Action personnalisée permettant d'envoyer un dossier d'acte.
+ */
 public class EnvoyerDossierActeAction extends ModeleAction {
     /**
      * L'hôte du webservice.
