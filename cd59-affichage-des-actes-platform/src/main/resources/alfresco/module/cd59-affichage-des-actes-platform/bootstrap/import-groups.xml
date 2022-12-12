@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view:view xmlns:view="http://www.alfresco.org/view/repository/1.0"
+           xmlns:cm="http://www.alfresco.org/model/content/1.0"
+           xmlns:sys="http://www.alfresco.org/model/system/1.0">
+
+    <view:reference view:pathref="${system.authorities_container.childname}">
+        <view:associations>
+            <sys:children>
+                <cm:authorityContainer view:childName="cm:GROUP__GEDAFF_Directions_Operationnelles">
+                    <view:aspects>
+                        <sys:referenceable />
+                    </view:aspects>
+                    <view:properties>
+                        <sys:node-uuid>_GEDAFF_Directions_Operationnelles</sys:node-uuid>
+                        <cm:name>GROUP__GEDAFF_Directions_Operationnelles</cm:name>
+                        <cm:authorityName>GROUP__GEDAFF_Directions_Operationnelles</cm:authorityName>
+                    </view:properties>
+                </cm:authorityContainer>
+                <cm:authorityContainer view:childName="cm:GROUP__GEDAFF_Lecteurs">
+                    <view:aspects>
+                        <sys:referenceable />
+                    </view:aspects>
+                    <view:properties>
+                        <sys:node-uuid>_GEDAFF_Lecteurs</sys:node-uuid>
+                        <cm:name>GROUP__GEDAFF_Lecteurs</cm:name>
+                        <cm:authorityName>GROUP__GEDAFF_Lecteurs</cm:authorityName>
+                    </view:properties>
+                </cm:authorityContainer>
+             </sys:children>
+        </view:associations>
+    </view:reference>
+
+    <!-- Each group is also part of the AUTH.ALF and APP.DEFAULT zones -->
+    <view:reference view:pathref="${system.zones_container.childname}/cm:AUTH.ALF">
+        <view:associations>
+            <cm:inZone>
+                <view:reference view:pathref="${system.authorities_container.childname}/cm:GROUP__GEDAFF_Directions_Operationnelles"
+                                view:childName="cm:GROUP__GEDAFF_Directions_Operationnelles" />
+            </cm:inZone>
+            <cm:inZone>
+                <view:reference view:pathref="${system.authorities_container.childname}/cm:GROUP__GEDAFF_Lecteurs"
+                                view:childName="cm:GROUP__GEDAFF_Lecteurs" />
+            </cm:inZone>
+        </view:associations>
+    </view:reference>
+	
+    <view:reference view:pathref="${system.zones_container.childname}/cm:APP.DEFAULT">
+        <view:associations>
+            <cm:inZone>
+                <view:reference view:pathref="${system.authorities_container.childname}/cm:GROUP__GEDAFF_Directions_Operationnelles"
+                                view:childName="cm:GROUP__GEDAFF_Directions_Operationnelles" />
+            </cm:inZone>
+            <cm:inZone>
+                <view:reference view:pathref="${system.authorities_container.childname}/cm:GROUP__GEDAFF_Lecteurs"
+                                view:childName="cm:GROUP__GEDAFF_Lecteurs" />
+            </cm:inZone>
+        </view:associations>
+    </view:reference>
+</view:view>
+
