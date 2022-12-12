@@ -127,9 +127,16 @@ public class EnvoyerDossierActeAction extends ModeleAction {
      * Copie le fichier d'acte original et y ajoute le tampon.
      * @return Le nœud représentant l'acte signé.
      */
-    private NodeRef copierActeOriginal() throws IOException, FileNotFoundException, PreRequisException, NoSuchMethodException {
+    private NodeRef copierActeOriginal()
+            throws IOException, FileNotFoundException, PreRequisException, NoSuchMethodException {
+
+        int dernierePosition = ModeleDocumentType.ACTE.valeur.lastIndexOf('.');
+        String extension = "";
+        if(dernierePosition > -1)
+            extension = ModeleDocumentType.ACTE.valeur.substring(dernierePosition);
+
         // Création du nom du nœud.
-        String nom = String.format("%s_%s", this.modele.identifiant, ModeleDocumentType.ACTE.valeur);
+        String nom = String.format("%s_%s%s", this.modele.identifiant, ModeleDocumentType.ACTE.valeur, extension);
 
         NodeRef acteSigne = this.copier(this.modele.getNoeud(), this.modele.getActeOriginal().getNoeud(), nom);
 

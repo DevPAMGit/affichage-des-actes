@@ -32,7 +32,7 @@ public class StockerDossierActeAction extends ModeleAction {
     /**
      * Le modèle de données de l'action.
      */
-    private final ModeleDossierStockage modele;
+    private ModeleDossierStockage modele;
 
     /**
      * Initialise une nouvelle instance de la classe {@link StockerDossierActeAction}.
@@ -43,6 +43,7 @@ public class StockerDossierActeAction extends ModeleAction {
      */
     public StockerDossierActeAction(ServiceRegistry serviceRegistry, NodeRef nodeRef) throws Exception {
         super(serviceRegistry);
+        this.modele = null;
 
         try {
 
@@ -64,8 +65,6 @@ public class StockerDossierActeAction extends ModeleAction {
             // Vérification de l'aspect avant mise en erreur.
             if(this.avoirAspect(nodeRef, DossierinfosAspectModele.NOM))
                 this.setErreur(e.getMessage());
-
-            throw e;
         }
     }
 
@@ -95,6 +94,7 @@ public class StockerDossierActeAction extends ModeleAction {
         this.modele.setMessageErreur(message);
         this.modele.setReferenceMultiple(false);
         this.modele.setEtatEnvoi(ModeleDossierEtatEnvoi.EN_ATTENTE);
+        this.modele.setEtatStockage(ModeleDossierEtatStockage.ERREUR);
     }
 
     /**
