@@ -35,4 +35,80 @@
         -->
     </bean>
 
+    <!-- Load Groups -->
+
+    <bean id="cd59-affichage-des-actes_bootstrapgroups"
+          class="org.alfresco.repo.admin.patch.impl.GenericBootstrapPatch"
+          parent="basePatch" >
+	    <property name="id">
+	      <value>cd59-affichage-des-actes_bootstrapgroups</value>
+	    </property>          
+        <property name="description"><value>Création des groupes AFFICHAGE ACTES</value></property>
+        <property name="fixesFromSchema"><value>0</value></property>
+        <property name="fixesToSchema"><value>${version.schema}</value></property>
+        <property name="targetSchema"><value>15000</value></property>
+        <property name="importerBootstrap">
+            <ref bean="spacesBootstrap" />
+        </property>
+        <property name="bootstrapView">
+            <props>
+                <prop key="path">/${alfresco_user_store.system_container.childname}</prop>
+                <prop key="location">alfresco/module/${project.artifactId}/bootstrap/import-groups.xml</prop>
+            </props>
+        </property>
+    </bean>
+    
+	 <bean id="cd59-affichage-des-actes_sitedefinition" class="org.alfresco.repo.admin.patch.impl.SiteLoadPatch" parent="basePatch">
+ 	    <property name="id">
+	      <value>cd59-affichage-des-actes_sitedefinition</value>
+	    </property>
+	    <property name="description">
+	      <value>Création du site pour l'affichage des ACTES</value>
+	    </property>
+	    <property name="fixesFromSchema">
+	      <value>0</value>
+	    </property>
+	    <property name="fixesToSchema">
+	      <value>${version.schema}</value>
+	    </property>
+	    <property name="targetSchema">
+	      <value>15000</value>
+	    </property>
+	    <property name="disabled">
+	      <value>false</value>
+	    </property>
+	    <property name="spacesBootstrap" ref="siteLoadBootstrap-Spaces" />
+	    <property name="usersBootstrap" ref="siteLoadBootstrap-Users" />
+	    <property name="siteService" ref="siteService" />
+	    <property name="authorityService" ref="authorityService" />
+	    <property name="behaviourFilter" ref="policyBehaviourFilter" />
+	    <property name="siteName">
+	      <value>affichage-actes</value>
+	    </property>
+	    <property name="bootstrapViews">
+	      <map>
+	        <entry key="contents">
+	          <props>
+	            <prop key="location">alfresco/module/${project.artifactId}/bootstrap/Site_AFFICHAGE.acp</prop>
+	          </props>
+	        </entry>
+	        <entry key="groups">
+	          <props>
+	              <prop key="location">alfresco/module/${project.artifactId}/bootstrap/groups.txt</prop>
+	          </props>
+	         </entry>
+	         <entry key="users">
+	                <props>
+	                    <prop key="location">alfresco/module/${project.artifactId}/bootstrap/Users.acp</prop>
+	                </props>
+	         </entry>
+	         <entry key="people">
+	                <props>
+	                    <prop key="location">alfresco/module/${project.artifactId}/bootstrap/People.acp</prop>
+	                </props>
+	         </entry>         
+	      </map>
+	    </property>
+	  </bean>   
+
 </beans>
