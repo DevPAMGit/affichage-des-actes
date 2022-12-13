@@ -107,11 +107,6 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
                 this.typologie.typeMajuscule == ModeleDossierTypologieEnumeration.ARRETE ?
                 "de l'arrêté" : "de la délibération", this.identifiant, this.date.jourChaine, this.date.nomMois,
                 this.date.annee));
-
-        if(this.source.equals(SOURCE_MANUEL))
-            this.setObjet(String.format("%s - %s - %s %s %s",this.typologie.typeMinuscule.valeur, this.numero,
-                    this.date.jourChaine, this.date.nomMois, this.date.anneeChaine)
-            );
     }
 
     /**
