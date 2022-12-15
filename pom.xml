@@ -151,7 +151,7 @@
                     the layout of your AMP. The end result is that Maven will produce both a JAR file and an AMP with your
                     module.
                 -->
-        <!--
+        
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
@@ -177,7 +177,7 @@
                         </dependency>
                     </dependencies>
                 </plugin>
-                -->
+               
         <!-- Filter resources in any subproject with this config -->
 
         <plugin>
