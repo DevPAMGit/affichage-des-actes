@@ -1,14 +1,11 @@
 package org.cd59.affichagedesactes.modele.donnee.aspect.dossier.envoie;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.cd59.affichagedesactes.action.custom.source.exception.prerequis.PreRequisException;
 import org.cd59.affichagedesactes.action.custom.source.v1.action.IModeleNoeudAction;
-import org.cd59.affichagedesactes.modele.alfresco.aspect.DocinfosAspectModele;
 import org.cd59.affichagedesactes.modele.alfresco.aspect.DossierinfosAspectModele;
 import org.cd59.affichagedesactes.modele.donnee.aspect.document.source.ModeleDocument;
 import org.cd59.affichagedesactes.modele.donnee.aspect.document.source.ModeleDocumentAnnexe;
-import org.cd59.affichagedesactes.modele.donnee.aspect.document.source.ModeleDocumentType;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.ModeleDossier;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.ModeleDossierDate;
 import org.cd59.affichagedesactes.modele.donnee.exception.ModeleException;
@@ -24,7 +21,7 @@ public class ModeleDossierEnvoi extends ModeleDossier {
     /**
      * La date du dossier d'acte.
      */
-    public final ModeleDossierDate date;
+    public final ModeleDossierDateEnvoi date;
 
     /**
      * L'identifiant du dossier.
@@ -43,11 +40,11 @@ public class ModeleDossierEnvoi extends ModeleDossier {
      * @param nodeRef         Le nœud source.
      * @throws ModeleException Si le registre de services ou le nœud sont null.
      */
-    public ModeleDossierEnvoi(/*ServiceRegistry serviceRegistry*/ IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef)
+    public ModeleDossierEnvoi(IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef)
             throws ModeleException, PreRequisException {
-        super(/*serviceRegistry*/ modeleNoeudAction, nodeRef);
+        super(modeleNoeudAction, nodeRef);
 
-        this.date = new ModeleDossierDate(this.getProprieteDate(DossierinfosAspectModele.DATEDOSSIER));
+        this.date = new ModeleDossierDateEnvoi(this.getProprieteDate(DossierinfosAspectModele.DATEDOSSIER));
         this.identifiant = this.getProprieteChaine(DossierinfosAspectModele.IDDOSSIER);
     }
 
@@ -119,8 +116,8 @@ public class ModeleDossierEnvoi extends ModeleDossier {
     }
 
     /**
-     *
-     * @param urlAffichage
+     * Modifie l'URL d'affichage de l'acte.
+     * @param urlAffichage              L'URL d'af
      * @throws PreRequisException       Si le nœud ou la propriété en paramètre est null ou vide.
      * @throws NoSuchMethodException    Levée lorsqu'une méthode particulière est introuvable.
      */

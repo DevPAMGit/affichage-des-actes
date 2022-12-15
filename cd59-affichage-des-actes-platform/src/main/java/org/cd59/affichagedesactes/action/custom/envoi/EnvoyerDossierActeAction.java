@@ -22,6 +22,8 @@ import org.cd59.affichagedesactes.modele.donnee.aspect.document.source.ModeleDoc
 import org.cd59.affichagedesactes.modele.donnee.aspect.document.source.ModeleDocumentType;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.envoie.ModeleDossierEnvoi;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.ModeleDossierEtatEnvoi;
+import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.type.ModeleDossierType;
+import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.type.ModeleDossierTypologieEnumeration;
 import org.cd59.affichagedesactes.modele.donnee.exception.ModeleException;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -163,14 +165,24 @@ public class EnvoyerDossierActeAction extends ModeleAction {
     private JSONObject getMetadonnees() throws JSONException {
         JSONObject metadonnees = new JSONObject();
 
-        metadonnees.put("objet", this.modele.objet);
+        StringBuilder objet = new StringBuilder(
+                String.format("%s - %s - ", this.modele.typologie.typeMinuscule, this.modele.getNumero())
+        );
+
+        if(this.modele.typologie.typeMinuscule == ModeleDossierTypologieEnumeration.Deliberation)
+            objet.append("Réunion du ");
+
+        objet.append(String.format("%s %s %s",
+                this.modele.date.jourChaine, this.modele.date.nomMois, this.modele.date.anneeChaine)
+        );
+
+        metadonnees.put("objet", objet.toString());
         metadonnees.put("resume", this.modele.resume);
         metadonnees.put("date", this.modele.date.dateChaine);
         metadonnees.put("signataire", this.modele.signataire);
         metadonnees.put("numero_acte", this.modele.getNumero());
         metadonnees.put("typologie", this.modele.typologie.typeMinuscule);
         metadonnees.put("empreinte", this.modele.getActeOriginal().empreinte);
-
 
         metadonnees.put("condition_1_rgaa", "1");
         metadonnees.put("condition_2_rgaa", "1");
