@@ -135,10 +135,12 @@ public class EnvoyerDossierActeAction extends ModeleAction {
     private NodeRef copierActeOriginal()
             throws IOException, FileNotFoundException, PreRequisException, NoSuchMethodException {
 
-        int dernierePosition = ModeleDocumentType.ACTE.valeur.lastIndexOf('.');
+        String nomActeOriginal = this.getProprieteChaine(this.modele.getActeOriginal().getNoeud(), ContentModel.PROP_NAME);
+
+        int dernierePosition = nomActeOriginal.lastIndexOf('.');
         String extension = "";
         if(dernierePosition > -1)
-            extension = ModeleDocumentType.ACTE.valeur.substring(dernierePosition);
+            extension = nomActeOriginal.substring(dernierePosition);
 
         // Création du nom du nœud.
         String nom = String.format("%s_%s%s", this.modele.identifiant, ModeleDocumentType.ACTE.valeur, extension);

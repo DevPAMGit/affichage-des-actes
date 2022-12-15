@@ -214,7 +214,7 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
      * Formate l'identifiant de l'acte afin de répondre au prérequis du dossier.
      * @return L'identifiant à formatter.
      */
-    private String formatterIdentifiant() throws /*ModeleException,*/ PreRequisException, NoSuchMethodException {
+    private String formatterIdentifiant() throws PreRequisException, NoSuchMethodException {
         // Si la source est manuelle alors construction du
         if(this.source.equals(SOURCE_MANUEL)) {
             String identifiant = String.format("%s_%s", this.typologie.diminutif, this.numero);
