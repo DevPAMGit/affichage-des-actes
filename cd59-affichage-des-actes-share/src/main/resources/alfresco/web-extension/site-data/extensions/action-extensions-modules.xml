@@ -144,7 +144,7 @@
 
                             <!-- Message en cas de succès de l'action -->
                             <param name="successMessage">
-                                org.cd59.affichagedesactes.actions.message.succes
+                                org.cd59.affichagedesactes.actions.envoi.message.succes
                             </param>
 
                             <!-- Message en cas d'erreur de l'action -->
