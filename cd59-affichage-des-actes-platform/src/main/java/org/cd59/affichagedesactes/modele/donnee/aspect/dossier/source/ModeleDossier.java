@@ -69,7 +69,7 @@ public abstract class ModeleDossier extends ModeleNoeud {
 
         this.objet = this.getProprieteChaine(DossierinfosAspectModele.OBJET);
         this.resume = this.getProprieteChaine(DossierinfosAspectModele.RESUME);
-        this.numero = this.getProprieteChaine(DossierinfosAspectModele.SIGNATAIRE);
+        this.numero = this.getProprieteChaine(DossierinfosAspectModele.NUMEROACTE);
         this.signataire = this.getProprieteChaine(DossierinfosAspectModele.SIGNATAIRE);
 
         this.typologie = new ModeleDossierType(this.getProprieteChaine(DossierinfosAspectModele.TYPEDOSSIER));
