@@ -168,7 +168,7 @@ public class EnvoyerDossierActeAction extends ModeleAction {
         JSONObject metadonnees = new JSONObject();
 
         StringBuilder objet = new StringBuilder(
-                String.format("%s - %s - ", this.modele.typologie.typeMinuscule, this.modele.getNumero())
+                String.format("%s - %s - ", this.modele.typologie.typeMinuscule.valeur, this.modele.getNumero())
         );
 
         if(this.modele.typologie.typeMinuscule == ModeleDossierTypologieEnumeration.Deliberation)
