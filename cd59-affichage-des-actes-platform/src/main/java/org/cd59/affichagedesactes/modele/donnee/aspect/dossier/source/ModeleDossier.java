@@ -1,6 +1,5 @@
 package org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source;
 
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.cd59.affichagedesactes.action.custom.source.exception.prerequis.PreRequisException;
 import org.cd59.affichagedesactes.action.custom.source.v1.action.IModeleNoeudAction;
@@ -8,6 +7,7 @@ import org.cd59.affichagedesactes.modele.alfresco.aspect.DossierinfosAspectModel
 import org.cd59.affichagedesactes.modele.donnee.aspect.document.source.ModeleDocument;
 import org.cd59.affichagedesactes.modele.donnee.aspect.document.source.ModeleDocumentAnnexe;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.type.ModeleDossierType;
+import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.type.ModeleDossierTypologieEnumeration;
 import org.cd59.affichagedesactes.modele.donnee.source.ModeleNoeud;
 import org.cd59.affichagedesactes.modele.donnee.exception.ModeleException;
 import org.cd59.affichagedesactes.utilitaire.UtilitaireChaineDeCaracteres;
@@ -91,11 +91,14 @@ public abstract class ModeleDossier extends ModeleNoeud {
         // Initialisation du message d'erreur.
         StringBuilder message = new StringBuilder();
 
-        if(UtilitaireChaineDeCaracteres.etreNullOuVide(this.signataire))
-            message.append("Le signataire n'est pas renseigné. ");
+        if(typologie.typeMajuscule == ModeleDossierTypologieEnumeration.ARRETE) {
 
-        if(UtilitaireChaineDeCaracteres.etreNullOuVide(this.objet))
-            message.append("L'objet n'est pas renseigné. ");
+            if (UtilitaireChaineDeCaracteres.etreNullOuVide(this.signataire))
+                message.append("Le signataire n'est pas renseigné. ");
+
+            if (UtilitaireChaineDeCaracteres.etreNullOuVide(this.objet))
+                message.append("L'objet n'est pas renseigné. ");
+        }
 
         if(message.length() > 0)
             throw new ModeleException(message.toString());
@@ -122,7 +125,7 @@ public abstract class ModeleDossier extends ModeleNoeud {
      * Modifie l'état d'envoi du dossier.
      * @param etat Le nouvel etat du dossier.
      */
-    public void setEtatEnvoi(ModeleDossierEtatEnvoi etat) throws ModeleException, PreRequisException, NoSuchMethodException {
+    public void setEtatEnvoi(ModeleDossierEtatEnvoi etat) throws /*ModeleException,*/ PreRequisException, NoSuchMethodException {
         this.setPropriete(DossierinfosAspectModele.ETAT_ENVOI_DOSSIER, etat.valeur);
     }
 
@@ -131,7 +134,7 @@ public abstract class ModeleDossier extends ModeleNoeud {
      * @param message Le message d'erreur.
      * @throws ModeleException Si la propriété à modifier est null.
      */
-    public void setMessageErreur(String message) throws ModeleException, PreRequisException, NoSuchMethodException {
+    public void setMessageErreur(String message) throws /*ModeleException,*/ PreRequisException, NoSuchMethodException {
         this.setPropriete(DossierinfosAspectModele.ERREURINTERNET, message);
     }
 }
