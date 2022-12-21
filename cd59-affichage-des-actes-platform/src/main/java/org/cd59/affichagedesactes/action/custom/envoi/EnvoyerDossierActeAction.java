@@ -24,8 +24,11 @@ import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.envoie.ModeleDoss
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.ModeleDossierEtatEnvoi;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.type.ModeleDossierTypologieEnumeration;
 import org.cd59.affichagedesactes.modele.donnee.exception.ModeleException;
+import org.cd59.affichagedesactes.utilitaire.UtilitaireChaineDeCaracteres;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.File;
@@ -62,6 +65,11 @@ public class EnvoyerDossierActeAction extends ModeleAction {
      * Le modèle de données pour l'envoi d'acte.
      */
     private final ModeleDossierEnvoi modele;
+
+    /**
+     * Le logger de la classe.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(EnvoyerDossierActeAction.class);
 
     /**
      * Initialise une nouvelle instance de la classe {@link EnvoyerDossierActeAction}.
@@ -122,6 +130,7 @@ public class EnvoyerDossierActeAction extends ModeleAction {
             this.modele.setDateAffichageGED(date);
 
         }catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
             this.annuler();
             throw e;
         }
@@ -178,7 +187,7 @@ public class EnvoyerDossierActeAction extends ModeleAction {
         );
 
         metadonnees.put("objet", objet.toString());
-        metadonnees.put("resume", this.modele.resume);
+        metadonnees.put("resume", UtilitaireChaineDeCaracteres.etreNullOuVide(this.modele.resume) ? "" : this.modele.resume);
         metadonnees.put("date", this.modele.date.dateChaine);
         metadonnees.put("signataire", this.modele.signataire);
         metadonnees.put("numero_acte", this.modele.getNumero());
