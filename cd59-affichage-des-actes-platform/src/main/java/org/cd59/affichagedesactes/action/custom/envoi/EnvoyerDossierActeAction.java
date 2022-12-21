@@ -22,7 +22,6 @@ import org.cd59.affichagedesactes.modele.donnee.aspect.document.source.ModeleDoc
 import org.cd59.affichagedesactes.modele.donnee.aspect.document.source.ModeleDocumentType;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.envoie.ModeleDossierEnvoi;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.ModeleDossierEtatEnvoi;
-import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.type.ModeleDossierType;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.type.ModeleDossierTypologieEnumeration;
 import org.cd59.affichagedesactes.modele.donnee.exception.ModeleException;
 import org.json.JSONException;
