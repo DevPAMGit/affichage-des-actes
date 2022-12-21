@@ -14,7 +14,7 @@ import org.cd59.affichagedesactes.action.custom.source.exception.prerequis.QName
 import org.cd59.affichagedesactes.action.custom.source.exception.prerequis.RequeteNullException;
 import org.cd59.affichagedesactes.action.custom.source.v1.logger.LoggerAction;
 import org.alfresco.service.ServiceRegistry;
-import org.cd59.affichagedesactes.action.custom.source.v1.loggeraction.IActionAnnulation;
+// import org.cd59.affichagedesactes.action.custom.source.v1.loggeraction.IActionAnnulation;
 import org.cd59.affichagedesactes.action.custom.source.v1.loggeraction.IActionAnnulationFactory;
 import org.cd59.affichagedesactes.utilitaire.UtilitaireChaineDeCaracteres;
 
@@ -224,9 +224,10 @@ public abstract class ModeleAction extends LoggerAction implements IModeleNoeudA
     }
 
     @Override
-    public void supprimerNoeud(NodeRef nodeRef) throws NoSuchMethodException, PreRequisException {
+    public void supprimerNoeud(NodeRef nodeRef) /*throws NoSuchMethodException, PreRequisException*/ {
         if(nodeRef == null) return;
 
+        /*
         Set<QName> aspects = this.nodeService.getAspects(nodeRef);
         QName type = this.nodeService.getType(nodeRef);
 
@@ -283,7 +284,7 @@ public abstract class ModeleAction extends LoggerAction implements IModeleNoeudA
 
         // Ajout de l'annulation : création du fichier typé.
         this.ajouterAnnulation(creation);
-
+        */
         // Suppression du nœud.
         this.serviceRegistry.getFileFolderService().delete(nodeRef);
     }
