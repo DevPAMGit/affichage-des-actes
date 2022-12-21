@@ -58,7 +58,8 @@
         </property>
     </bean>
     
-	 <bean id="cd59-affichage-des-actes_sitedefinition" class="org.alfresco.repo.admin.patch.impl.SiteLoadPatch" parent="basePatch">
+	 <bean id="cd59-affichage-des-actes_sitedefinition" class="org.alfresco.repo.admin.patch.impl.SiteLoadPatch"
+		   parent="basePatch">
  	    <property name="id">
 	      <value>cd59-affichage-des-actes_sitedefinition</value>
 	    </property>
