@@ -276,7 +276,7 @@ public abstract class ModeleAction extends LoggerAction implements IModeleNoeudA
                 this.ajouterAnnulation(
                     IActionAnnulationFactory.creerActionAnnulation(
                         creation, this.nodeService,
-                        this.nodeService.getClass().getMethod("addAspect", QName.class, Map.class),
+                        this.nodeService.getClass().getMethod("addAspect", NodeRef.class, QName.class, Map.class),
                         aspect, new HashMap<QName, Serializable>()
                     )
                 );
