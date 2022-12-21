@@ -145,7 +145,7 @@
                 <property name="actes59:signataire">
                     <title>Signataire</title>
                     <type>d:text</type>
-                    <mandatory>true</mandatory>
+                    <mandatory>false</mandatory>
                     <index enabled="true">
                         <tokenised>true</tokenised>
                         <facetable>false</facetable>
