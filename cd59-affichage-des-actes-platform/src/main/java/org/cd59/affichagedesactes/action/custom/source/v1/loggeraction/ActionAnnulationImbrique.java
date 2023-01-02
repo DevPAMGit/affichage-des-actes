@@ -3,6 +3,7 @@ package org.cd59.affichagedesactes.action.custom.source.v1.loggeraction;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ActionAnnulationImbrique extends ActionAnnulation {
     /**
@@ -26,7 +27,7 @@ public class ActionAnnulationImbrique extends ActionAnnulation {
         ArrayList<Object> args = new ArrayList<>();
         args.add(this.action.getResultat());
 
-        for(Object argument : this.arguments) args.add(argument);
+        Collections.addAll(args, this.arguments);
 
         this.arguments = args.toArray();
         super.annuler();

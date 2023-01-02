@@ -54,5 +54,8 @@ public class StockerDossierActeRequete {
                                                         "and IN_TREE('%s') " +
                                                         "order by cmis:creationDate asc";
 
+    public final static String RECHERCHE_DOSSIER_ACTE_STOCKABLE = "select * from actes59:dossierinfos " +
+                                                                  "where actes59:dossiercomplet = true " +
+                                                                  "and IN_TREE('%s')";
 
 }
