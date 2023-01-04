@@ -191,7 +191,7 @@ public class EnvoyerDossierActeAction extends ModeleAction {
         metadonnees.put("date", this.modele.date.dateChaine);
         metadonnees.put("signataire", this.modele.signataire);
         metadonnees.put("numero_acte", this.modele.getNumero());
-        metadonnees.put("typologie", this.modele.typologie.typeMinuscule);
+        metadonnees.put("typologie", this.modele.typologie.typeMinuscule.valeur);
         metadonnees.put("empreinte", this.modele.getActeOriginal().empreinte);
 
         metadonnees.put("condition_1_rgaa", "1");
