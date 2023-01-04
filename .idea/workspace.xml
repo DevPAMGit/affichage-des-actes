@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b1329924-ed2b-40d7-87b6-e09e150d525f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/java/org/cd59/affichagedesactes/action/custom/source/v1/loggeraction/ActionAnnulationImbrique.java" beforeDir="false" afterPath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/java/org/cd59/affichagedesactes/action/custom/source/v1/loggeraction/ActionAnnulationImbrique.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/java/org/cd59/affichagedesactes/action/custom/stockage/StockerDossierActeRequete.java" beforeDir="false" afterPath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/java/org/cd59/affichagedesactes/action/custom/stockage/StockerDossierActeRequete.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/java/org/cd59/affichagedesactes/action/executer/StockerDossierActeIU.java" beforeDir="false" afterPath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/java/org/cd59/affichagedesactes/action/executer/StockerDossierActeIU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/resources/alfresco/module/cd59-affichage-des-actes-platform/bootstrap/Site_AFFICHAGE.acp" beforeDir="false" afterPath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/resources/alfresco/module/cd59-affichage-des-actes-platform/bootstrap/Site_AFFICHAGE.acp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/resources/alfresco/module/cd59-affichage-des-actes-platform/context/scheduler-context.xml" beforeDir="false" afterPath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/resources/alfresco/module/cd59-affichage-des-actes-platform/context/scheduler-context.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
