@@ -23,7 +23,7 @@ services:
       JAVA_TOOL_OPTIONS: "${keystore.settings}"
       CATALINA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8888"
       TZ: "Europe/Paris"
-      JAVA_OPTS: " -Duser.language=fr -Duser.country=FR"
+      JAVA_OPTS: " -Duser.language=fr -Duser.country=FR -Dhttp.proxyHost=proxy.intranet.cg59.fr -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy.intranet.cg59.fr -Dhttps.proxyPort=8080"
     ports:
       - "${acs.port}:8080"
       - "${acs.debug.port}:8888"
