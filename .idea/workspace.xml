@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b1329924-ed2b-40d7-87b6-e09e150d525f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/java/org/cd59/affichagedesactes/cron/stockage/ScheduledEnvoiActeJobExecuter.java" beforeDir="false" afterPath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/java/org/cd59/affichagedesactes/cron/stockage/ScheduledEnvoiActeJobExecuter.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
