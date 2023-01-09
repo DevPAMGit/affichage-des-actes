@@ -100,7 +100,7 @@ public class StockerDossierActeAction extends ModeleAction {
         this.deplacer(nodeRef, this.modele.getNoeud());
 
         // Renommage du dossier modèle.
-        this.renommerDossierActe(this.modele,  (Math.max(numero, 0)));
+        this.renommerDossierActe(this.modele,  (Math.max((numero > 0 ? numero + 1 : numero), 0)));
     }
 
     /**
