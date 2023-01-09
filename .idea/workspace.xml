@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b1329924-ed2b-40d7-87b6-e09e150d525f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/cd59-affichage-des-actes-platform-docker/src/main/docker/license/Alfresco-ent62-heartbeat disabled-ConseilGeneralduNordCG59-Expires09.29.2023.lic" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cd59-affichage-des-actes-platform-docker/src/main/docker/license/Alfresco-ent72-ConseilGeneralduNordCG59-Expires09.29.2023.lic" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/java/org/cd59/affichagedesactes/action/custom/stockage/StockerDossierActeAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/cd59-affichage-des-actes-platform/src/main/java/org/cd59/affichagedesactes/action/custom/stockage/StockerDossierActeAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cd59-affichage-des-actes-share/src/main/resources/alfresco/web-extension/messages/indicateurs.properties" beforeDir="false" afterPath="$PROJECT_DIR$/cd59-affichage-des-actes-share/src/main/resources/alfresco/web-extension/messages/indicateurs.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
