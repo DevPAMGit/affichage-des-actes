@@ -89,6 +89,7 @@ public class StockerDossierActeAction extends ModeleAction {
 
         // Initialisation du compteur des fichiers.
         int numero = nodeRefList.size() - 1;
+        int nouveauNumero = nodeRefList.size() == 0 ? 0 : nodeRefList.size() +1;
 
         // Renommage de tous les nœuds référencés en nœud multiple.
         for(NodeRef nodeRef1 : nodeRefList) {
@@ -100,7 +101,7 @@ public class StockerDossierActeAction extends ModeleAction {
         // Déplacement du dossier modèle.
         this.deplacer(nodeRef, this.modele.getNoeud());
         // Renommage du dossier modèle.
-        this.renommerDossierActe(this.modele,  (Math.max(0, nodeRefList.size() == 0 ? 0 : nodeRefList.size() + 1 )));
+        this.renommerDossierActe(this.modele,  nouveauNumero);
     }
 
     /**
