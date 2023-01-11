@@ -64,7 +64,7 @@ public class StockerDossierActeIU extends ActionExecuterAbstractBase {
     protected void executeImpl(Action action, NodeRef nodeRef) {
         try {
             this.serviceRegistry.getNodeService().setProperty(nodeRef, DossierinfosAspectModele.DOSSIERCOMPLET, true);
-            new StockerDossierActeAction(this.serviceRegistry, nodeRef).executer();
+            new StockerDossierActeAction(this.serviceRegistry, nodeRef, -1).executer();
         }catch (UtilitaireException e) {
             this.setErreur(nodeRef, e.getMessage());
         } catch (Exception e) {

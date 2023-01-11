@@ -1,8 +1,8 @@
 package org.cd59.affichagedesactes.action.custom.stockage;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.model.FileNotFoundException;
+import org.alfresco.service.cmr.repository.DuplicateChildNodeNameException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.cd59.affichagedesactes.action.custom.source.exception.prerequis.PreRequisException;
 import org.cd59.affichagedesactes.action.custom.source.v1.action.ModeleAction;
@@ -33,6 +33,8 @@ public class StockerDossierActeAction extends ModeleAction {
      */
     private ModeleDossierStockage modele;
 
+    private final int position;
+
     /**
      * Initialise une nouvelle instance de la classe {@link StockerDossierActeAction}.
      // @param serviceRegistry Le registre de services d'Alfresco.
@@ -40,12 +42,13 @@ public class StockerDossierActeAction extends ModeleAction {
      * @throws ModeleException Si une erreur de modèle survient.
      * @throws PreRequisException Si le nœud en paramètre est null.
      */
-    public StockerDossierActeAction(ServiceRegistry serviceRegistry, NodeRef nodeRef) throws Exception {
+    public StockerDossierActeAction(ServiceRegistry serviceRegistry, NodeRef nodeRef, int position) throws Exception {
         super(serviceRegistry);
         this.modele = null;
 
         LOGGER.info("Stockage d'un acte");
         LOGGER.info("1. Initialisation du Modèle");
+        this.position = position;
         this.modele = new ModeleDossierStockage(this, nodeRef);
 
         LOGGER.info("2. Recherche du fichier d'acte dans le dossier.");
@@ -151,19 +154,13 @@ public class StockerDossierActeAction extends ModeleAction {
      */
     private NodeRef obtenirDossierTypologie(NodeRef nodeRef) throws PreRequisException, NoSuchMethodException {
         // Vérification que le type n'est pas déjà présent dans le dossier parent.
-        /*List<NodeRef> recherche = this.requeterNoeuds(nodeRef,
+        List<NodeRef> recherche = this.requeterNoeuds(nodeRef,
                 String.format(StockerDossierActeRequete.RECHERCHE_DOSSIER_TYPOLOGIE,
                         this.modele.typologie.typeMajuscule.valeur, nodeRef.getId())
         );
 
         // Récupération du nœud si la recherche est effective.
-        if(recherche.size() > 0) return recherche.get(0);*/
-        NodeRef dossier = this.serviceRegistry.getNodeService().getChildByName(nodeRef, ContentModel.TYPE_FOLDER,
-                String.format(StockerDossierActeRequete.RECHERCHE_DOSSIER_TYPOLOGIE,
-                        this.modele.typologie.typeMajuscule.valeur, nodeRef.getId())
-        );
-
-        if(dossier != null) return dossier;
+        if(recherche.size() > 0) return recherche.get(0);
 
         // Création du dossier.
         return this.creerDossierType(nodeRef, DossierTypologieTypeModele.NOM,
@@ -181,20 +178,14 @@ public class StockerDossierActeAction extends ModeleAction {
         LOGGER.info("9. Création / Récupération du journalier de stockage des actes.");
 
         // Recherche du dossier s'il existe déjà.
-        /*List<NodeRef> recherche = this.requeterNoeuds(nodeRef,
+        List<NodeRef> recherche = this.requeterNoeuds(nodeRef,
                 String.format(StockerDossierActeRequete.RECHERCHE_DOSSIER_JOURNALIER,
                         this.modele.date.jourChaine, nodeRef.getId()
                 )
         );
 
         // Retour du resultat si la recherche n'est pas null.
-        if(recherche.size() > 0) return recherche.get(0);*/
-        NodeRef dossier = this.serviceRegistry.getNodeService().getChildByName(nodeRef, ContentModel.TYPE_FOLDER,
-                String.format(StockerDossierActeRequete.RECHERCHE_DOSSIER_JOURNALIER,
-                        this.modele.date.jourChaine, nodeRef.getId()
-                )
-        );
-        if(dossier != null) return dossier;
+        if(recherche.size() > 0) return recherche.get(0);
 
         // Création du dossier, car il n'existe pas.
         return this.creerDossierType(nodeRef, DossierJourTypeModele.NOM, this.modele.date.jourChaine,
@@ -212,21 +203,14 @@ public class StockerDossierActeAction extends ModeleAction {
         LOGGER.info("8. Création / Récupération du dossier mensuel de stockage des actes.");
 
         // Recherche du nœud correspondant au mois.
-        /*List<NodeRef> recherche = this.requeterNoeuds(nodeRef,
+        List<NodeRef> recherche = this.requeterNoeuds(nodeRef,
                 String.format(
                         StockerDossierActeRequete.RECHERCHE_DOSSIER_MENSUEL,
                         this.modele.date.moisChaine, nodeRef.getId()
                 )
         );
         // Récupération du nœud mensuel.
-        if(recherche.size() > 0) return recherche.get(0);*/
-        NodeRef dossier = this.serviceRegistry.getNodeService().getChildByName(nodeRef, ContentModel.TYPE_FOLDER,
-                String.format(
-                        StockerDossierActeRequete.RECHERCHE_DOSSIER_MENSUEL,
-                        this.modele.date.moisChaine, nodeRef.getId()
-                )
-        );
-        if(dossier != null) return dossier;
+        if(recherche.size() > 0) return recherche.get(0);
 
         // Création du nœud du mois.
         return this.creerDossierType(
@@ -245,18 +229,12 @@ public class StockerDossierActeAction extends ModeleAction {
         LOGGER.info("7. Création / Récupération du dossier annuel de stockage des actes.");
 
         // Recherche du nœud des actes.
-        /*List<NodeRef> recherche = this.requeterNoeuds(nodeRef,
+        List<NodeRef> recherche = this.requeterNoeuds(nodeRef,
                 String.format(StockerDossierActeRequete.RECHERCHE_DOSSIER_ANNUEL,
                         this.modele.date.annee, nodeRef.getId())
         );
         // Récupération du nœud d'acte.
-        if(recherche.size() > 0) return recherche.get(0); */
-
-        NodeRef dossier = this.serviceRegistry.getNodeService().getChildByName(nodeRef, ContentModel.TYPE_FOLDER,
-                String.format(StockerDossierActeRequete.RECHERCHE_DOSSIER_ANNUEL,
-                        this.modele.date.annee, nodeRef.getId()));
-
-        if(dossier != null)  return dossier;
+        if(recherche.size() > 0) return recherche.get(0);
 
         // Création du nœud d'acte.
         return this.creerDossierType(
@@ -273,22 +251,36 @@ public class StockerDossierActeAction extends ModeleAction {
     private NodeRef obtenirDossierActes() throws PreRequisException, NoSuchMethodException {
         LOGGER.info("6. Création / Récupération du dossier de stockage des actes.");
 
+        LOGGER.error(String.format("CREATION - OBTENTION DOSSIER ACTE %d", this.position));
+
         // Recherche du noeuds des actes.
         NodeRef noeudRacine = this.getNoeudParent(this.modele.sas.getNoeud());
-        NodeRef dossier = this.serviceRegistry.getNodeService().getChildByName(noeudRacine, ContentModel.TYPE_FOLDER,
-                "Actes");
-        /* List<NodeRef> recherche = this.requeterNoeuds(noeudRacine,
+        List<NodeRef> recherche = this.requeterNoeuds(noeudRacine,
                 String.format(StockerDossierActeRequete.RECHERCHE_DOSSIER_ACTES, noeudRacine.getId())
         );
 
         // Récupération du nœud d'acte.
-        if(recherche.size() > 0) return recherche.get(0); */
-        if(dossier != null) return dossier;
+        if(recherche.size() > 0) {
+            LOGGER.error(String.format("OBTENTION DOSSIER ACTE %d TROUVE", this.position));
+            return recherche.get(0);
+        }else {
+            LOGGER.error(String.format("CREATION DOSSIER ACTE %d TROUVE", this.position));
+        }
 
         // Création du nœud d'acte.
-        return this.creerDossierType(
-                noeudRacine,  DossierActesTypeModele.NOM, "Actes",
-                StockerDossierActeDonneesFactory.obtenirMetadonneesDossierActe()
-        );
+        try {
+
+            return this.creerDossierType(
+                    noeudRacine,  DossierActesTypeModele.NOM, "Actes",
+                    StockerDossierActeDonneesFactory.obtenirMetadonneesDossierActe()
+            );
+
+        }catch (DuplicateChildNodeNameException e) {
+            LOGGER.error(String.format("DOUBLON ERREUR ACTE %d TROUVE", this.position));
+            this.getNoeudParent(this.modele.sas.getNoeud());
+            return this.requeterNoeuds(
+                    noeudRacine, String.format(StockerDossierActeRequete.RECHERCHE_DOSSIER_ACTES, noeudRacine.getId())
+            ).get(0);
+        }
     }
 }

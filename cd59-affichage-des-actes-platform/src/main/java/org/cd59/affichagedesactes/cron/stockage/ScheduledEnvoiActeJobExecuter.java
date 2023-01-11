@@ -94,11 +94,13 @@ public class ScheduledEnvoiActeJobExecuter {
                         StockerDossierActeRequete.RECHERCHE_DOSSIER_ACTE_STOCKABLE,
                         dossiersActe.getId())).getNodeRefs();
 
+        int cpt = 0;
         for(NodeRef nodeRef : actes){
             if(this.isBeenFiveMinutes(nodeRef))
                 try {
                     // Execution de l'action.
-                    new StockerDossierActeAction(serviceRegistry, nodeRef).executer();
+                    new StockerDossierActeAction(serviceRegistry, nodeRef, cpt).executer();
+                    cpt = cpt + 1;
                 // Initialisation de l'erreur.
                 }catch (Exception e) {
                     this.setErreur(nodeRef, e.getMessage());

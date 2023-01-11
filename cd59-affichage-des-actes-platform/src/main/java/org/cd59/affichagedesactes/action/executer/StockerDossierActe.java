@@ -67,7 +67,7 @@ public class StockerDossierActe extends ActionExecuterAbstractBase {
     @Override
     protected void executeImpl(Action action, NodeRef nodeRef) {
         try {
-            new StockerDossierActeAction(this.serviceRegistry, nodeRef).executer();
+            new StockerDossierActeAction(this.serviceRegistry, nodeRef, -2).executer();
         }catch (UtilitaireException e) {
             this.setErreur(nodeRef, e.getMessage());
         } catch (Exception e) {
