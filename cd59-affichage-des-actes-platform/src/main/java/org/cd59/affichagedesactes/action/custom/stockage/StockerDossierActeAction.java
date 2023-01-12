@@ -4,6 +4,7 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.model.FileNotFoundException;
 import org.alfresco.service.cmr.repository.DuplicateChildNodeNameException;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.model.ContentModel;
 import org.cd59.affichagedesactes.action.custom.source.exception.prerequis.PreRequisException;
 import org.cd59.affichagedesactes.action.custom.source.v1.action.ModeleAction;
 import org.cd59.affichagedesactes.modele.alfresco.type.*;
@@ -252,7 +253,7 @@ public class StockerDossierActeAction extends ModeleAction {
         LOGGER.info("6. Création / Récupération du dossier de stockage des actes.");
 
         LOGGER.error(String.format("CREATION - OBTENTION DOSSIER ACTE %d", this.position));
-
+/* 
         // Recherche du noeuds des actes.
         NodeRef noeudRacine = this.getNoeudParent(this.modele.sas.getNoeud());
         List<NodeRef> recherche = this.requeterNoeuds(noeudRacine,
@@ -265,10 +266,22 @@ public class StockerDossierActeAction extends ModeleAction {
             return recherche.get(0);
         }else {
             LOGGER.error(String.format("CREATION DOSSIER ACTE %d TROUVE", this.position));
-        }
+        } */
+
+		NodeRef noeudRacine = this.getNoeudParent(this.modele.sas.getNoeud());
+        NodeRef dossier = this.serviceRegistry.getNodeService().getChildByName(noeudRacine, ContentModel.ASSOC_CONTAINS, "Actes");
+		LOGGER.info("dossier: ({})", dossier);
+		
+		if(dossier != null) return dossier;
 
         // Création du nœud d'acte.
-        try {
+        return this.creerDossierType(
+                noeudRacine,  DossierActesTypeModele.NOM, "Actes",
+                StockerDossierActeDonneesFactory.obtenirMetadonneesDossierActe()
+        );
+        // Création du nœud d'acte.		
+		
+/*         try {
 
             return this.creerDossierType(
                     noeudRacine,  DossierActesTypeModele.NOM, "Actes",
@@ -280,7 +293,7 @@ public class StockerDossierActeAction extends ModeleAction {
             this.getNoeudParent(this.modele.sas.getNoeud());
             return this.requeterNoeuds(
                     noeudRacine, String.format(StockerDossierActeRequete.RECHERCHE_DOSSIER_ACTES, noeudRacine.getId())
-            ).get(0);
-        }
+            ).get(0); 
+        } */
     }
 }
