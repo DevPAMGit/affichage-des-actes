@@ -38,6 +38,8 @@ tmp/
 .idea/**/dictionaries
 .idea/**/shelf
 .idea
+.idea/workspace.xml
+.idea/misc.xml
 
 # AWS User-specific
 .idea/**/aws.xml
