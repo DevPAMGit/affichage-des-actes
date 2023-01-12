@@ -34,8 +34,8 @@ Les métadonnées du dossier de l'acte créé par l'application tierce devra per
             └── 01
                 ├── DELIBERATIONS
                 |	 └── DEL_DAJAP_2022_001
-	            |    	 ├── Acte_original                          
-	            |    	 └── Annexe_1
+	        |    	     ├── Acte_original                          
+	        |    	     └── Annexe_1
                 └── ARRETES
 	                └── ARR_DAJAP_2022_001
 	                 	 ├── Acte_original                
