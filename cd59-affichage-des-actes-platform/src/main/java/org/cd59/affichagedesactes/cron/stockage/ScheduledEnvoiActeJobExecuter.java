@@ -2,18 +2,18 @@ package org.cd59.affichagedesactes.cron.stockage;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.util.Content;
 import org.cd59.affichagedesactes.action.custom.stockage.StockerDossierActeAction;
-import org.cd59.affichagedesactes.action.custom.stockage.StockerDossierActeRequete;
 import org.cd59.affichagedesactes.modele.alfresco.aspect.DossierinfosAspectModele;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.ModeleDossierEtatEnvoi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -79,33 +79,46 @@ public class ScheduledEnvoiActeJobExecuter {
      */
     public void execute(){
         SearchService searchService = this.serviceRegistry.getSearchService();
+        NodeService nodeService = this.serviceRegistry.getNodeService();
 
-        // Recherche du dossier d'actes.
-        List<NodeRef> rechercheActes = searchService.query(STOREREF,
+        List<NodeRef> rechercheSas = searchService.query(STOREREF,
                 SearchService.LANGUAGE_CMIS_STRICT, REQUETE_RECHERCHE_SAS).getNodeRefs();
 
-        if(rechercheActes == null || rechercheActes.size() == 0) return;
+        if(rechercheSas == null || rechercheSas.size() == 0) return;
 
-        NodeRef dossiersActe = rechercheActes.get(0);
+        NodeRef dossiersSas = rechercheSas.get(0);
 
         // Recherche des dossiers d'actes en possibilités d'envoi.
-        List<NodeRef> actes = searchService.query(STOREREF,
+        /*List<NodeRef> actes = searchService.query(STOREREF,
                 SearchService.LANGUAGE_CMIS_STRICT, String.format(
                         StockerDossierActeRequete.RECHERCHE_DOSSIER_ACTE_STOCKABLE,
-                        dossiersActe.getId())).getNodeRefs();
+                        dossiersSas.getId())).getNodeRefs();*/
 
-        int cpt = 0;
-        for(NodeRef nodeRef : actes){
-            if(this.isBeenFiveMinutes(nodeRef))
+        for(ChildAssociationRef child : nodeService.getChildAssocs(dossiersSas)) {
+            NodeRef childNode = child.getChildRef();
+            if(nodeService.hasAspect(childNode, DossierinfosAspectModele.NOM)) {
+                Serializable serializable = nodeService.getProperty(childNode, DossierinfosAspectModele.DOSSIERCOMPLET);
+                if(serializable != null && ((boolean) serializable))
+                    try {
+                        new StockerDossierActeAction(serviceRegistry, childNode).executer();
+                    }catch (Exception e) {
+                        this.setErreur(childNode, e.getMessage());
+                        LOGGER.error(e.getMessage(), e);
+                    }
+
+            }
+        }
+
+        /*for(NodeRef nodeRef : actes){
+            //if(this.isBeenFiveMinutes(nodeRef))
                 try {
                     // Execution de l'action.
-                    new StockerDossierActeAction(serviceRegistry, nodeRef, cpt).executer();
-                    cpt = cpt + 1;
+                    new StockerDossierActeAction(serviceRegistry, nodeRef).executer();
                 // Initialisation de l'erreur.
                 }catch (Exception e) {
                     this.setErreur(nodeRef, e.getMessage());
                     LOGGER.error(e.getMessage(), e);
                 }
-        }
+        }*/
     }
 }

@@ -274,6 +274,7 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
     @Override
     public void initFichierActe(List<NodeRef> nodeRefList)
             throws ModeleException, IOException, NoSuchAlgorithmException, PreRequisException, NoSuchMethodException {
+
         // 1. Erreur s'il n'y a aucuns nœuds.
         if(nodeRefList == null || nodeRefList.size() == 0)
             throw new ModeleException("Le dossier d'acte ne contient aucun fichier d'acte original.");
