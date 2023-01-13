@@ -1,6 +1,5 @@
 package org.cd59.affichagedesactes.cron.stockage;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -14,20 +13,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * Classe d'exécution du cron de stockage d'acte.
  */
-public class ScheduledEnvoiActeJobExecuter {
+public class ScheduledStockageActeJobExecuter {
     /**
      * Le registre des services Alfresco.
      */
     private ServiceRegistry serviceRegistry;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ScheduledEnvoiActeJobExecuter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScheduledStockageActeJobExecuter.class);
 
     /**
      * Modifie le paramètre de classe "serviceRegistry".
@@ -66,14 +64,6 @@ public class ScheduledEnvoiActeJobExecuter {
         nodeService.setProperty(nodeRef, DossierinfosAspectModele.ETAT_ENVOI_DOSSIER, ModeleDossierEtatEnvoi.ERREUR.valeur);
     }
 
-    private boolean isBeenFiveMinutes(NodeRef nodeRef) {
-        Date dateCreation = (Date)this.serviceRegistry.getNodeService().getProperty(
-                nodeRef, ContentModel.PROP_CREATED
-        ), dateActuelle = new Date();
-
-        return (TimeUnit.MILLISECONDS.toMinutes(dateActuelle.getTime() - dateCreation.getTime()) >= 5);
-    }
-
     /**
      * Execute le script.
      */
@@ -87,12 +77,6 @@ public class ScheduledEnvoiActeJobExecuter {
         if(rechercheSas == null || rechercheSas.size() == 0) return;
 
         NodeRef dossiersSas = rechercheSas.get(0);
-
-        // Recherche des dossiers d'actes en possibilités d'envoi.
-        /*List<NodeRef> actes = searchService.query(STOREREF,
-                SearchService.LANGUAGE_CMIS_STRICT, String.format(
-                        StockerDossierActeRequete.RECHERCHE_DOSSIER_ACTE_STOCKABLE,
-                        dossiersSas.getId())).getNodeRefs();*/
 
         for(ChildAssociationRef child : nodeService.getChildAssocs(dossiersSas)) {
             NodeRef childNode = child.getChildRef();
@@ -108,17 +92,5 @@ public class ScheduledEnvoiActeJobExecuter {
 
             }
         }
-
-        /*for(NodeRef nodeRef : actes){
-            //if(this.isBeenFiveMinutes(nodeRef))
-                try {
-                    // Execution de l'action.
-                    new StockerDossierActeAction(serviceRegistry, nodeRef).executer();
-                // Initialisation de l'erreur.
-                }catch (Exception e) {
-                    this.setErreur(nodeRef, e.getMessage());
-                    LOGGER.error(e.getMessage(), e);
-                }
-        }*/
     }
 }

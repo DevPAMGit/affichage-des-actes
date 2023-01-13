@@ -54,7 +54,7 @@
 
 
     <bean id="org.cd59.affichagedesactes.scheduledjob.stockageActeExecuter"
-          class="org.cd59.affichagedesactes.cron.stockage.ScheduledEnvoiActeJobExecuter">
+          class="org.cd59.affichagedesactes.cron.stockage.ScheduledStockageActeJobExecuter">
         <property name="serviceRegistry">
             <ref bean="ServiceRegistry" />
         </property>
