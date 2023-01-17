@@ -53,7 +53,7 @@
     </bean>
 
 
-    <bean id="org.cd59.affichagedesactes.scheduledjob.stockageActeExecuter"
+    <!--bean id="org.cd59.affichagedesactes.scheduledjob.stockageActeExecuter"
           class="org.cd59.affichagedesactes.cron.stockage.ScheduledStockageActeJobExecuter">
         <property name="serviceRegistry">
             <ref bean="ServiceRegistry" />
@@ -99,6 +99,6 @@
             </list>
         </property>
         <property name="enabled" value="true" />
-    </bean>
+    </bean-->
 
 </beans>
