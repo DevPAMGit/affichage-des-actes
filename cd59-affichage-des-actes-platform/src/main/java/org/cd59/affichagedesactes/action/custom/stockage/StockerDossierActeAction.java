@@ -79,15 +79,8 @@ public class StockerDossierActeAction extends ModeleAction {
 
         }
 
-        /* this.modele.initFichierActe(this.requeterNoeuds(nodeRef,
-                String.format(StockerDossierActeRequete.RECHERCHE_ACTE_ORIGINAL, nodeRef.getId())));*/
-
         this.modele.initFichierActe(acteOriginal);
         this.modele.setFichierAnnexes(annexes);
-
-        LOGGER.info("3. Recherche des fichiers annexes dans le dossier.");
-        /*this.modele.setFichierAnnexes(this.requeterNoeuds(nodeRef,
-                String.format(StockerDossierActeRequete.RECHERCHE_AUTRES_DOCUMENTS, nodeRef.getId()))); */
     }
 
     @Override
@@ -114,11 +107,6 @@ public class StockerDossierActeAction extends ModeleAction {
      */
     private void deplacerDossierActe(NodeRef nodeRef) throws PreRequisException, ModeleException, FileNotFoundException,
             NoSuchMethodException {
-        // Récupération de la liste des dossiers du même identifiant.
-        /*List<NodeRef> nodeRefList = this.requeterNoeuds(nodeRef,
-                String.format(StockerDossierActeRequete.RECHERCHE_DOSSIER_ACTE,
-                        this.modele.getIdentifiant(), nodeRef.getId())
-        );*/
         ArrayList<NodeRef> nodeRefList = new ArrayList<>();
         NodeService nodeService = this.serviceRegistry.getNodeService();
 

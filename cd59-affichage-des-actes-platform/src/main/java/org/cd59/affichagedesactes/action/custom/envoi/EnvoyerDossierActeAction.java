@@ -3,9 +3,7 @@ package org.cd59.affichagedesactes.action.custom.envoi;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.model.FileNotFoundException;
-import org.alfresco.service.cmr.repository.ContentReader;
-import org.alfresco.service.cmr.repository.ContentWriter;
-import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.util.TempFileProvider;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -34,10 +32,12 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -79,19 +79,34 @@ public class EnvoyerDossierActeAction extends ModeleAction {
             throws ModeleException, PreRequisException, IOException, NoSuchAlgorithmException, NoSuchMethodException {
         super(serviceRegistry);
 
-        /* Initialisation du modèle.
-        this.modele = modele; */
-
+        NodeService nodeService = this.serviceRegistry.getNodeService();
         this.modele = new ModeleDossierEnvoi(this, nodeRef);
 
-        // Initialisation du fichier d'acte original.
-        this.modele.initFichierActe(this.requeterNoeuds(nodeRef,
-                String.format(EnvoyerDossierActeRequete.REQUETE_RECHERCHE_ACTE_ORIGINAL, nodeRef.getId()))
-        );
+        ArrayList<NodeRef> annexes = new ArrayList<>();
+        ArrayList<NodeRef> acteOriginal = new ArrayList<>();
 
-        // Initialisation des fichiers d'annexes du dossier.
-        this.modele.setFichierAnnexes(this.requeterNoeuds(nodeRef,
-                String.format(EnvoyerDossierActeRequete.REQUETE_RECHERCHE_ANNEXES_ACTE, nodeRef.getId())));
+        for(ChildAssociationRef child : this.serviceRegistry.getNodeService().getChildAssocs(nodeRef)) {
+
+            NodeRef childNode = child.getChildRef();
+
+            if (nodeService.hasAspect(childNode, DocinfosAspectModele.NOM)) {
+
+                Serializable typeDocument = nodeService.getProperty(childNode, DocinfosAspectModele.TYPEDOCUMENT);
+
+                if(typeDocument == null)
+                    throw new ModeleException("Le dossier contient un fichier non typé");
+
+                if( "ACTE_ORIGINAL".equals(typeDocument) ) acteOriginal.add(childNode);
+                else if( "ANNEXE".equals(typeDocument) ) annexes.add(childNode);
+
+            }else
+                throw new PreRequisException( String.format("\"Le dossier d'acte contient un fichier non typé %s.",
+                        DocinfosAspectModele.NOM.getLocalName()) );
+
+        }
+
+        this.modele.initFichierActe(acteOriginal);
+        this.modele.setFichierAnnexes(annexes);
     }
 
     @Override

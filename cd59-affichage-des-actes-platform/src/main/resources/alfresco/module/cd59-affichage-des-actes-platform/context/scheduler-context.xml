@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <bean id="org.cd59.affichagedesactes.scheduledjob.envoiActeExecuter"
+          class="org.cd59.affichagedesactes.cron.envoi.ScheduledEnvoiActeJobExecuter">
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry" />
+        </property>
+    </bean>
+
+    <bean id="org.cd59.affichagedesactes.scheduledjob.envoiActeJobDetail"
+          class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass">
+            <value>org.cd59.affichagedesactes.cron.envoi.ScheduledEnvoiActeJob</value>
+        </property>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobExecuter">
+                    <ref bean="org.cd59.affichagedesactes.scheduledjob.envoiActeExecuter" />
+                </entry>
+                <entry key="jobLockService">
+                    <ref bean="jobLockService" />
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="envoiActeCron"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="org.cd59.affichagedesactes.scheduledjob.envoiActeJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 0/5 * * * ?</value>
+        </property>
+        <property name="startDelay">
+            <value>240000</value>
+        </property>
+    </bean>
+
+    <bean id="org.cd59.affichagedesactes.scheduledjob.envoiActe"
+          class="org.alfresco.schedule.AlfrescoSchedulerAccessorBean">
+        <property name="scheduler" ref="schedulerFactory"/>
+        <property name="triggers">
+            <list>
+                <ref bean="envoiActeCron"/>
+            </list>
+        </property>
+        <property name="enabled" value="true" />
+    </bean>
+
+
+    <bean id="org.cd59.affichagedesactes.scheduledjob.stockageActeExecuter"
+          class="org.cd59.affichagedesactes.cron.stockage.ScheduledStockageActeJobExecuter">
+        <property name="serviceRegistry">
+            <ref bean="ServiceRegistry" />
+        </property>
+    </bean>
+
+    <bean id="org.cd59.affichagedesactes.scheduledjob.stockageActeJobDetail"
+          class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass">
+            <value>org.cd59.affichagedesactes.cron.stockage.ScheduledStockageActeJob</value>
+        </property>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobExecuter">
+                    <ref bean="org.cd59.affichagedesactes.scheduledjob.stockageActeExecuter" />
+                </entry>
+                <entry key="jobLockService">
+                    <ref bean="jobLockService" />
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="stockageActeCron"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="org.cd59.affichagedesactes.scheduledjob.stockageActeJobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0 0/5 * * * ?</value>
+        </property>
+        <property name="startDelay">
+            <value>240000</value>
+        </property>
+    </bean>
+
+    <bean id="org.cd59.affichagedesactes.scheduledjob.stockageActe"
+          class="org.alfresco.schedule.AlfrescoSchedulerAccessorBean">
+        <property name="scheduler" ref="schedulerFactory"/>
+        <property name="triggers">
+            <list>
+                <ref bean="stockageActeCron"/>
+            </list>
+        </property>
+        <property name="enabled" value="true" />
+    </bean>
+
+</beans>

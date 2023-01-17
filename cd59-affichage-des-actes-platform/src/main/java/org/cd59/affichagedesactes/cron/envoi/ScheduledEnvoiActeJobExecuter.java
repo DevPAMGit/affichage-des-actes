@@ -66,15 +66,17 @@ public class ScheduledEnvoiActeJobExecuter {
      * Execute le script.
      */
     public void execute(){
+        // Récupération des services
         SearchService searchService = this.serviceRegistry.getSearchService();
 
-        // Recherche du dossier d'actes.
+        // Recherche de tous les dossiers d'actes disponible dans la GED.
         List<NodeRef> rechercheActes = searchService.query(STOREREF,
                 SearchService.LANGUAGE_CMIS_STRICT, REQUETE_RECHERCHE_ACTE).getNodeRefs();
 
         if(rechercheActes == null || rechercheActes.size() == 0) return;
 
         NodeRef dossiersActe = rechercheActes.get(0);
+
         // Recherche des dossiers d'actes en possibilités d'envoi.
         List<NodeRef> actes = searchService.query(STOREREF,
                 SearchService.LANGUAGE_CMIS_STRICT, String.format(

@@ -14,12 +14,12 @@ public class ScheduledStockageActeJob extends AbstractScheduledLockedJob impleme
 
         // Extract the Job executer to use
         Object executerObj = jobData.get("jobExecuter");
-        if (!(executerObj instanceof ScheduledEnvoiActeJobExecuter)) {
+        if (!(executerObj instanceof ScheduledStockageActeJobExecuter)) {
             throw new AlfrescoRuntimeException(
                     "ScheduledJob data must contain valid 'Executer' reference");
         }
 
-        final ScheduledEnvoiActeJobExecuter jobExecuter = (ScheduledEnvoiActeJobExecuter) executerObj;
+        final ScheduledStockageActeJobExecuter jobExecuter = (ScheduledStockageActeJobExecuter) executerObj;
 
         AuthenticationUtil.runAs(() -> {
             jobExecuter.execute();
