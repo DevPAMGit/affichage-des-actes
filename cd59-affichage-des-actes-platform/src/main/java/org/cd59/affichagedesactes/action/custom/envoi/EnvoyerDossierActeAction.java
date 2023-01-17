@@ -187,7 +187,8 @@ public class EnvoyerDossierActeAction extends ModeleAction {
         );
 
         metadonnees.put("objet", objet.toString());
-        metadonnees.put("resume", UtilitaireChaineDeCaracteres.etreNullOuVide(this.modele.resume) ? "" : this.modele.resume);
+		// On a choisit d'envoyer la métadonnée objet de la GED dans la metadonnee resume de l'affichage coté lenord 
+        metadonnees.put("resume", UtilitaireChaineDeCaracteres.etreNullOuVide(this.modele.objet) ? "" : this.modele.objet);
         metadonnees.put("date", this.modele.date.dateChaine);
         metadonnees.put("signataire", this.modele.signataire);
         metadonnees.put("numero_acte", this.modele.getNumero());
