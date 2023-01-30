@@ -131,8 +131,6 @@ public class EnvoyerDossierActeAction extends ModeleAction {
 
             if (!resultat.has("url_image")) {
                 String message = resultat.getString("message");
-
-                this.modele.getActeOriginal().supprimerNoeud();
                 throw new ModeleException(message);
             }
 
@@ -143,10 +141,9 @@ public class EnvoyerDossierActeAction extends ModeleAction {
             this.modele.setEtatEnvoi(ModeleDossierEtatEnvoi.STOCKE);
             this.modele.setDateAffichageInternet(date);
             this.modele.setDateAffichageGED(date);
-
         }catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
             this.annuler();
+            LOGGER.error(e.getMessage(), e);
             throw e;
         }
     }
