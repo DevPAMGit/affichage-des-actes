@@ -64,10 +64,10 @@ public class StockerDossierActeIU extends ActionExecuterAbstractBase {
     protected void executeImpl(Action action, NodeRef nodeRef) {
         try {
             this.serviceRegistry.getNodeService().setProperty(nodeRef, DossierinfosAspectModele.DOSSIERCOMPLET, true);
-            new StockerDossierActeAction(this.serviceRegistry, nodeRef).executer();
-        }catch (UtilitaireException e) {
+            // new StockerDossierActeAction(this.serviceRegistry, nodeRef).executer();
+        }/*catch (UtilitaireException e) {
             this.setErreur(nodeRef, e.getMessage());
-        } catch (Exception e) {
+        }*/ catch (Exception e) {
             this.setErreur(nodeRef, "Une erreur inattendue à eu lieu. Veuillez vous référer au log du serveur svp.");
             LOGGER.error(e.getMessage(), e);
         }
