@@ -120,7 +120,7 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
 
     /**
      * Modifie la valeur de la référence
-     * @param valeur La valeur de la référence multiple.
+     * @param valeur La valeur de la multiple référence.
      // @throws ModeleException Si la propriété à modifier est null.
      */
     public void setReferenceMultiple(boolean valeur) throws /*ModeleException,*/ PreRequisException, NoSuchMethodException {
