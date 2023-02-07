@@ -29,6 +29,7 @@
     <!-- Docker images -->
     <docker.acs.image>quay.io/alfresco/alfresco-content-repository</docker.acs.image>
     <docker.share.image>quay.io/alfresco/alfresco-share</docker.share.image>
+
     <keystore.settings></keystore.settings>
     <activemq.version>5.16.3</activemq.version>
 
