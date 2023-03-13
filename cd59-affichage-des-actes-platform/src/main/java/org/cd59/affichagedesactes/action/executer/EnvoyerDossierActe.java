@@ -26,8 +26,8 @@ public class EnvoyerDossierActe extends ActionExecuterAbstractBase {
      * Le registre de service d'Alfresco.
      */
     private ServiceRegistry serviceRegistry;
-
-    /**
+    
+	/**
      * Le logger de la classe.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(EnvoyerDossierActe.class);
@@ -40,7 +40,7 @@ public class EnvoyerDossierActe extends ActionExecuterAbstractBase {
         this.serviceRegistry = serviceRegistry;
     }
 
-    /**
+     /**
      * Modifie les propriétés du nœud pour indiquer une erreur.
      * @param nodeRef Le nœud dont on souhaite modifier les propriétés.
      * @param message Le message d'erreur à afficher.

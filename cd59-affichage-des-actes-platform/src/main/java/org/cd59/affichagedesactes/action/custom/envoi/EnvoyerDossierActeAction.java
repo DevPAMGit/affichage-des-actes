@@ -42,34 +42,51 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+
 /**
  * Action personnalisée permettant d'envoyer un dossier d'acte.
  */
 public class EnvoyerDossierActeAction extends ModeleAction {
-    /**
-     * L'hôte du webservice.
-     */
-    private static final String HOTE = "https://lenordged.spontaneit.fr";
 
-    /**
+ /**
+	**
+     * L'hôte du webservice.
+     *
+    private static final String HOTE = "vide";
+
+    **
      * Le login du webservice.
-     */
+     *
     private static final String LOGIN = "8b5Ex34Vw7EeweHq";
 
-    /**
+    **
      * Le mot de passe du webservice.
-     */
+     *
     private static final String MOT_DE_PASSE = "s7pYCFhkUVGdes4Q";
-
+*/
+	
     /**
      * Le modèle de données pour l'envoi d'acte.
      */
     private final ModeleDossierEnvoi modele;
-
+    
+    /**
+    * L'hôte du webservice.
+    */
+    private final String HOTE = WebServiceParametres.getHote();
+    /**
+    * L'hôte du webservice.
+    */
+    private final String LOGIN = WebServiceParametres.getLogin();      
+    /**
+    * L'hôte du webservice.
+    */
+    private final String MOT_DE_PASSE = WebServiceParametres.getMotdepasse();  
     /**
      * Le logger de la classe.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(EnvoyerDossierActeAction.class);
+
 
     /**
      * Initialise une nouvelle instance de la classe {@link EnvoyerDossierActeAction}.
@@ -122,10 +139,10 @@ public class EnvoyerDossierActeAction extends ModeleAction {
             List<ModeleDocumentAnnexe> listeAnnexes = this.modele.getAnnexes();
             ModeleDocument annexe = (listeAnnexes == null || listeAnnexes.size() == 0) ? null :
                     this.modele.getAnnexes().get(0);
-
+    
             AffichageDesActesWebservice webservice = new AffichageDesActesWebservice(HOTE);
             JSONObject resultat = new JSONObject(webservice.envoyerActe(
-                    LOGIN, MOT_DE_PASSE, new EnvoiActeFichierModel(acteSigne.nom, acteSigne.contenu),
+            		LOGIN, MOT_DE_PASSE, new EnvoiActeFichierModel(acteSigne.nom, acteSigne.contenu),
                     annexe != null ? new EnvoiActeFichierModel(annexe.nom, annexe.contenu) : null, this.getMetadonnees()
             ));
 

@@ -19,6 +19,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+          
 
     <!-- Action automatique de stockage des actes -->
     <bean id="stocker-acte" class="org.cd59.affichagedesactes.action.executer.StockerDossierActe"
@@ -48,6 +49,12 @@
             <ref bean="ServiceRegistry"/>
         </property>
 
+    </bean>
+
+    <bean id="envoi-webservice-parametres" class="org.cd59.affichagedesactes.action.custom.envoi.WebServiceParametres">
+        <property name="hote" value="${affichageLenord.hote}"/>
+        <property name="login" value="${affichageLenord.login}"/>
+        <property name="motdepasse" value="${affichageLenord.mdp}"/>
     </bean>
 
 </beans>
