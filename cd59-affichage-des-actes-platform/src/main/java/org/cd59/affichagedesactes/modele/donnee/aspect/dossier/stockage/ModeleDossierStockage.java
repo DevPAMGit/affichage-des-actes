@@ -283,11 +283,13 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
             throw new ModeleException("Le dossier d'acte ne contient plus d'un fichier d'acte original.");
 
         // Traitement du fichier d'acte.
-        this.acteOriginal = new ModeleDocumentActeStockage(this.modeleNoeudAction, nodeRefList.get(0), this.identifiant, this.date);
+        this.acteOriginal = new ModeleDocumentActeStockage(this.modeleNoeudAction, nodeRefList.get(0),
+                this.identifiant, this.date);
     }
 
     @Override
-    public void setFichierAnnexes(List<NodeRef> nodeRefList) throws ModeleException, IOException, NoSuchAlgorithmException, PreRequisException, NoSuchMethodException {
+    public void setFichierAnnexes(List<NodeRef> nodeRefList) throws ModeleException, IOException,
+            NoSuchAlgorithmException, PreRequisException, NoSuchMethodException {
         // Vérification des preconditions.
         this.annexes = new ArrayList<>();
 
