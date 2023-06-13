@@ -116,7 +116,7 @@ public class StockerDossierActeAction extends ModeleAction {
             if( nodeService.hasAspect(childNode, DossierinfosAspectModele.NOM) ) {
                 Serializable id = nodeService.getProperty(childNode, DossierinfosAspectModele.IDDOSSIER);
 
-                if(this.modele.getIdentifiant().equals(id))
+                if(id != null && this.modele.getIdentifiant().equals(id))
                     nodeRefList.add(childNode);
             }
         }
