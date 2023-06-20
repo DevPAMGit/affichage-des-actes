@@ -103,7 +103,7 @@ public class ModeleDocument extends ModeleNoeud {
         if(UtilitaireChaineDeCaracteres.etreNullOuVide(hash)) {
             hash = UtilitaireFichier.getEmpreinte("SHA-256", this.contenu);
 
-            this.setPropriete(DocinfosAspectModele.EMPREINTE, hash);
+            // this.setPropriete(DocinfosAspectModele.EMPREINTE, hash);
         }
 
         // Retour de la valeur.
