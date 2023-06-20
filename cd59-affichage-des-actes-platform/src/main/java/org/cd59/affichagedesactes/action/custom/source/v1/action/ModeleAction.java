@@ -100,6 +100,7 @@ public abstract class ModeleAction extends LoggerAction implements IModeleNoeudA
     @Override
     public void setPropriete(NodeRef nodeRef, QName propriete, Serializable valeur)
             throws PreRequisException, NoSuchMethodException {
+
         // Vérification des préconditions.
         if(nodeRef == null) throw new NoeudNullException();
         if(propriete == null) throw new QNameNullException();

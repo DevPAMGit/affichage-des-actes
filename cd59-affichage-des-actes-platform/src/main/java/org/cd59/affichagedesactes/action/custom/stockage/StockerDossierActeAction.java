@@ -70,8 +70,13 @@ public class StockerDossierActeAction extends ModeleAction {
                 if(typeDocument == null)
                     throw new ModeleException("Le dossier contient un fichier non typé");
 
-                if( "ACTE_ORIGINAL".equals(typeDocument) ) acteOriginal.add(childNode);
-                else if( "ANNEXE".equals(typeDocument) ) annexes.add(childNode);
+                if( "ACTE_ORIGINAL".equals(typeDocument) ) {
+                    LOGGER.info("3. Fichier d'acte trouvé.");
+                    acteOriginal.add(childNode);
+                } else if( "ANNEXE".equals(typeDocument) ) {
+                    LOGGER.info("4. Fichier annexe trouvé.");
+                    annexes.add(childNode);
+                }
 
             }else
                 throw new PreRequisException( String.format("\"Le dossier d'acte contient un fichier non typé %s.",
