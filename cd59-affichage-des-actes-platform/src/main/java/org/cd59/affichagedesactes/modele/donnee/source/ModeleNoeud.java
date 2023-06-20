@@ -109,7 +109,7 @@ public class ModeleNoeud {
 
     /**
      * Modifie la valeur d'une propriété d'un nœud.
-     * @param propriete La propriété a modifié.
+     * @param propriete La propriété à modifier.
      * @param valeur La nouvelle valeur de la propriété.
      * @throws PreRequisException   Si le nœud ou la propriété est null.
      */

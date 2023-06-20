@@ -162,7 +162,7 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
     private String formatterSource() throws /*ModeleException,*/ PreRequisException, NoSuchMethodException {
         String source = this.getProprieteChaine(DossierinfosAspectModele.SOURCE);
 
-        // Si la source est null alors elle est manuelle.
+        // Si la source est null alors, elle est manuelle.
         if(UtilitaireChaineDeCaracteres.etreNullOuVide(source)) source = SOURCE_MANUEL;
         else source = source.toLowerCase();
 
@@ -190,7 +190,7 @@ public class ModeleDossierStockage extends ModeleDossier implements IModeleDossi
             // initialisation du numéro
             numero = String.format("%s_%d_%s", this.organisation, this.date.annee, this.sas.genererNumeroActe());
 
-        // Si la source n'est pas manuelle elle doit être renseignée.
+        // Si la source n'est pas manuelle, elle doit être renseignée.
         } else if( UtilitaireChaineDeCaracteres.etreNullOuVide(numero) )
             throw new ModeleException("Le numéro de l'acte n'est pas renseigné alors que la source n'est pas manuelle.");
 

@@ -41,10 +41,10 @@ public class ModeleDocument extends ModeleNoeud {
 
     /**
      * Initialise une nouvelle instance de la classe {@link ModeleDocument}.
-     // @param serviceRegistry  Le service de registre du nœud.
+     // @param serviceRegistry Le service de registre du nœud.
      * @param nodeRef          Le nœud source.
      * @throws ModeleException Si le registre de services ou le nœud sont null.
-     * @throws IOException     Si une erreur entrée/sortie à lieu lors de la lecture du nœud.
+     * @throws IOException     Si une erreur entrée/sortie a lieu lors de la lecture du nœud.
      */
     public ModeleDocument(IModeleNoeudAction modeleNoeudAction, NodeRef nodeRef)
             throws ModeleException, IOException, NoSuchAlgorithmException, PreRequisException, NoSuchMethodException {
@@ -102,6 +102,7 @@ public class ModeleDocument extends ModeleNoeud {
         // S'il n'y a pas d'empreinte : initialisation.
         if(UtilitaireChaineDeCaracteres.etreNullOuVide(hash)) {
             hash = UtilitaireFichier.getEmpreinte("SHA-256", this.contenu);
+
             this.setPropriete(DocinfosAspectModele.EMPREINTE, hash);
         }
 
