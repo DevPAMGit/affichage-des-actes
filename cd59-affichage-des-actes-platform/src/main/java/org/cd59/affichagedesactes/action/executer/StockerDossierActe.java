@@ -1,12 +1,15 @@
 package org.cd59.affichagedesactes.action.executer;
 
 import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
+import org.alfresco.repo.lock.LockAcquisitionException;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.QName;
 import org.cd59.affichagedesactes.action.custom.stockage.StockerDossierActeAction;
+import org.cd59.affichagedesactes.modele.alfresco.aspect.DocinfosAspectModele;
 import org.cd59.affichagedesactes.modele.alfresco.aspect.DossierinfosAspectModele;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.source.ModeleDossierEtatEnvoi;
 import org.cd59.affichagedesactes.modele.donnee.aspect.dossier.stockage.ModeleDossierEtatStockage;
@@ -66,11 +69,32 @@ public class StockerDossierActe extends ActionExecuterAbstractBase {
 
     @Override
     protected void executeImpl(Action action, NodeRef nodeRef) {
+        String lockName = String.format("%sLockStockage", nodeRef.getId());
+        QName lockQName = QName.createQName(DocinfosAspectModele.URI, lockName);
+
         try {
-            new StockerDossierActeAction(this.serviceRegistry, nodeRef).executer();
-        }catch (UtilitaireException e) {
-            this.setErreur(nodeRef, e.getMessage());
-        } catch (Exception e) {
+
+            // Récupération du lock pour 30 secondes, retry toutes les 3 secondes, 10 fois
+            String token = this.serviceRegistry.getJobLockService().getLock(lockQName, 30000, 3000, 10);
+
+            try {
+                new StockerDossierActeAction(this.serviceRegistry, nodeRef).executer();
+                // Libération du lock
+                this.serviceRegistry.getJobLockService().releaseLock(token, lockQName);
+
+            } catch (UtilitaireException e) {
+                this.setErreur(nodeRef, e.getMessage());
+                // Libération du lock
+                this.serviceRegistry.getJobLockService().releaseLock(token, lockQName);
+
+            } catch (Exception e) {
+                this.setErreur(nodeRef, "Une erreur inattendue à eu lieu. Veuillez vous référer au log du serveur svp.");
+                LOGGER.error(e.getMessage(), e);
+                // Libération du lock
+                this.serviceRegistry.getJobLockService().releaseLock(token, lockQName);
+            }
+
+        }catch (LockAcquisitionException e) {
             this.setErreur(nodeRef, "Une erreur inattendue à eu lieu. Veuillez vous référer au log du serveur svp.");
             LOGGER.error(e.getMessage(), e);
         }
