@@ -91,13 +91,13 @@ public class StockerDossierActeAction extends ModeleAction {
     @Override
     public void executer() throws Exception {
         // Synchronisation sur le mutex de l'arborescence.
-        synchronized (StockerDossierActeMutex.MUTEX_ARBORESCENCE) {
-            // 1. Récupération du chemin de dépôt de l'acte.
-            NodeRef destination = this.creerArborescence();
+        // synchronized (StockerDossierActeMutex.MUTEX_ARBORESCENCE) {
+        // 1. Récupération du chemin de dépôt de l'acte.
+        NodeRef destination = this.creerArborescence();
 
-            // Renommage des multiples dossiers.
-            this.deplacerDossierActe(destination);
-        }
+        // Renommage des multiples dossiers.
+        this.deplacerDossierActe(destination);
+        // }
 
         this.modele.setEtatStockage(ModeleDossierEtatStockage.STOCKE);
         this.modele.setEtatEnvoi(ModeleDossierEtatEnvoi.PRET_A_ETRE_ENVOYE);
