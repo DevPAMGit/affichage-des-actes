@@ -60,7 +60,7 @@ public class EnvoyerDossierActeAction extends ModeleAction {
     private static final String LOGIN = "8b5Ex34Vw7EeweHq";
 
     **
-     * Le mot de passe du webservice.
+     * Le mot-de-passe du webservice.
      *
     private static final String MOT_DE_PASSE = "s7pYCFhkUVGdes4Q";
 */
