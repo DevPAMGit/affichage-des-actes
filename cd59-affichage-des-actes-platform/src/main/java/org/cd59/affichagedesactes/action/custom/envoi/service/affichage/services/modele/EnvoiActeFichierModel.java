@@ -1,7 +1,7 @@
 package org.cd59.affichagedesactes.action.custom.envoi.service.affichage.services.modele;
 
 /**
- * Modele pour les fichiers de l'envoie d'acte.
+ * Modele pour les fichiers de l'envoi d'acte.
  */
 public class EnvoiActeFichierModel {
 
