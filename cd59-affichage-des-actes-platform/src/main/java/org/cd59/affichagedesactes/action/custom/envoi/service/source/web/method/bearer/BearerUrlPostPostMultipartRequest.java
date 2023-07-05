@@ -24,6 +24,9 @@ public abstract class BearerUrlPostPostMultipartRequest extends UrlPostMultipart
         this.token = jeton;
     }
 
+    /**
+     * Modifie les en-têtes de la requête.
+     */
     @Override
     protected void setHeaders() {
         super.setHeaders();
