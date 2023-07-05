@@ -45,6 +45,10 @@ public class EnvoiActeService extends BearerUrlPostPostMultipartRequest {
         this.acte = acte;
     }
 
+    /**
+     * Écrit le corps de la requête.
+     * @throws IOException Si une erreur E/S est lancée.
+     */
     @Override
     protected void ecrireLeCorps() throws IOException {
 

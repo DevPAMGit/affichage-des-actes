@@ -90,7 +90,7 @@ public abstract class RequeteURL {
     protected abstract String getBody();
 
     /**
-     * Modifie les en-têtes.
+     * Modifie les en-têtes de la requête.
      */
     protected abstract void setHeaders();
 }
