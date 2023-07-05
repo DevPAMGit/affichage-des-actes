@@ -72,23 +72,12 @@ public abstract class UrlPostMultipartRequestPost extends RequeteURLPost {
         this.redacteur.flush();
     }
 
-
-    protected void envoyerChampTexte(String nomParametre, String valeur) {
-        this.redacteur.append(String.format("--%s%s", LIMITE, RETOUR));
-        this.redacteur.append((String.format("Content-Disposition: form-data; name=\"%s\"%s", nomParametre, RETOUR)));
-         this.redacteur.append((String.format("Content-Type: text/plain%s", RETOUR)));
-        this.redacteur.append(RETOUR);
-        this.redacteur.append(valeur);
-        this.redacteur.append(RETOUR);
-        this.redacteur.flush();
-    }
-
+    /**
+     * Envoie un paramètre au format JSon.
+     * @param nomParametre Le nom du parametre dans la requête POST Multipart
+     * @param valeur La valeur du paramètre à envoyer.
+     */
     protected void envoyerChampJson(String nomParametre, JSONObject valeur) {
-        System.out.println("=======================================================================");
-        System.out.println("NOM PARAMETRE " + nomParametre );
-        System.out.println("VALEUR " + valeur.toString());
-        System.out.println("=======================================================================");
-
         this.redacteur.append(String.format("--%s%s", LIMITE, RETOUR));
         this.redacteur.append((String.format("Content-Disposition: form-data; name=\"%s\"%s", nomParametre, RETOUR)));
         this.redacteur.append((String.format("Content-Type: application/json%s", RETOUR)));
@@ -98,6 +87,9 @@ public abstract class UrlPostMultipartRequestPost extends RequeteURLPost {
         this.redacteur.flush();
     }
 
+    /**
+     * Modifie les en-têtes de la requête.
+     */
     @Override
     protected void setHeaders() {
         this.addHeader("Content-Type", String.format("multipart/form-data;boundary=\"%s\"", LIMITE) );
@@ -105,6 +97,10 @@ public abstract class UrlPostMultipartRequestPost extends RequeteURLPost {
         this.addHeader("Cache-Control", "no-cache");
     }
 
+    /**
+     * Envoie la requête.
+     * @throws IOException Si une exception d'E/S est lancée.
+     */
     @Override
     protected void send() throws IOException {
 
@@ -120,6 +116,10 @@ public abstract class UrlPostMultipartRequestPost extends RequeteURLPost {
         this.redacteur.close();
     }
 
+    /**
+     * Récupère le corps de la requête.
+     * @return String Récupère la valeur du corps de la requête.
+     */
     @Override
     protected String getBody() {
         return null;
