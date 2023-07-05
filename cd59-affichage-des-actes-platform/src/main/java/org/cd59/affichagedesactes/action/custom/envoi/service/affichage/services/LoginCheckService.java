@@ -33,10 +33,18 @@ public class LoginCheckService extends RequeteURLPost {
         this.password = password;
     }
 
+    /**
+     * Récupère le corps de la requête.
+     * @return String Récupère la valeur du corps de la requête.
+     */
     @Override
     protected String getBody() {
         return String.format("{\"username\":\"%s\",\"password\":\"%s\"}", username, password);
     }
+
+    /**
+     * Modifie les en-têtes de la requête.
+     */
     @Override
     protected void setHeaders() {
         this.addHeader("Content-Type", "application/json");
