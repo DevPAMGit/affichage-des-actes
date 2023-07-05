@@ -48,23 +48,6 @@ import java.util.Locale;
  */
 public class EnvoyerDossierActeAction extends ModeleAction {
 
- /**
-	**
-     * L'hôte du webservice.
-     *
-    private static final String HOTE = "vide";
-
-    **
-     * Le login du webservice.
-     *
-    private static final String LOGIN = "8b5Ex34Vw7EeweHq";
-
-    **
-     * Le mot-de-passe du webservice.
-     *
-    private static final String MOT_DE_PASSE = "s7pYCFhkUVGdes4Q";
-*/
-	
     /**
      * Le modèle de données pour l'envoi d'acte.
      */
