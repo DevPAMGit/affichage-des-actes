@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-/** */
+/** Classe de service permettant d'envoyer par méthode HTTP POST (multipart) un acte. */
 public class EnvoiActeService extends BearerUrlPostPostMultipartRequest {
 
     /**
