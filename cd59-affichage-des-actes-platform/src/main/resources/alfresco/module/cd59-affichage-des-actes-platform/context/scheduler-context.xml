@@ -34,7 +34,7 @@
             <ref bean="org.cd59.affichagedesactes.scheduledjob.envoiActeJobDetail" />
         </property>
         <property name="cronExpression">
-            <value>0 0/5 * * * ?</value>
+            <value>${affichageLenord.envoi.cronExpression}</value>
         </property>
         <property name="startDelay">
             <value>240000</value>
@@ -84,7 +84,7 @@
             <ref bean="org.cd59.affichagedesactes.scheduledjob.stockageActeJobDetail" />
         </property>
         <property name="cronExpression">
-            <value>0 0/5 * * * ?</value>
+            <value>${affichageLenord.rangement.cronExpression}</value>
         </property>
         <property name="startDelay">
             <value>240000</value>
